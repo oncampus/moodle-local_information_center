@@ -89,6 +89,7 @@ final class message_manager_test extends advanced_testcase {
     }
 
     protected function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
         $this->manager = di::get(i_message_manager::class);

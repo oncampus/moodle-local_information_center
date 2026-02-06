@@ -19,7 +19,7 @@ namespace local_information_center\form;
 use renderable;
 
 class filter_renderer implements renderable {
-    const PLUGIN_NAME = 'local_information_center';
+    private const PLUGIN_NAME = 'local_information_center';
 
     public function render(array $params = []): string {
         global $OUTPUT;

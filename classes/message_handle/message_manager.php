@@ -35,7 +35,7 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 readonly class message_manager implements i_message_manager {
-    const TABLE = 'local_information_center_messages';
+    private const TABLE = 'local_information_center_messages';
 
     public function __construct(
         private clock $clock,

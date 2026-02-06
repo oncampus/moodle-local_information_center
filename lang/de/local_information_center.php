@@ -86,7 +86,6 @@ $string['table:title'] = 'Titel';
 $string['table:type'] = 'Typ';
 
 $string['pluginname'] = 'Informationszentrum';
-$string['overview:title'] = 'Infocenter';
 $string['visibility:admin']   = 'Sichtbar für Administrator*innen';
 $string['visibility:manager'] = 'Sichtbar für Manager*innen';
 $string['visibility:teacher'] = 'Sichtbar für Lehrkräfte';

@@ -25,9 +25,9 @@ use stdClass;
 
 class message_table extends flexible_table implements filterable_table {
     /** @var string EDIT_LINK Link to the edit page for messages */
-    const EDIT_LINK = '/local/information_center/pages/edit_notification.php';
+    private const EDIT_LINK = '/local/information_center/pages/edit_notification.php';
     /** @var string EDIT_LINK Link to the deletion page for messages */
-    const DELETE_LINK = '/local/information_center/pages/delete_notification.php';
+    private const DELETE_LINK = '/local/information_center/pages/delete_notification.php';
 
     private array $filters = [];
     private array $filterparams = [];
