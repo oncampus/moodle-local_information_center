@@ -18,35 +18,18 @@ namespace local_information_center;
 
 use context_system;
 use core\di;
-use local_information_center\privacy\provider;
+use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
-use core_privacy\local\metadata\collection;
 use core_privacy\tests\provider_testcase;
+use local_information_center\privacy\provider;
 use moodle_database;
 use stdClass;
 
 final class provider_test extends provider_testcase {
     public function setUp(): void {
         $this->resetAfterTest();
-    }
-
-    public function get_message(int $userid): stdClass {
-        return (object)[
-            'useridfrom' => $userid,
-            'subject' => 'Test subject',
-            'fullmessage' => 'Full message',
-            'fullmessageformat' => FORMAT_PLAIN,
-            'smallmessage' => 'Small msg',
-            'timestart' => time(),
-            'timeend' => time() + 1000,
-            'visibility' => 1,
-            'categoryid' => 1,
-            'component' => 'infocenter',
-            'timecreated' => time(),
-            'timemodified' => time(),
-        ];
     }
 
     public function test_get_metadata() {
@@ -69,7 +52,7 @@ final class provider_test extends provider_testcase {
 
         $read = (object)[
             'userid' => $user->id,
-            'messageid' => $message->id
+            'messageid' => $message->id,
         ];
         $db->insert_record('local_information_center', $read);
 
@@ -81,6 +64,23 @@ final class provider_test extends provider_testcase {
 
         $exportwrote = writer::with_context($context)->get_data(['Infocenter/Own Messages']);
         $this->assertNotEmpty($exportwrote->messages);
+    }
+
+    public function get_message(int $userid): stdClass {
+        return (object)[
+            'useridfrom' => $userid,
+            'subject' => 'Test subject',
+            'fullmessage' => 'Full message',
+            'fullmessageformat' => FORMAT_PLAIN,
+            'smallmessage' => 'Small msg',
+            'timestart' => time(),
+            'timeend' => time() + 1000,
+            'visibility' => 1,
+            'categoryid' => 1,
+            'component' => 'infocenter',
+            'timecreated' => time(),
+            'timemodified' => time(),
+        ];
     }
 
     public function test_delete_data_for_user() {
@@ -140,7 +140,7 @@ final class provider_test extends provider_testcase {
         $DB->insert_record('local_information_center_messages', $message);
         $DB->insert_record('local_information_center', (object)[
             'userid' => 1,
-            'messageid' => 1
+            'messageid' => 1,
         ]);
 
         provider::delete_data_for_all_users_in_context($context);

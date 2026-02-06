@@ -31,12 +31,6 @@ use tool_oc_remote_notification\generator;
 final class message_manager_test extends advanced_testcase {
     private i_message_manager $manager;
 
-    protected function setUp(): void {
-        $this->resetAfterTest();
-        $this->setAdminUser();
-        $this->manager = di::get(i_message_manager::class);
-    }
-
     public function test_create_and_get_message(): void {
         $exspectedmessage = generator::generate_message();
 
@@ -92,5 +86,11 @@ final class message_manager_test extends advanced_testcase {
 
         $message = $this->manager->get($id);
         $this->assertFalse($message);
+    }
+
+    protected function setUp(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $this->manager = di::get(i_message_manager::class);
     }
 }

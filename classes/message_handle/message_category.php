@@ -16,8 +16,8 @@
 
 namespace local_information_center\message_handle;
 
-use moodle_database;
 use local_information_center\message_handle\contracts\i_message_category;
+use moodle_database;
 
 readonly class message_category implements i_message_category {
     public function __construct(

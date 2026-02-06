@@ -43,14 +43,6 @@ readonly class message_manager implements i_message_manager {
     ) {
     }
 
-    public function get(int $id): message|false {
-        $data = $this->db->get_record(self::TABLE, ['id' => $id]);
-        if (!$data) {
-            return false;
-        }
-        return message::from_stdClass($data);
-    }
-
     public function add_or_update(message $message): int {
         $ctx = context_system::instance();
         if (!$ctx instanceof context) {
@@ -76,6 +68,14 @@ readonly class message_manager implements i_message_manager {
             }
             return $successorid;
         }
+    }
+
+    public function get(int $id): message|false {
+        $data = $this->db->get_record(self::TABLE, ['id' => $id]);
+        if (!$data) {
+            return false;
+        }
+        return message::from_stdClass($data);
     }
 
     public function validate(message $message): array {
@@ -130,12 +130,6 @@ readonly class message_manager implements i_message_manager {
         return $error;
     }
 
-    public function get_with_request(message_query_data $request): array {
-        $query = new message_query($request);
-        $sql = $query->get_sql();
-        return $this->db->get_records_sql($sql[0], $sql[1]);
-    }
-
     public function count_with_request(
         message_query_data $request,
     ): int {
@@ -172,5 +166,11 @@ readonly class message_manager implements i_message_manager {
         $getrequest->notdeleted = true;
         $getrequest->userid = $USER->id;
         return $this->get_with_request($getrequest);
+    }
+
+    public function get_with_request(message_query_data $request): array {
+        $query = new message_query($request);
+        $sql = $query->get_sql();
+        return $this->db->get_records_sql($sql[0], $sql[1]);
     }
 }

@@ -16,11 +16,6 @@
 
 namespace local_information_center\message_handle\contracts;
 
-use coding_exception;
-use core\clock;
-use core\di;
-use dml_exception;
-
 /**
  * Prepares a request to call messages from the plugin
  *

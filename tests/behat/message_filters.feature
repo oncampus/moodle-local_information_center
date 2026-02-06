@@ -5,10 +5,10 @@ Feature: Messages can be seen in the message overview.
   Background:
     Given I log in as "admin"
     And the following information center messages exist:
-      | component | subject    | fullmessage  | fullmessageformat | categoryid | visibility | useridfrom |
-      | testing   | news       | internal msg | 1                 | 1          | student    | 2          |
-      | testing   | events     | internal msg | 1                 | 3          | student    | 2          |
-      | testing   | my_event   | internal msg | 1                 | 3          | student    | 2          |
+      | component | subject  | fullmessage  | fullmessageformat | categoryid | visibility | useridfrom |
+      | testing   | news     | internal msg | 1                 | 1          | student    | 2          |
+      | testing   | events   | internal msg | 1                 | 3          | student    | 2          |
+      | testing   | my_event | internal msg | 1                 | 3          | student    | 2          |
     And I am in the "internal" Infocenter
 
   Scenario: A simple internal message get shown

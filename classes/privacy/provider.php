@@ -17,7 +17,6 @@
 namespace local_information_center\privacy;
 
 use context;
-use context_system;
 use core\di;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\metadata\provider as metadata_provider;
@@ -30,7 +29,7 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use moodle_database;
 
-class provider implements metadata_provider, request_provider, core_userlist_provider {
+class provider implements core_userlist_provider, metadata_provider, request_provider {
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
             'local_information_center',

@@ -42,7 +42,7 @@ class message {
     /**
      * Converts stdClass data to this class
      */
-    public static function from_stdClass(stdClass $data): message {
+    public static function from_stdclass(stdClass $data): message {
         $message = new message();
 
         foreach ($data as $key => $value) {

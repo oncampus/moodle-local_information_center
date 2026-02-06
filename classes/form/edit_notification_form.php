@@ -109,22 +109,6 @@ class edit_notification_form extends moodleform {
     }
 
     /**
-     * Formats the visibility for a selection menu.
-     *
-     * @return array [option => lang string]
-     * @throws coding_exception Lang string could not be fetched
-     */
-    public static function get_visibility(): array {
-        $menu = [];
-
-        foreach (visibility::cases() as $case) {
-            $menu[$case->value] = get_string('visibility:' . $case->value, 'local_information_center');
-        }
-
-        return $menu;
-    }
-
-    /**
      * Get categories, that are allowed to be sent locally
      *
      * @return array List of message type categories, as id => displayname
@@ -147,6 +131,22 @@ class edit_notification_form extends moodleform {
         }
 
         return $categoryselect;
+    }
+
+    /**
+     * Formats the visibility for a selection menu.
+     *
+     * @return array [option => lang string]
+     * @throws coding_exception Lang string could not be fetched
+     */
+    public static function get_visibility(): array {
+        $menu = [];
+
+        foreach (visibility::cases() as $case) {
+            $menu[$case->value] = get_string('visibility:' . $case->value, 'local_information_center');
+        }
+
+        return $menu;
     }
 
     /**
