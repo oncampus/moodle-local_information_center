@@ -1,0 +1,65 @@
+.notification-timeline {
+    position: relative;
+}
+
+.notification-item {
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.notification:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.notification-icon {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.notification-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.notification-user img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.infocenter-unread-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #0d6efd; /* Primary */
+    margin-left: .5rem;
+}
+
+.infocenter-count-container {
+    padding: 2px;
+    border-radius: 2px;
+    background-color: #ca3120;
+    color: #fff;
+    font-size: 11px;
+    line-height: 11px;
+    position: absolute;
+    bottom: 0.75rem;
+}

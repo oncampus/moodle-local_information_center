@@ -1,0 +1,66 @@
+<?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ * Renders the admin message overview
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2025, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require('../../../config.php');
+
+use core\di;
+use local_information_center\form\filter_renderer;
+use local_information_center\form\message_filter_form;
+use local_information_center\form\message_table;
+use local_information_center\message_handle\contracts\i_message_manager;
+
+require_login();
+
+// Set PAGE variables.
+$PAGE->set_context(context_system::instance());
+$baseurl = new moodle_url('/local/information_center/pages/message_overview.php');
+$PAGE->set_pagelayout('admin');
+$PAGE->set_url($baseurl);
+$PAGE->set_title(get_string('page:message_overview', 'local_information_center'));
+$PAGE->set_heading(get_string('page:message_overview', 'local_information_center'));
+
+// Overview.
+$table = new message_table($baseurl);
+$table->setup();
+$filterrenderer = new filter_renderer();
+$filterform = new message_filter_form();
+$filterform->set_filters($table);
+
+$messagemanager = di::get(i_message_manager::class);
+$messages = $table->get_data();
+
+echo $OUTPUT->header();
+echo $filterrenderer->render(['form' => $filterform->render()]);
+
+foreach ($messages as $msg) {
+    $table->add_message_data($msg);
+}
+$table->finish_output();
+
+echo html_writer::link(
+    new moodle_url('/local/information_center/pages/edit_notification.php'),
+    get_string('settings:btn_add', 'local_information_center'),
+    ['class' => 'btn btn-secondary instance mb-3']
+);
+echo $OUTPUT->footer();

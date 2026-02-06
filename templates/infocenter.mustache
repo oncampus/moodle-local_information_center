@@ -1,0 +1,21 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {{> local_information_center/infocenter_header }}
+                    {{> local_information_center/infocenter_search_and_filter }}
+
+                    <!-- Notification Timeline -->
+                    <div class="notification-timeline">
+                        {{#notifications}}
+                            {{> local_information_center/notification }}
+                        {{/notifications}}
+                    </div>
+
+                    {{> local_information_center/pagination }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
