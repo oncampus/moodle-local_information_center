@@ -22,8 +22,6 @@ use local_information_center\message_handle\contracts\i_message_category;
 use moodle_database;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Manages message categories
  *
