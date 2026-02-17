@@ -16,16 +16,20 @@
 
 namespace local_information_center\message_handle;
 
+use coding_exception;
 use context;
 use context_system;
 use core\clock;
 use core\di;
+use dml_exception;
 use Exception;
 use local_information_center\message_handle\contracts\i_message_manager;
 use local_information_center\message_handle\contracts\message;
 use local_information_center\message_handle\contracts\message_query_data;
 use local_information_center\message_handle\contracts\visibility;
 use moodle_database;
+use required_capability_exception;
+use stdClass;
 
 /**
  * Gives options to handle the messages of this plugin
@@ -35,14 +39,29 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 readonly class message_manager implements i_message_manager {
+    /** @var string Table to save and read messages from */
     private const TABLE = 'local_information_center_messages';
 
+    /**
+     * Constructor
+     *
+     * @param clock $clock Clock
+     * @param moodle_database $db Moodle Database
+     */
     public function __construct(
         private clock $clock,
         private moodle_database $db,
     ) {
     }
 
+    /**
+     * Adds or updates the message
+     *
+     * @param message $message Message object
+     * @return int ID of the saved message
+     * @throws dml_exception
+     * @throws required_capability_exception
+     */
     public function add_or_update(message $message): int {
         $ctx = context_system::instance();
         if (!$ctx instanceof context) {
@@ -70,6 +89,13 @@ readonly class message_manager implements i_message_manager {
         }
     }
 
+    /**
+     * Gets a message with the given id
+     *
+     * @param int $id Message ID
+     * @return message|false The message data or false if not found
+     * @throws dml_exception
+     */
     public function get(int $id): message|false {
         $data = $this->db->get_record(self::TABLE, ['id' => $id]);
         if (!$data) {
@@ -78,6 +104,13 @@ readonly class message_manager implements i_message_manager {
         return message::from_stdClass($data);
     }
 
+    /**
+     * Validate the data of a message
+     *
+     * @param message $message Message data object
+     * @return string[] Param => Validation error reason
+     * @throws dml_exception
+     */
     public function validate(message $message): array {
         $error = [];
 
@@ -130,6 +163,14 @@ readonly class message_manager implements i_message_manager {
         return $error;
     }
 
+    /**
+     * Counts the messages returned by a request
+     *
+     * @param message_query_data $request Request DTO
+     * @return int Message count inside this request
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function count_with_request(
         message_query_data $request,
     ): int {
@@ -144,6 +185,14 @@ readonly class message_manager implements i_message_manager {
         return $DB->count_records_sql($sql[0], $sql[1]);
     }
 
+    /**
+     * Deletes the message with the given ID
+     *
+     * @param int $id Message ID
+     * @return bool True if successful
+     * @throws dml_exception
+     * @throws required_capability_exception
+     */
     public function delete(int $id): bool {
         $ctx = context_system::instance();
         if (!$ctx instanceof context) {
@@ -159,6 +208,12 @@ readonly class message_manager implements i_message_manager {
         return $this->db->update_record(self::TABLE, $record);
     }
 
+    /**
+     * Returns all non-deleted messages
+     *
+     * @return stdClass[] Message data
+     * @throws dml_exception
+     */
     public function get_all(): array {
         global $USER;
 
@@ -168,6 +223,14 @@ readonly class message_manager implements i_message_manager {
         return $this->get_with_request($getrequest);
     }
 
+    /**
+     * Gets messages with the given request
+     *
+     * @param message_query_data $request Message data request
+     * @return stdClass[] Message data
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function get_with_request(message_query_data $request): array {
         $query = new message_query($request);
         $sql = $query->get_sql();

@@ -22,6 +22,10 @@ use stdClass;
 
 /**
  * Handles the categories of messages
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2025, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface i_message_category {
     /**

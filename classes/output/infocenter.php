@@ -59,6 +59,16 @@ class infocenter implements renderable, templatable {
     /** @var string Message component to filter for */
     private string $component;
 
+    /**
+     * Constructor
+     *
+     * @param moodle_url $url Pages base url
+     * @param string $component Whether to search for 'external' or 'internal' messages
+     * @param string|null $search User input in search field
+     * @param int $page Page ID
+     * @param int|null $category Category to search for, or null if filter not active
+     * @param int $pagesize Messages per page
+     */
     public function __construct(
         moodle_url $url,
         string $component,

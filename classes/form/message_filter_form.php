@@ -32,6 +32,7 @@ use moodleform;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class message_filter_form extends moodleform {
+    /** @var string Name of this plugin */
     private const PLUGIN_NAME = 'local_information_center';
 
     /**

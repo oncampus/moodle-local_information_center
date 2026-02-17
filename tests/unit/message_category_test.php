@@ -25,7 +25,7 @@ use local_information_center\message_handle\contracts\i_message_category;
 /**
  * Test the message category class
  *
- * @covers local_information_center\message_handle\contracts\i_message_category
+ * @covers \local_information_center\message_handle\contracts\i_message_category
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

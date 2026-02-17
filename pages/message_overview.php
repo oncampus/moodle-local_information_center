@@ -25,7 +25,7 @@
 require('../../../config.php');
 
 use core\di;
-use local_information_center\form\filter_renderer;
+use local_information_center\form\filter_button;
 use local_information_center\form\message_filter_form;
 use local_information_center\form\message_table;
 use local_information_center\message_handle\contracts\i_message_manager;
@@ -43,15 +43,15 @@ $PAGE->set_heading(get_string('page:message_overview', 'local_information_center
 // Overview.
 $table = new message_table($baseurl);
 $table->setup();
-$filterrenderer = new filter_renderer();
 $filterform = new message_filter_form();
 $filterform->set_filters($table);
+$filterrenderer = new filter_button($filterform->render());
 
 $messagemanager = di::get(i_message_manager::class);
 $messages = $table->get_data();
 
 echo $OUTPUT->header();
-echo $filterrenderer->render(['form' => $filterform->render()]);
+echo $OUTPUT->render($filterrenderer);
 
 foreach ($messages as $msg) {
     $table->add_message_data($msg);

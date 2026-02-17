@@ -16,17 +16,40 @@
 
 namespace local_information_center\message_handle;
 
+use coding_exception;
+use dml_exception;
 use local_information_center\message_handle\contracts\i_message_category;
 use moodle_database;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Manages message categories
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2025, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 readonly class message_category implements i_message_category {
+    /**
+     * Constructor.
+     *
+     * @param moodle_database $db Moodle Database
+     */
     public function __construct(
         private moodle_database $db
     ) {
     }
 
+    /**
+     * Returns all categories
+     * (with lang string in out)
+     *
+     * @return stdClass[] Data objects
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function get_all(): array {
         $categories = $this->db->get_records(
             'local_information_center_categories',

@@ -16,7 +16,10 @@
 
 namespace local_information_center\form;
 
+use core\exception\moodle_exception;
+use core\output\renderer_base;
 use renderable;
+use templatable;
 
 /**
  * UI Component for rendering the message filter area,
@@ -26,13 +29,28 @@ use renderable;
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_renderer implements renderable {
-    private const PLUGIN_NAME = 'local_information_center';
+class filter_button implements renderable, templatable {
+    /** @var string HTML-Moodleform to render in the template */
+    private string $form;
 
-    public function render(array $params = []): string {
-        global $OUTPUT;
-        return $OUTPUT->render_from_template(self::PLUGIN_NAME . '/filter_button', [
-            'filtersform' => $params['form'],
-        ]);
+    /**
+     * Constructor
+     *
+     * @param string $form HTML-Moodleform to render
+     */
+    public function __construct(string $form) {
+        $this->form = $form;
+    }
+
+    /**
+     * Export values for template
+     *
+     * @param renderer_base $output Renderer to use
+     * @return string[] Template parameters
+     */
+    public function export_for_template(renderer_base $output) {
+        return [
+            'filtersform' => $this->form
+        ];
     }
 }

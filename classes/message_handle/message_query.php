@@ -23,7 +23,19 @@ use dml_exception;
 use local_information_center\message_handle\contracts\message_query_data;
 use local_information_center\message_handle\contracts\visibility;
 
+/**
+ * Query object for calling messages
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class message_query {
+    /**
+     * Constructor.
+     *
+     * @param message_query_data $data Query data object
+     */
     public function __construct(
         private message_query_data $data
     ) {

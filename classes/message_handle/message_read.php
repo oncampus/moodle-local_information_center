@@ -17,17 +17,39 @@
 namespace local_information_center\message_handle;
 
 use core\clock;
+use dml_exception;
 use local_information_center\message_handle\contracts\i_message_read;
 use local_information_center\message_handle\contracts\visibility;
 use moodle_database;
 
+/**
+ * Manages the read status of messages
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class message_read implements i_message_read {
+    /**
+     * Constructor
+     *
+     * @param moodle_database $db Moodle Database
+     * @param clock $clock Clock
+     */
     public function __construct(
         private moodle_database $db,
         private clock $clock,
     ) {
     }
 
+    /**
+     * Sets the message to read
+     *
+     * @param int $messageid Message ID
+     * @param int $userid User ID
+     * @return void
+     * @throws dml_exception
+     */
     public function set_read(int $messageid, int $userid): void {
         if ($this->is_read($messageid, $userid)) {
             return;
@@ -39,6 +61,14 @@ class message_read implements i_message_read {
         ]);
     }
 
+    /**
+     * Checks if the user have read this message
+     *
+     * @param int $messageid Message ID
+     * @param int $userid User ID
+     * @return bool True if read
+     * @throws dml_exception
+     */
     public function is_read(int $messageid, int $userid): bool {
         return $this->db->record_exists('local_information_center', [
             'userid'    => $userid,
@@ -46,6 +76,15 @@ class message_read implements i_message_read {
         ]);
     }
 
+    /**
+     * Counts the unread messages for a user
+     *
+     * @param int $userid User to count for
+     * @param bool|null $external If external set only counts external messages, else only internal
+     * @return int Unread messages for given user
+     * @throws \coding_exception
+     * @throws dml_exception
+     */
     public function count_unread(int $userid, ?bool $external = null): int {
         $rights = array_map(
             fn($v) => $v->value,
@@ -88,6 +127,13 @@ class message_read implements i_message_read {
         return $this->db->count_records_sql($sql, $inparams);
     }
 
+    /**
+     * Resets, that the message is read for all users
+     *
+     * @param int $messageid Message ID
+     * @return void
+     * @throws dml_exception
+     */
     public function reset_readcount(int $messageid): void {
         $this->db->delete_records('local_information_center', [
             'messageid' => $messageid,

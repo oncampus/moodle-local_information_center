@@ -39,6 +39,12 @@ use navigation_node;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
+    /**
+     * Defined DI Configurations
+     *
+     * @param di_configuration $config DI Hook
+     * @return void
+     */
     public static function di_configuration(di_configuration $config): void {
         $config->add_definition(
             id: i_message_read::class,

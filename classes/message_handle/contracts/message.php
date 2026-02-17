@@ -26,21 +26,35 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class message {
+    /** @var int|null Message ID */
     public ?int $id = null;
+    /** @var int|null Message author */
     public ?int $useridfrom = null;
+    /** @var string|null Title of the message */
     public ?string $subject = null;
+    /** @var string|null Body of the message */
     public ?string $fullmessage = null;
+    /** @var int|null Format, like html */
     public ?int $fullmessageformat = null;
+    /** @var string|null Short form of the body */
     public ?string $smallmessage = null;
+    /** @var int|null Start time, when its visible */
     public ?int $timestart = null;
+    /** @var int|null End time, when its gets hidden */
     public ?int $timeend = null;
+    /** @var int|null Time, where the message got deleted */
     public ?int $timedeleted = null;
+    /** @var string|null Visibility, like visible for teachers, admins… */
     public ?string $visibility = null;
+    /** @var string|null Creating plugin of this message */
     public ?string $component = null;
+    /** @var int|null Category ID */
     public ?int $categoryid = null;
 
     /**
      * Converts stdClass data to this class
+     *
+     * @param stdClass $data Converts a stdClass into this data object
      */
     public static function from_stdclass(stdClass $data): message {
         $message = new message();

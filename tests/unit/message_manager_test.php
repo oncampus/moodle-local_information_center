@@ -16,6 +16,7 @@
 
 namespace local_information_center\message_handle;
 
+defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/generator.php');
 require_once(__DIR__ . '/../../../../lib/testing/classes/frozen_clock.php');
 
@@ -32,8 +33,8 @@ use tool_oc_remote_notification\generator;
 /**
  * Tests if the message manager is working correctly
  *
- * @covers local_information_center\tasks\message_cleanup
- * @covers local_information_center\message_handle\contracts\i_message_manager
+ * @covers \local_information_center\tasks\message_cleanup
+ * @covers \local_information_center\message_handle\contracts\i_message_manager
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

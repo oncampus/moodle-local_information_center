@@ -32,7 +32,7 @@ use stdClass;
 /**
  * Tests if the privacy provider is working correctly
  *
- * @covers local_information_center\privacy\provider
+ * @covers \local_information_center\privacy\provider
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -44,6 +44,7 @@ final class provider_test extends provider_testcase {
      * @return void
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
     }
 
