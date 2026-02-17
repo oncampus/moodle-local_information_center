@@ -25,7 +25,7 @@ use local_information_center\message_handle\contracts\i_message_category;
 /**
  * Test the message category class
  *
- * @covers i_message_category
+ * @covers local_information_center\message_handle\contracts\i_message_category
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -34,7 +34,7 @@ final class message_category_test extends advanced_testcase {
     /**
      * Test if all message categories exist
      *
-     * @covers i_message_category::get_all
+     * @covers ::get_all
      * @return void
      * @throws coding_exception Cache cannot be loaded
      * @throws dml_exception Database connection failed

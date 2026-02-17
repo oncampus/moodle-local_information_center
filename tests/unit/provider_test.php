@@ -32,7 +32,7 @@ use stdClass;
 /**
  * Tests if the privacy provider is working correctly
  *
- * @covers provider
+ * @covers local_information_center\privacy\provider
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -50,10 +50,10 @@ final class provider_test extends provider_testcase {
     /**
      * Check if the metadata overview is returned correctly
      *
-     * @covers provider::get_metadata
+     * @covers ::get_metadata
      * @return void
      */
-    public function test_get_metadata() {
+    public function test_get_metadata(): void {
         $collection = new collection('local_information_center');
         $collection = provider::get_metadata($collection);
         $items = $collection->get_collection();
@@ -64,12 +64,12 @@ final class provider_test extends provider_testcase {
     /**
      * Test if the exported user data is not empty, when user data exists
      *
-     * @covers provider::export_user_data
+     * @covers ::export_user_data
      * @return void
      * @throws coding_exception
      * @throws dml_exception
      */
-    public function test_export_user_data() {
+    public function test_export_user_data(): void {
         $db = di::get(moodle_database::class);
 
         $user = $this->getDataGenerator()->create_user();
@@ -120,11 +120,11 @@ final class provider_test extends provider_testcase {
     /**
      * Test if user data gets deleted properly
      *
-     * @covers provider::delete_data_for_user
+     * @covers ::delete_data_for_user
      * @return void
      * @throws dml_exception
      */
-    public function test_delete_data_for_user() {
+    public function test_delete_data_for_user(): void {
         global $DB;
 
         $user = $this->getDataGenerator()->create_user();
@@ -150,11 +150,11 @@ final class provider_test extends provider_testcase {
     /**
      * Tests if users with user data are returned by the provider
      *
-     * @covers provider::get_users_in_context
+     * @covers ::get_users_in_context
      * @return void
      * @throws dml_exception
      */
-    public function test_get_users_in_context() {
+    public function test_get_users_in_context(): void {
         global $DB;
 
         $context = context_system::instance();
@@ -182,11 +182,11 @@ final class provider_test extends provider_testcase {
     /**
      * Tests if user data is deleted properly if all data is deleted
      *
-     * @covers provider::delete_data_for_all_users_in_context
+     * @covers ::delete_data_for_all_users_in_context
      * @return void
      * @throws dml_exception
      */
-    public function test_delete_data_for_all_users_in_context() {
+    public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
 
         $context = context_system::instance();
