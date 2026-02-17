@@ -50,7 +50,7 @@ class filter_button implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         return [
-            'filtersform' => $this->form
+            'filtersform' => $this->form,
         ];
     }
 }

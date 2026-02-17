@@ -31,15 +31,19 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-readonly class message_category implements i_message_category {
+class message_category implements i_message_category {
+    /** @var moodle_database Moodle Database */
+    private readonly moodle_database $db;
+
     /**
      * Constructor.
      *
      * @param moodle_database $db Moodle Database
      */
     public function __construct(
-        private moodle_database $db
+        moodle_database $db
     ) {
+        $this->db = $db;
     }
 
     /**

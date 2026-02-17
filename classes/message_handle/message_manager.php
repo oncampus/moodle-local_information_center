@@ -38,9 +38,14 @@ use stdClass;
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-readonly class message_manager implements i_message_manager {
+class message_manager implements i_message_manager {
     /** @var string Table to save and read messages from */
     private const TABLE = 'local_information_center_messages';
+    /** @var clock Clock */
+    private clock $clock;
+    /** @var moodle_database Moodle Database */
+    private moodle_database $db;
+
 
     /**
      * Constructor
@@ -49,9 +54,11 @@ readonly class message_manager implements i_message_manager {
      * @param moodle_database $db Moodle Database
      */
     public function __construct(
-        private clock $clock,
-        private moodle_database $db,
+        clock $clock,
+        moodle_database $db,
     ) {
+        $this->clock = $clock;
+        $this->db = $db;
     }
 
     /**

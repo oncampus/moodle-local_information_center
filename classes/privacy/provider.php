@@ -160,6 +160,13 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         }
     }
 
+    /**
+     * Delete data for every user in the context
+     *
+     * @param context $context Context, only deletes in system context
+     * @return void
+     * @throws dml_exception
+     */
     public static function delete_data_for_all_users_in_context(context $context): void {
         if ($context->contextlevel != CONTEXT_SYSTEM) {
             return;
@@ -170,6 +177,14 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         $db->delete_records('local_information_center');
     }
 
+    /**
+     * Deletes data for given users
+     *
+     * @param approved_userlist $userlist List of users to delete data for
+     * @return void
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public static function delete_data_for_users(approved_userlist $userlist): void {
         $db = di::get(moodle_database::class);
         [$userinsql, $userinparams] = $db->get_in_or_equal($userlist->get_userids());
@@ -194,6 +209,14 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         );
     }
 
+    /**
+     * Delete data for a single user
+     *
+     * @param approved_contextlist $contextlist Context and user
+     * @return void
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         if (empty($contextlist->count())) {
             return;

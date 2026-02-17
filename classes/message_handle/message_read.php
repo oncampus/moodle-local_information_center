@@ -30,6 +30,11 @@ use moodle_database;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class message_read implements i_message_read {
+    /** @var moodle_database Moodle Database */
+    private moodle_database $db;
+    /** @var clock Clock */
+    private clock $clock;
+
     /**
      * Constructor
      *
@@ -37,9 +42,11 @@ class message_read implements i_message_read {
      * @param clock $clock Clock
      */
     public function __construct(
-        private moodle_database $db,
-        private clock $clock,
+        moodle_database $db,
+        clock $clock,
     ) {
+        $this->db = $db;
+        $this->clock = $clock;
     }
 
     /**

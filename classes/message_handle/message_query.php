@@ -31,14 +31,18 @@ use local_information_center\message_handle\contracts\visibility;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class message_query {
+    /** @var message_query_data Query data object */
+    private message_query_data $data;
+
     /**
      * Constructor.
      *
      * @param message_query_data $data Query data object
      */
     public function __construct(
-        private message_query_data $data
+        message_query_data $data
     ) {
+        $this->data = $data;
     }
 
     /**
