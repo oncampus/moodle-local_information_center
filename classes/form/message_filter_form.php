@@ -19,11 +19,27 @@ namespace local_information_center\form;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
+use coding_exception;
+use dml_exception;
 use moodleform;
 
+/**
+ * Defines all filters can be applied to search messages
+ * in a corresponding form
+ *
+ * @author Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright 2025, oncampus GmbH, <support@oncampus.de>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class message_filter_form extends moodleform {
-    const PLUGIN_NAME = 'local_information_center';
+    private const PLUGIN_NAME = 'local_information_center';
 
+    /**
+     * Form definition
+     *
+     * @throws coding_exception Error loading the config or cache
+     * @throws dml_exception Database Connection Error
+     */
     public function definition(): void {
         // A reference to the form is stored in $this->form.
         // A common convention is to store it in a variable, such as `$mform`.
@@ -83,7 +99,12 @@ class message_filter_form extends moodleform {
         $this->add_action_buttons(false);
     }
 
-
+    /**
+     * Sets the configured filters from this from to a filterable table
+     *
+     * @param filterable_table $table Apply the filters to this table
+     * @return void
+     */
     public function set_filters(filterable_table $table): void {
         $data = (array) $this->get_data();
         if (!array_key_exists('timedeleted', $data)) {

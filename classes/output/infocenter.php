@@ -42,13 +42,21 @@ use ValueError;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class infocenter implements renderable, templatable {
+    /** @var i_message_manager Message manager */
     private i_message_manager $messagemanager;
+    /** @var moodle_url Base url for the page */
     private moodle_url $url;
+    /** @var string|null Text input of the user search */
     private ?string $search;
+    /** @var int Page, that should be rendered */
     private int $page;
+    /** @var int Maximum messages per page */
     private int $pagesize;
+    /** @var int|null Message category to filter for */
     private ?int $category;
+    /** @var message_query_data Search request object */
     private message_query_data $searchrequest;
+    /** @var string Message component to filter for */
     private string $component;
 
     public function __construct(

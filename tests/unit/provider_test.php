@@ -16,6 +16,7 @@
 
 namespace local_information_center;
 
+use coding_exception;
 use context_system;
 use core\di;
 use core_privacy\local\metadata\collection;
@@ -23,15 +24,35 @@ use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\provider_testcase;
+use dml_exception;
 use local_information_center\privacy\provider;
 use moodle_database;
 use stdClass;
 
+/**
+ * Tests if the privacy provider is working correctly
+ *
+ * @covers provider
+ * @author Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright 2025, oncampus GmbH, <support@oncampus.de>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class provider_test extends provider_testcase {
+    /**
+     * Setup for this test
+     *
+     * @return void
+     */
     public function setUp(): void {
         $this->resetAfterTest();
     }
 
+    /**
+     * Check if the metadata overview is returned correctly
+     *
+     * @covers provider::get_metadata
+     * @return void
+     */
     public function test_get_metadata() {
         $collection = new collection('local_information_center');
         $collection = provider::get_metadata($collection);
@@ -40,13 +61,20 @@ final class provider_test extends provider_testcase {
         $this->assertCount(2, $items);
     }
 
+    /**
+     * Test if the exported user data is not empty, when user data exists
+     *
+     * @covers provider::export_user_data
+     * @return void
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     public function test_export_user_data() {
         $db = di::get(moodle_database::class);
 
         $user = $this->getDataGenerator()->create_user();
         $context = context_system::instance();
 
-        // Insert a message and read record
         $message = $this->get_message($user->id);
         $message->id = $db->insert_record('local_information_center_messages', $message);
 
@@ -66,6 +94,12 @@ final class provider_test extends provider_testcase {
         $this->assertNotEmpty($exportwrote->messages);
     }
 
+    /**
+     * Creates message data for a user with specific id
+     *
+     * @param int $userid
+     * @return stdClass
+     */
     public function get_message(int $userid): stdClass {
         return (object)[
             'useridfrom' => $userid,
@@ -83,6 +117,13 @@ final class provider_test extends provider_testcase {
         ];
     }
 
+    /**
+     * Test if user data gets deleted properly
+     *
+     * @covers provider::delete_data_for_user
+     * @return void
+     * @throws dml_exception
+     */
     public function test_delete_data_for_user() {
         global $DB;
 
@@ -106,6 +147,13 @@ final class provider_test extends provider_testcase {
         $this->assertEmpty($DB->get_records('local_information_center_messages', ['useridfrom' => $user->id]));
     }
 
+    /**
+     * Tests if users with user data are returned by the provider
+     *
+     * @covers provider::get_users_in_context
+     * @return void
+     * @throws dml_exception
+     */
     public function test_get_users_in_context() {
         global $DB;
 
@@ -131,6 +179,13 @@ final class provider_test extends provider_testcase {
         $this->assertContains((int)$user2->id, $userids);
     }
 
+    /**
+     * Tests if user data is deleted properly if all data is deleted
+     *
+     * @covers provider::delete_data_for_all_users_in_context
+     * @return void
+     * @throws dml_exception
+     */
     public function test_delete_data_for_all_users_in_context() {
         global $DB;
 

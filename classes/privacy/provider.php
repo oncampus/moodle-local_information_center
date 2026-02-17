@@ -16,6 +16,7 @@
 
 namespace local_information_center\privacy;
 
+use coding_exception;
 use context;
 use core\di;
 use core_privacy\local\metadata\collection;
@@ -27,9 +28,23 @@ use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\plugin\provider as request_provider;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
+use dml_exception;
 use moodle_database;
 
+/**
+ * Privacy Provider to overview, collect and delete user specific data
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class provider implements core_userlist_provider, metadata_provider, request_provider {
+    /**
+     * Gives an overview over all user data saved by the plugin
+     *
+     * @param collection $collection Collection to gather user data
+     * @return collection Collection with gathered user data
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
             'local_information_center',
@@ -63,12 +78,23 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         return $collection;
     }
 
+    /**
+     * Gives back the system context, cause the plugin only exists in system context
+     *
+     * @param int $userid User ID
+     * @return contextlist List with system context
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $contextlist->add_system_context();
         return $contextlist;
     }
 
+    /**
+     * Collects all users which send or read messages
+     *
+     * @param userlist $userlist List with all users, which have user data in this plugin
+     */
     public static function get_users_in_context(userlist $userlist): void {
         $context = $userlist->get_context();
 
@@ -85,6 +111,14 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         $userlist->add_from_sql('userid', $sql, []);
     }
 
+    /**
+     * Gather all user data about a user in a context
+     *
+     * @param approved_contextlist $contextlist User, Context to call the data for
+     * @return void
+     * @throws coding_exception Config cannot be loaded
+     * @throws dml_exception Database not reachable
+     */
     public static function export_user_data(approved_contextlist $contextlist): void {
         $userid = $contextlist->get_user()->id;
         $db = di::get(moodle_database::class);

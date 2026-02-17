@@ -17,7 +17,11 @@
 namespace local_information_center\form;
 
 /**
- * Filterable tables should implement this interface
+ * Filterable Table, multiple filters can be applied
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface filterable_table {
     /**

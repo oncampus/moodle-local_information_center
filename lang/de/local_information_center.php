@@ -27,6 +27,37 @@ defined('MOODLE_INTERNAL') || die();
 $string['action:delete'] = 'Löschen';
 $string['action:edit'] = 'Bearbeiten';
 
+$string['category:administrative'] = 'Verwaltung';
+$string['category:all'] = 'Alle';
+$string['category:events'] = 'Veranstaltungen';
+$string['category:infos'] = 'Informationen';
+$string['category:innovations'] = 'Neuerungen';
+$string['category:maintenance'] = 'Wartung/Störung';
+
+$string['deletion_success'] = 'Die Benachrichtigung wurde erfolgreich gelöscht';
+
+$string['form:after'] = 'Nach';
+$string['form:any'] = 'Beliebig';
+$string['form:before'] = 'Vor';
+$string['form:category'] = 'Kategorie';
+$string['form:category_help'] = (
+    '<ul>' .
+    '<li><strong>Informationen <i class="fa fa-newspaper"></i>.</strong> Allgemeine Nachrichten und Mitteilungen (Prio Niedrig)</li>' .
+    '<li><strong>Veranstaltungen <i class="fa-regular fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)' .
+    '<li><strong>Verwaltung <i class="fa fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>' .
+    '</ul>'
+);
+$string['form:categoryname'] = 'Kategorie';
+$string['form:contains'] = 'Enthält';
+$string['form:deleted'] = 'Gelöschte anzeigen';
+$string['form:equals'] = 'Gleich';
+$string['form:firstname'] = 'Vorname';
+$string['form:header'] = 'Neue Benachrichtigung';
+$string['form:lastname'] = 'Nachname';
+$string['form:message'] = 'Nachricht';
+$string['form:renotify'] = 'Erneut benachrichtigen';
+$string['form:title'] = 'Titel';
+$string['form:validation:date'] = 'Das Enddatum muss nach dem Startdatum liegen';
 $string['form:visibility'] = 'Sichtbarkeit';
 $string['form:visibility_help'] = (
     'Die Rollen verfügen über eine gestufte Sichtbarkeit. ' .
@@ -38,32 +69,43 @@ $string['form:visibility_help'] = (
     <li><strong>Administrator*innen.</strong> sehen sämtliche Nachrichten</li>
     </ol>'
 );
-$string['form:header'] = 'Neue Benachrichtigung';
-$string['form:message'] = 'Nachricht';
-$string['form:title'] = 'Titel';
-$string['form:category'] = 'Kategorie';
-$string['form:category_help'] = (
-    '<ul>' .
-        '<li><strong>Informationen <i class="fa fa-newspaper"></i>.</strong> Allgemeine Nachrichten und Mitteilungen (Prio Niedrig)</li>' .
-        '<li><strong>Veranstaltungen <i class="fa-regular fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)' .
-        '<li><strong>Verwaltung <i class="fa fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>' .
-    '</ul>'
-);
-$string['form:renotify'] = 'Erneut benachrichtigen';
-$string['form:validation:date'] = 'Das Enddatum muss nach dem Startdatum liegen';
-$string['form:firstname'] = 'Vorname';
-$string['form:lastname'] = 'Nachname';
-$string['form:categoryname'] = 'Kategorie';
-$string['form:contains'] = 'Enthält';
-$string['form:any'] = 'Beliebig';
-$string['form:before'] = 'Vor';
-$string['form:after'] = 'Nach';
-$string['form:equals'] = 'Gleich';
-$string['form:deleted'] = 'Gelöschte anzeigen';
+
+$string['local/information_center:delete_messages'] = 'Kann Nachrichten löschen';
+$string['local/information_center:read_admin_messages'] = 'Kann Nachrichten von Administratoren im Informationszentrum sehen';
+$string['local/information_center:read_manager_messages'] = 'Kann Nachrichten von Managern im Informationszentrum sehen';
+$string['local/information_center:read_student_messages'] = 'Kann Nachrichten von Studierenden im Informationszentrum sehen';
+$string['local/information_center:read_teacher_messages'] = 'Kann Nachrichten von Lehrenden im Informationszentrum sehen';
+$string['local/information_center:update_or_create_messages'] = 'Kann Nachrichten editieren und erstellen';
+
+$string['navigationnode:unreadcount'] = '{$a} ungelesene Nachrichten';
+
+$string['overview:external'] = 'Extern (BW)';
+$string['overview:internal'] = 'Intern';
+$string['overview:sendmessages'] = 'Nachrichten verwalten';
+$string['overview:title'] = 'Benachrichtigungen';
 
 $string['page:message_overview'] = 'Benachrichtigungsübersicht';
 
-$string['deletion_success'] = 'Die Benachrichtigung wurde erfolgreich gelöscht';
+$string['pluginname'] = 'Informationszentrum';
+
+$string['privacy:metadata:local_information_center'] = 'Speichert Informationen über Nachrichten, die ein Benutzer im Informationszentrum gelesen hat.';
+$string['privacy:metadata:local_information_center:messageid'] = 'Nachricht die gelesen wurde.';
+$string['privacy:metadata:local_information_center:userid'] = 'Die ID des Benutzers, der eine Nachricht gelesen hat.';
+
+$string['privacy:metadata:local_information_center_messages'] = 'Speichert Nachrichten, die über das Informationszentrum gesendet wurden.';
+$string['privacy:metadata:local_information_center_messages:categoryid'] = 'Die ID der Kategorie, zu der diese Nachricht gehört.';
+$string['privacy:metadata:local_information_center_messages:component'] = 'Die Moodle-Komponente oder das Plugin, das die Nachricht generiert hat.';
+$string['privacy:metadata:local_information_center_messages:fullmessage'] = 'Der vollständige Nachrichtentext.';
+$string['privacy:metadata:local_information_center_messages:fullmessageformat'] = 'Das Format der vollständigen Nachricht (z. B. HTML oder Klartext).';
+$string['privacy:metadata:local_information_center_messages:smallmessage'] = 'Eine kurze Zusammenfassung oder Vorschau der Nachricht.';
+$string['privacy:metadata:local_information_center_messages:subject'] = 'Der Betreff der Nachricht.';
+$string['privacy:metadata:local_information_center_messages:timecreated'] = 'Der Zeitpunkt, zu dem die Nachricht erstellt wurde.';
+$string['privacy:metadata:local_information_center_messages:timedeleted'] = 'Der Zeitpunkt, zu dem die Nachricht gelöscht wurde (falls zutreffend).';
+$string['privacy:metadata:local_information_center_messages:timeend'] = 'Der Zeitpunkt, ab dem die Nachricht nicht mehr sichtbar ist.';
+$string['privacy:metadata:local_information_center_messages:timemodified'] = 'Der Zeitpunkt, zu dem die Nachricht zuletzt bearbeitet wurde.';
+$string['privacy:metadata:local_information_center_messages:timestart'] = 'Der Zeitpunkt, ab dem die Nachricht sichtbar ist.';
+$string['privacy:metadata:local_information_center_messages:useridfrom'] = 'Die ID des Benutzers, der die Nachricht gesendet hat.';
+$string['privacy:metadata:local_information_center_messages:visibility'] = 'Für welche Benutzer die Nachricht sichtbar ist.';
 
 $string['settings:auto_delete'] = 'Automatisch löschen';
 $string['settings:auto_delete_desc'] = 'Legt fest, ob eine Benachrichtigung nach Ablauf des Enddatums automatisch gelöscht wird';
@@ -77,55 +119,17 @@ $string['table:createdby'] = 'Erstellt von';
 $string['table:createdby:extern'] = 'Extern';
 $string['table:enddate'] = 'Enddatum';
 $string['table:enddate_help'] = (
-    'Nachrichten werden nach dem Datum unsichtbar. Man kann sie im Managementbereich sehen.'
+'Nachrichten werden nach dem Datum unsichtbar. Man kann sie im Managementbereich sehen.'
 );
-$string['table:visibility'] = 'Sichtbarkeit';
-$string['table:startdate'] = 'Startdatum';
 $string['table:messagecategory'] = 'Kategorie';
+$string['table:startdate'] = 'Startdatum';
 $string['table:title'] = 'Titel';
 $string['table:type'] = 'Typ';
-
-$string['pluginname'] = 'Informationszentrum';
-$string['visibility:admin']   = 'Sichtbar für Administrator*innen';
-$string['visibility:manager'] = 'Sichtbar für Manager*innen';
-$string['visibility:teacher'] = 'Sichtbar für Lehrkräfte';
-$string['visibility:student'] = 'Sichtbar für Schüler*innen';
-
-$string['category:all'] = 'Alle';
-$string['category:infos'] = 'Informationen';
-$string['category:innovations'] = 'Neuerungen';
-$string['category:events'] = 'Veranstaltungen';
-$string['category:administrative'] = 'Verwaltung';
-$string['category:maintenance'] = 'Wartung/Störung';
+$string['table:visibility'] = 'Sichtbarkeit';
 
 $string['task:message_cleanup'] = 'Nachrichtenbereinigung';
-$string['local/information_center:read_student_messages'] = 'Kann Nachrichten von Studierenden im Informationszentrum sehen';
-$string['local/information_center:read_teacher_messages'] = 'Kann Nachrichten von Lehrenden im Informationszentrum sehen';
-$string['local/information_center:read_manager_messages'] = 'Kann Nachrichten von Managern im Informationszentrum sehen';
-$string['local/information_center:read_admin_messages'] = 'Kann Nachrichten von Administratoren im Informationszentrum sehen';
-$string['local/information_center:update_or_create_messages'] = 'Kann Nachrichten editieren und erstellen';
-$string['local/information_center:delete_messages'] = 'Kann Nachrichten löschen';
-$string['overview:sendmessages'] = 'Nachrichten verwalten';
-$string['overview:title'] = 'Benachrichtigungen';
-$string['overview:internal'] = 'Intern';
-$string['overview:external'] = 'Extern (BW)';
-$string['navigationnode:unreadcount'] = '{$a} ungelesene Nachrichten';
 
-$string['privacy:metadata:local_information_center'] = 'Speichert Informationen über Nachrichten, die ein Benutzer im Informationszentrum gelesen hat.';
-$string['privacy:metadata:local_information_center:userid'] = 'Die ID des Benutzers, der eine Nachricht gelesen hat.';
-$string['privacy:metadata:local_information_center:messageid'] = 'Nachricht die gelesen wurde.';
-
-$string['privacy:metadata:local_information_center_messages'] = 'Speichert Nachrichten, die über das Informationszentrum gesendet wurden.';
-$string['privacy:metadata:local_information_center_messages:useridfrom'] = 'Die ID des Benutzers, der die Nachricht gesendet hat.';
-$string['privacy:metadata:local_information_center_messages:subject'] = 'Der Betreff der Nachricht.';
-$string['privacy:metadata:local_information_center_messages:fullmessage'] = 'Der vollständige Nachrichtentext.';
-$string['privacy:metadata:local_information_center_messages:fullmessageformat'] = 'Das Format der vollständigen Nachricht (z. B. HTML oder Klartext).';
-$string['privacy:metadata:local_information_center_messages:smallmessage'] = 'Eine kurze Zusammenfassung oder Vorschau der Nachricht.';
-$string['privacy:metadata:local_information_center_messages:timestart'] = 'Der Zeitpunkt, ab dem die Nachricht sichtbar ist.';
-$string['privacy:metadata:local_information_center_messages:timeend'] = 'Der Zeitpunkt, ab dem die Nachricht nicht mehr sichtbar ist.';
-$string['privacy:metadata:local_information_center_messages:visibility'] = 'Für welche Benutzer die Nachricht sichtbar ist.';
-$string['privacy:metadata:local_information_center_messages:categoryid'] = 'Die ID der Kategorie, zu der diese Nachricht gehört.';
-$string['privacy:metadata:local_information_center_messages:component'] = 'Die Moodle-Komponente oder das Plugin, das die Nachricht generiert hat.';
-$string['privacy:metadata:local_information_center_messages:timecreated'] = 'Der Zeitpunkt, zu dem die Nachricht erstellt wurde.';
-$string['privacy:metadata:local_information_center_messages:timemodified'] = 'Der Zeitpunkt, zu dem die Nachricht zuletzt bearbeitet wurde.';
-$string['privacy:metadata:local_information_center_messages:timedeleted'] = 'Der Zeitpunkt, zu dem die Nachricht gelöscht wurde (falls zutreffend).';
+$string['visibility:admin'] = 'Sichtbar für Administrator*innen';
+$string['visibility:manager'] = 'Sichtbar für Manager*innen';
+$string['visibility:student'] = 'Sichtbar für Schüler*innen';
+$string['visibility:teacher'] = 'Sichtbar für Lehrkräfte';

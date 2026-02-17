@@ -18,6 +18,14 @@ namespace local_information_center\form;
 
 use renderable;
 
+/**
+ * UI Component for rendering the message filter area,
+ * to search messages
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class filter_renderer implements renderable {
     private const PLUGIN_NAME = 'local_information_center';
 

@@ -17,11 +17,25 @@
 namespace tool_oc_remote_notification;
 
 use core\di;
+use dml_exception;
 use local_information_center\message_handle\contracts\i_message_manager;
 use local_information_center\message_handle\contracts\message;
 use local_information_center\message_handle\contracts\visibility;
 
+/**
+ * Generates plugin-specific data
+ *
+ * @author Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright 2025, oncampus GmbH, <support@oncampus.de>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class generator {
+    /**
+     * Creates a message in the database
+     *
+     * @return message Message data object
+     * @throws dml_exception Database connection failed
+     */
     public static function create_message(): message {
         $message = self::generate_message();
         $manager = di::get(i_message_manager::class);
@@ -29,6 +43,11 @@ class generator {
         return $message;
     }
 
+    /**
+     * Generates a message data object and returns it
+     *
+     * @return message Message data object
+     */
     public static function generate_message(): message {
         $message = new message();
         $message->component = 'message_manager';

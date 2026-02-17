@@ -19,6 +19,13 @@ namespace local_information_center\form;
 use core\output\html_writer;
 use moodle_url;
 
+/**
+ * Creates an action item html component
+ *
+ * @author      Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright   2025, oncampus GmbH, <support@oncampus.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class action_icon {
     /**
      * Helper functions to show icons in the settings menu (delete and edit)

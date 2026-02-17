@@ -16,22 +16,38 @@
 
 namespace local_information_center\form;
 
+use coding_exception;
 use core\di;
 use core\output\html_writer;
+use dml_exception;
 use flexible_table;
 use moodle_database;
 use moodle_url;
 use stdClass;
 
+/**
+ * Table of all messages, with edit, delete and resend buttons
+ *
+ * @author Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright 2025, oncampus GmbH, <support@oncampus.de>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class message_table extends flexible_table implements filterable_table {
     /** @var string EDIT_LINK Link to the edit page for messages */
     private const EDIT_LINK = '/local/information_center/pages/edit_notification.php';
     /** @var string EDIT_LINK Link to the deletion page for messages */
     private const DELETE_LINK = '/local/information_center/pages/delete_notification.php';
-
+    /** @var array Applied filters with field and way */
     private array $filters = [];
+    /** @var array Applied filter values */
     private array $filterparams = [];
 
+    /**
+     * Define the table structure
+     *
+     * @param string $baseurl Base URL of the page
+     * @throws coding_exception Cannot load language string
+     */
     public function __construct($baseurl) {
         $this->define_baseurl($baseurl);
         $this->define_columns(['subject', 'timestart', 'timeend', 'firstname', 'categoryname', 'edit', 'delete']);
@@ -51,6 +67,14 @@ class message_table extends flexible_table implements filterable_table {
         parent::__construct('message_status');
     }
 
+    /**
+     * Applies an filter to the messages in the table
+     *
+     * @param string $field Database field
+     * @param mixed $value Value to compare with
+     * @param string $comparator Way to compare value with database value
+     * @return void
+     */
     public function add_filter(
         $field,
         $value,
@@ -64,6 +88,12 @@ class message_table extends flexible_table implements filterable_table {
         }
     }
 
+    /**
+     * Fetches the message data from the database (Does not load it in the table!!!)
+     *
+     * @return array Message data as array
+     * @throws dml_exception Cannot connect to the database
+     */
     public function get_data(): array {
         $messageorder = "";
         if ($order = $this->get_sql_sort()) {
@@ -103,6 +133,14 @@ class message_table extends flexible_table implements filterable_table {
         return $db->get_records_sql($sql, $this->filterparams);
     }
 
+    /**
+     * Adds a message to the shown entries
+     *
+     * @param stdClass $message
+     * @return void
+     * @throws \core\exception\moodle_exception
+     * @throws coding_exception
+     */
     public function add_message_data(stdClass $message): void {
         global $USER;
 

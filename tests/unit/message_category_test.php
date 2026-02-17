@@ -17,11 +17,29 @@
 namespace local_information_center\message_handle;
 
 use advanced_testcase;
+use coding_exception;
 use core\di;
+use dml_exception;
 use local_information_center\message_handle\contracts\i_message_category;
 
+/**
+ * Test the message category class
+ *
+ * @covers i_message_category
+ * @author Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright 2025, oncampus GmbH, <support@oncampus.de>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class message_category_test extends advanced_testcase {
-    public function test_get_all() {
+    /**
+     * Test if all message categories exist
+     *
+     * @covers i_message_category::get_all
+     * @return void
+     * @throws coding_exception Cache cannot be loaded
+     * @throws dml_exception Database connection failed
+     */
+    public function test_get_all(): void {
         $messagecategory = di::get(i_message_category::class);
 
         $categories = $messagecategory->get_all();
