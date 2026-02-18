@@ -1,77 +1,72 @@
-# Information Center
+# Information Centre
 
-**Information Center** ist ein lokales Plugin für Moodle, welches die Verwaltung und Anzeige von Informationen innerhalb
-der Moodle-Plattform ermöglicht.
-Es bietet Funktionen zum Erstellen, Aktualisieren und Löschen von Nachrichten sowie zur Definition von
-Nachrichtenkategorien und Sichtbarkeitsoptionen
-basierend auf Benutzerrollen.
+**Information Centre** is a local plugin for Moodle that enables the management and display of information within
+the Moodle platform. It offers functions for creating, updating and deleting messages, as well as for defining
+message categories and visibility options based on user roles.
 
 ## Features
 
-- APIs um Nachrichten zu erstellen, aktualisieren und löschen
-- Definition von Nachrichtenkategorien
-- Steuerung der Nachrichtensichtbarkeit basierend auf Benutzerrollen
-- Bereinigung alter Nachrichten durch Cronjob
-- Bereitstellung von Web-Service-Funktionen zur externen Nachrichtenverwaltung
+- APIs for creating, updating and deleting messages
+- Definition of message categories
+- Control of message visibility based on user roles
+- Clean-up of old messages via cron job
+- Provision of web service functions for external message management
 
 ## Installation
 
-1. Clone das Repository in das `/local/information_center`-Verzeichnis der Moodle-Installation.
-2. Ruf' **Website-Administration → Systemnachrichten** auf, um die Installation anzustoßen oder führ'
-   `admin/cli/upgrade.php` aus.
+1. Clone the repository into the `/local/information_center` directory of the Moodle installation.
+2. Go to **Site administration → System messages** to start the installation or run
+   `admin/cli/upgrade.php`.
 
-### Voraussetzungen
+### Requirements
 
-- Moodle 3.x oder höher
-- PHP 7.x oder höher
+None
 
-## Konfiguration
+## Configuration
 
-Keine Vorhanden
+None
 
 ## Nutzung
 
-- Die Nachrichten werden Sichtbar unter `/local/information_center/pages/overview.php`
-- Nachrichten können für verschiedene Benutzerrollen sichtbar gemacht werden (z.B. Studenten, Lehrer, Manager,
-  Administratoren).
-- Das Plugin ermöglicht es Administratoren, wichtige Informationen gezielt an bestimmte Benutzergruppen zu
-  kommunizieren.
+- The messages are visible at `/local/information_centre/pages/overview.php`
+- Messages can be made visible to different user roles (e.g. students, teachers, managers, administrators).
+- The plugin enables administrators to communicate important information to specific user groups in a targeted manner.
 
-## Rechte
+## Rights
 
-Dieses Plugin definiert folgende Rechte:
+This plugin defines the following rights:
 
-| Name des Rechts                                  | Beschreibung                                                    | Standardrolle           |
-|--------------------------------------------------|-----------------------------------------------------------------|-------------------------|
-| `local/information_center:read_student_messages` | Erlaubt es dem Nutzer, Nachrichten für Studenten zu lesen       | Authenticated users     |
-| `local/information_center:read_teacher_messages` | Erlaubt es dem Nutzer, Nachrichten für Lehrer zu lesen          | Editingteacher, Teacher |
-| `local/information_center:read_manager_messages` | Erlaubt es dem Nutzer, Nachrichten für Manager zu lesen         | Manager                 |
-| `local/information_center:read_admin_messages`   | Erlaubt es dem Nutzer, Nachrichten für Administratoren zu lesen |                         |
-| `local/information_center:create_message`        | Erlaubt es dem Nutzer, Nachrichten zu erstellen                 | Manager                 |
+| Name                                             | Description                                          | Standard role           |
+|--------------------------------------------------|------------------------------------------------------|-------------------------|
+| `local/information_center:read_student_messages` | Allows the user to read messages for students        | Authenticated users     |
+| `local/information_center:read_teacher_messages` | Allows the user to read messages for teachers        | Editingteacher, Teacher |
+| `local/information_center:read_manager_messages` | Allows the user to read messages for managers        | Manager                 |
+| `local/information_center:read_admin_messages`   | Allows the user to read messages for administrators  |                         |
+| `local/information_center:create_message`        | Allows the user to create messages                   | Manager                 |
 
-## Cronjobs
+## Cron jobs
 
-Dieses Plugin definiert folgende Cronjobs:
+This plugin defines the following cron jobs:
 
-| Task Class                                       | Beschreibung                               | Standardintervall der Ausführung |
-|--------------------------------------------------|--------------------------------------------|----------------------------------|
-| `local_information_center\tasks\message_cleanup` | Bereinigt alte und abgelaufene Nachrichten | Täglich (um 02:00 Uhr)           |
+| Task Class                                       | Description                     | Standard intervall for execution |
+|--------------------------------------------------|---------------------------------|----------------------------------|
+| `local_information_center\tasks\message_cleanup` | Clears old and expired messages | Daily (at 2:00 a.m.)             |
 
 ## Web Services
 
-Dieses Plugin stellt folgende Webservice-Funktionen zur Verfügung:
+This plugin provides the following web service functions:
 
-| Webservice-Funktion                       | Beschreibung                                 |
-|-------------------------------------------|----------------------------------------------|
-| `local_information_center_create_message` | Sendet eine Nachricht an bestimmte Benutzer. |
+| Web Service Function                      | Description                       |
+|-------------------------------------------|-----------------------------------|
+| `local_information_center_create_message` | Send a message to specific users. |
 
-## Lizenz
+## License
 
-Dieses Plugin ist lizensiert unter [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This plugin is licensed under [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 ## Credits
 
-Autor:
+Author:
 
 - Konrad Ebel ([konrad.ebel@oncampus.de](mailto:konrad.ebel@oncampus.de))
 - Jonas Reuter ([jonas.reuter@oncampus.de](mailto:jonas.reuter@oncampus.de))
