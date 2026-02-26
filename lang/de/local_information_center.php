@@ -58,7 +58,7 @@ $string['form:title'] = 'Titel';
 $string['form:validation:date'] = 'Das Enddatum muss nach dem Startdatum liegen';
 $string['form:visibility'] = 'Sichtbarkeit';
 $string['form:visibility_help'] = 'Die Rollen verfügen über eine gestufte Sichtbarkeit.
-Höherrangige Rollen schließen automatisch alle Sichtbarkeiten der niedrigeren Rollen mit ein:
+ Höherrangige Rollen schließen automatisch alle Sichtbarkeiten der niedrigeren Rollen mit ein:
 <ol>
 <li><strong>Schüler*innen.</strong> sehen nur Ihre Nachrichten.</li>
 <li><strong>Lehrkräfte.</strong> sehen Nachrichten für Lehrkräfte und Schüler*innen.</li>
@@ -126,6 +126,14 @@ $string['table:type'] = 'Typ';
 $string['table:visibility'] = 'Sichtbarkeit';
 
 $string['task:message_cleanup'] = 'Nachrichtenbereinigung';
+
+$string['validation:category:notexist'] = 'Kategorie {$a} existiert nicht';
+$string['validation:timeend:aftertimestart'] = 'Muss nach der Startzeit liegen';
+$string['validation:timeend:notnegative'] = 'Die Endzeit darf nicht negativ sein';
+$string['validation:timestart:notnegative'] = 'Die Startzeit darf nicht negativ sein';
+$string['validation:useridfrom:cannotbechanged'] = 'Der Eigentümer der Nachrichten kann nicht geändert werden';
+$string['validation:useridfrom:notexist'] = 'Ein Benutzer mit der ID {$a} existiert nicht';
+$string['validation:visibility:invalid'] = 'Die Sichtbarkeit {$a} ist ungültig';
 
 $string['visibility:admin'] = 'Sichtbar für Administrator*innen';
 $string['visibility:manager'] = 'Sichtbar für Manager*innen';

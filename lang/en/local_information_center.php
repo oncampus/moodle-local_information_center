@@ -57,8 +57,8 @@ $string['form:renotify'] = 'Notify again';
 $string['form:title'] = 'Title';
 $string['form:validation:date'] = 'The enddate must be later then the startdate';
 $string['form:visibility'] = 'Visibility';
-$string['form:visibility_help'] = 'The roles have a tiered visibility. 
-Higher-level roles automatically include all visibility levels of lower-level roles:
+$string['form:visibility_help'] = 'The roles have a tiered visibility.
+ Higher-level roles automatically include all visibility levels of lower-level roles:
 <ol>
 <li><strong>Learners. can only see their own messages.</li>
 <li><strong>Teachers. see messages for teachers and learners.</li>
@@ -129,13 +129,13 @@ $string['table:visibility'] = 'Visibility';
 
 $string['task:message_cleanup'] = 'Message cleanup';
 
-$string['validation:visibility:invalid'] = 'Visibility {$a} is not valid';
-$string['validation:timestart:notnegative'] = 'Start time can not be negative';
-$string['validation:timeend:notnegative'] = 'End time can not be negative';
-$string['validation:timeend:aftertimestart'] = 'Should be later than start time';
 $string['validation:category:notexist'] = 'Category {$a} does not exist';
-$string['validation:useridfrom:notexist'] = 'User with ID {$a} does not exist';
+$string['validation:timeend:aftertimestart'] = 'Should be later than start time';
+$string['validation:timeend:notnegative'] = 'End time can not be negative';
+$string['validation:timestart:notnegative'] = 'Start time can not be negative';
 $string['validation:useridfrom:cannotbechanged'] = 'The owner of messages cannot be changed';
+$string['validation:useridfrom:notexist'] = 'User with ID {$a} does not exist';
+$string['validation:visibility:invalid'] = 'Visibility {$a} is not valid';
 
 $string['visibility:admin'] = 'Visible to administrators';
 $string['visibility:manager'] = 'Visible to managers';
