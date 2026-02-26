@@ -22,12 +22,12 @@ use core\di;
 use core\hook\di_configuration;
 use core\hook\navigation\primary_extend;
 use core\output\html_writer;
-use local_information_center\message_handle\contracts\i_message_category;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\i_message_read;
-use local_information_center\message_handle\message_category;
-use local_information_center\message_handle\message_manager;
-use local_information_center\message_handle\message_read;
+use local_information_center\notification\contracts\NotificationCategory;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\NotificationsRead;
+use local_information_center\notification\notification_category;
+use local_information_center\notification\notification_manager;
+use local_information_center\notification\notifications_read;
 use moodle_database;
 use moodle_url;
 use navigation_node;
@@ -48,31 +48,31 @@ class hook_callbacks {
      */
     public static function di_configuration(di_configuration $config): void {
         $config->add_definition(
-            id: i_message_read::class,
+            id: NotificationsRead::class,
             definition: function (
                 moodle_database $db,
                 clock $clock,
-            ): i_message_read {
-                return new message_read($db, $clock);
+            ): NotificationsRead {
+                return new notifications_read($db, $clock);
             }
         );
 
         $config->add_definition(
-            id: i_message_category::class,
+            id: NotificationCategory::class,
             definition: function (
                 moodle_database $db,
-            ): i_message_category {
-                return new message_category($db);
+            ): NotificationCategory {
+                return new notification_category($db);
             }
         );
 
         $config->add_definition(
-            id: i_message_manager::class,
+            id: NotificationManager::class,
             definition: function (
                 clock $clock,
                 moodle_database $db,
-            ): i_message_manager {
-                return new message_manager($clock, $db);
+            ): NotificationManager {
+                return new notification_manager($clock, $db);
             }
         );
     }
@@ -97,7 +97,7 @@ class hook_callbacks {
         }
 
         // Data: unread count for current user.
-        $readmng = di::get(i_message_read::class);
+        $readmng = di::get(NotificationsRead::class);
         $unread = $readmng->count_unread($USER->id);
 
         // Badge (only when there are unread items).
@@ -118,7 +118,7 @@ class hook_callbacks {
         $label = get_string('overview:title', 'local_information_center') . $iconwithbadge;
 
         // Target URL.
-        $url = new moodle_url('/local/information_center/pages/overview.php');
+        $url = new moodle_url('/local/information_center/pages/user_notification_dashboard.php');
 
         // Create and add node.
         $node = navigation_node::create($label, $url);

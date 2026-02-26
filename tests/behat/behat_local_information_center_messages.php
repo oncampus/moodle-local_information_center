@@ -17,8 +17,8 @@
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use core\di;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\message;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\notification;
 
 /**
  * Creates, edits or deletes messages for behat tests
@@ -43,8 +43,8 @@ class behat_local_information_center_messages extends behat_base {
      */
     public function given_the_following_messages_exist(TableNode $table): void {
         foreach ($table as $row) {
-            $message = message::from_stdClass((object) $row);
-            $result = di::get(i_message_manager::class)->add_or_update($message);
+            $message = notification::from_stdClass((object) $row);
+            $result = di::get(NotificationManager::class)->add_or_update($message);
 
             if ($result === false) {
                 throw new ExpectationException("Could not update message with id " . $row['id'], $this->getSession());
@@ -64,7 +64,7 @@ class behat_local_information_center_messages extends behat_base {
      * @param string $component Defines the component internal or external
      */
     public function when_i_am_on_the_infocenter_page(string $component): void {
-        $url = new moodle_url("/local/information_center/pages/overview.php", ['component' => $component]);
+        $url = new moodle_url("/local/information_center/pages/user_notification_dashboard.php", ['component' => $component]);
         $this->getSession()->visit($this->locate_path($url->out()));
     }
 }

@@ -29,9 +29,9 @@ use core_external\external_value;
 use dml_exception;
 use Exception;
 use invalid_parameter_exception;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\i_message_read;
-use local_information_center\message_handle\contracts\message;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\NotificationsRead;
+use local_information_center\notification\contracts\notification;
 use moodle_database;
 use required_capability_exception;
 use stdClass;
@@ -75,18 +75,7 @@ class create_message extends external_api {
         self::validate_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
-        $db = di::get(moodle_database::class);
-        $localid = $db->get_field(
-            'local_information_center_external_ids',
-            'messageid',
-            ['externalid' => $messagedata['id']]
-        );
-        if ($localid === false) {
-            $localid = null;
-        }
-
-        $message = new message();
-        $message->id = $localid;
+        $message = new notification();
         $message->useridfrom = $USER->id;
         $message->timestart = $messagedata['timestart'];
         $message->timeend = $messagedata['timeend'];
@@ -99,7 +88,7 @@ class create_message extends external_api {
         $message->subject = $messagedata['subject'];
         $message->component = 'external';
 
-        $messagemanager = di::get(i_message_manager::class);
+        $messagemanager = di::get(NotificationManager::class);
         $errors = $messagemanager->validate($message);
         if (!empty($errors)) {
             $output = new stdClass();
@@ -112,22 +101,58 @@ class create_message extends external_api {
             return $output;
         }
 
+        // Search if the message exists locally.
+        $message->id = self::get_local_id($messagedata['id']);
         $id = $messagemanager->add_or_update($message);
-        if ($localid == null) {
-            $db->insert_record(
-                'local_information_center_external_ids',
-                (object) ['messageid' => $id, 'externalid' => $messagedata['id']]
-            );
+        if ($message->id === null) {
+            self::save_local_id($message->id, $id);
         }
 
         if ($renotify) {
-            $readmng = di::get(i_message_read::class);
+            $readmng = di::get(NotificationsRead::class);
             $readmng->reset_readcount($id);
         }
 
         $output = new stdClass();
         $output->errors = [];
         return $output;
+    }
+
+    /**
+     * Saves a mapping of a local ID to a remote ID
+     *
+     * @param int $localid local ID
+     * @param int $remoteid remote ID
+     * @return bool Successful
+     * @throws dml_exception
+     */
+    private static function save_local_id(int $localid, int $remoteid): bool {
+        $db = di::get(moodle_database::class);
+        return $db->insert_record(
+            'local_information_center_external_ids',
+            (object) ['messageid' => $localid, 'externalid' => $remoteid],
+            false
+        );
+    }
+
+    /**
+     * Check for local mapping of the given remote id
+     *
+     * @param int $remoteid remote ID
+     * @return int|null Local notification ID, if mapping exists
+     * @throws dml_exception
+     */
+    private static function get_local_id(int $remoteid): int|null {
+        $db = di::get(moodle_database::class);
+        $localid = $db->get_field(
+            'local_information_center_external_ids',
+            'messageid',
+            ['externalid' => $remoteid]
+        );
+        if ($localid === false) {
+            return null;
+        }
+        return $localid;
     }
 
     /**

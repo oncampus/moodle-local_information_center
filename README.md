@@ -28,7 +28,7 @@ None
 
 ## Nutzung
 
-- The messages are visible at `/local/information_centre/pages/overview.php`
+- The messages are visible at `/local/information_centre/pages/user_notification_dashboard.php`
 - Messages can be made visible to different user roles (e.g. students, teachers, managers, administrators).
 - The plugin enables administrators to communicate important information to specific user groups in a targeted manner.
 

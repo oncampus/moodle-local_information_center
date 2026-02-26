@@ -26,7 +26,7 @@ require('../../../config.php');
 
 use core\di;
 use core\output\html_writer;
-use local_information_center\message_handle\contracts\i_message_read;
+use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\output\infocenter;
 
 require_login();
@@ -54,16 +54,17 @@ $params = [
     'component' => optional_param('component', 'external', PARAM_TEXT),
 ];
 
-$url = new moodle_url('/local/information_center/pages/overview.php');
+$url = '/local/information_center/pages/user_notification_dashboard.php';
 $PAGE->set_context($context);
-$PAGE->set_url($url);
+$PAGE->set_url(new moodle_url($url));
 $PAGE->set_title(get_string('pluginname', 'local_information_center'));
 $PAGE->set_heading(get_string('overview:title', 'local_information_center'));
 
-$redirecturl = new moodle_url('/local/information_center/pages/overview.php', $params);
+$redirecturl = new moodle_url($url, $params);
 $renderer = $PAGE->get_renderer('core', 'message');
 $infocenter = new infocenter(
     $redirecturl,
+    new moodle_url('/local/information_center/pages/admin_notification_dashboard.php', $params),
     $params['component'],
     $params['query'],
     $params['page'],
@@ -73,7 +74,7 @@ $infocenter = new infocenter(
 $tabs = [];
 foreach (['internal', 'external'] as $component) {
     $text = get_string("overview:$component", 'local_information_center');
-    $messageread = di::get(i_message_read::class);
+    $messageread = di::get(NotificationsRead::class);
     $external = $component == 'external';
     $unreadmsgs = $messageread->count_unread($USER->id, $external);
     if (0 < $unreadmsgs) {

@@ -31,7 +31,7 @@ use moodleform;
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_filter_form extends moodleform {
+class notification_filter_form extends moodleform {
     /** @var string Name of this plugin */
     private const PLUGIN_NAME = 'local_information_center';
 
@@ -103,10 +103,10 @@ class message_filter_form extends moodleform {
     /**
      * Sets the configured filters from this from to a filterable table
      *
-     * @param filterable_table $table Apply the filters to this table
+     * @param FilterableTable $table Apply the filters to this table
      * @return void
      */
-    public function set_filters(filterable_table $table): void {
+    public function set_filters(FilterableTable $table): void {
         $data = (array) $this->get_data();
         if (!array_key_exists('timedeleted', $data)) {
             $data['timedeleted_ftype'] = 'isset';

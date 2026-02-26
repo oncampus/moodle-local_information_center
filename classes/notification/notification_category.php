@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle;
+namespace local_information_center\notification;
 
 use coding_exception;
 use dml_exception;
-use local_information_center\message_handle\contracts\i_message_category;
+use local_information_center\notification\contracts\NotificationCategory;
 use moodle_database;
 use stdClass;
 
@@ -29,7 +29,7 @@ use stdClass;
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_category implements i_message_category {
+class notification_category implements NotificationCategory {
     /** @var moodle_database Moodle Database */
     private readonly moodle_database $db;
 

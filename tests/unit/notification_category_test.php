@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle;
+namespace local_information_center\notification;
 
 use advanced_testcase;
 use coding_exception;
 use core\di;
 use dml_exception;
-use local_information_center\message_handle\contracts\i_message_category;
+use local_information_center\notification\contracts\NotificationCategory;
 
 /**
- * Test the message category class
+ * Test the notification category class
  *
- * @covers \local_information_center\message_handle\contracts\i_message_category
+ * @covers \local_information_center\notification\contracts\NotificationCategory
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class message_category_test extends advanced_testcase {
+final class notification_category_test extends advanced_testcase {
     /**
-     * Test if all message categories exist
+     * Test if all notification categories exist
      *
      * @covers ::get_all
      * @return void
@@ -40,9 +40,9 @@ final class message_category_test extends advanced_testcase {
      * @throws dml_exception Database connection failed
      */
     public function test_get_all(): void {
-        $messagecategory = di::get(i_message_category::class);
+        $notificationcategory = di::get(NotificationCategory::class);
 
-        $categories = $messagecategory->get_all();
+        $categories = $notificationcategory->get_all();
 
         $this->assertCount(5, $categories);
     }

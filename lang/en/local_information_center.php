@@ -81,6 +81,7 @@ $string['overview:internal'] = 'Internal';
 $string['overview:sendmessages'] = 'Manage messages';
 $string['overview:title'] = 'Notifications';
 
+$string['page'] = 'Page';
 $string['page:message_overview'] = 'Notification overview';
 
 $string['pluginname'] = 'Information Center';
@@ -104,6 +105,8 @@ $string['privacy:metadata:local_information_center_messages:timestart'] = 'The t
 $string['privacy:metadata:local_information_center_messages:useridfrom'] = 'The ID of the user who sent the message.';
 $string['privacy:metadata:local_information_center_messages:visibility'] = 'To which users the message is visible.';
 
+$string['search'] = "Search";
+
 $string['settings:auto_delete'] = 'Auto delete';
 $string['settings:auto_delete_desc'] = 'Toggles whether a notification that go past the set end-date is automatically deleted';
 $string['settings:auto_delete_duration'] = 'Auto delete duration';
@@ -125,6 +128,14 @@ $string['table:type'] = 'Type';
 $string['table:visibility'] = 'Visibility';
 
 $string['task:message_cleanup'] = 'Message cleanup';
+
+$string['validation:visibility:invalid'] = 'Visibility {$a} is not valid';
+$string['validation:timestart:notnegative'] = 'Start time can not be negative';
+$string['validation:timeend:notnegative'] = 'End time can not be negative';
+$string['validation:timeend:aftertimestart'] = 'Should be later than start time';
+$string['validation:category:notexist'] = 'Category {$a} does not exist';
+$string['validation:useridfrom:notexist'] = 'User with ID {$a} does not exist';
+$string['validation:useridfrom:cannotbechanged'] = 'The owner of messages cannot be changed';
 
 $string['visibility:admin'] = 'Visible to administrators';
 $string['visibility:manager'] = 'Visible to managers';

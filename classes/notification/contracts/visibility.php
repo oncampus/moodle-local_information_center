@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle\contracts;
+namespace local_information_center\notification\contracts;
 
 use context_system;
-use local_information_center\message_handle\enrol_utils;
+use local_information_center\notification\enrol_utils;
 
 /**
  * Different visibilities messages can have.

@@ -29,7 +29,7 @@ use local_information_center\external\create_message;
 $functions['local_information_center_create_message'] = [
     'classname'    => create_message::class,
     'methodname'   => 'execute',
-    'description'  => 'Send a message to specified users.',
+    'description'  => 'Send a notification to specified users.',
     'type'         => 'write',
     'ajax'         => false,
     'capabilities' => 'local/information_center:update_or_create_messages',

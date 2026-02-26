@@ -23,13 +23,13 @@ require_once($CFG->libdir . '/formslib.php');
 use coding_exception;
 use core\di;
 use dml_exception;
-use local_information_center\message_handle\contracts\i_message_category;
-use local_information_center\message_handle\contracts\message;
-use local_information_center\message_handle\contracts\visibility;
+use local_information_center\notification\contracts\NotificationCategory;
+use local_information_center\notification\contracts\notification;
+use local_information_center\notification\contracts\visibility;
 use moodleform;
 
 /**
- * Let the user creates messages for local_information_center
+ * Let the user creates notifications for local_information_center
  *
  * @author      Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
@@ -40,7 +40,7 @@ class edit_notification_form extends moodleform {
      * Defines the fields:
      * - (Id)
      * - Title / Subject
-     * - Message (HTML Format without Files included)
+     * - Notification (HTML Format without Files included)
      * - Category
      * - Visibility
      * - Startdate
@@ -56,7 +56,7 @@ class edit_notification_form extends moodleform {
         $mform->setType('title', PARAM_TEXT);
         $mform->addRule('title', null, 'required');
 
-        // Message.
+        // Notification.
         $editoropt = [
             'enable_filemanagement' => false,
             'maxfiles' => 0,
@@ -111,13 +111,13 @@ class edit_notification_form extends moodleform {
     /**
      * Get categories, that are allowed to be sent locally
      *
-     * @return array List of message type categories, as id => displayname
+     * @return array List of notification type categories, as id => displayname
      * @throws dml_exception Database cannot be reached
      * @throws coding_exception Could not fetch language string
      */
     public static function get_categories(): array {
         $allowedcategories = ['infos', 'events', 'administrative'];
-        $categorymanager = di::get(i_message_category::class);
+        $categorymanager = di::get(NotificationCategory::class);
         $categories = $categorymanager->get_all();
 
         $categoryselect = [];
@@ -150,19 +150,22 @@ class edit_notification_form extends moodleform {
     }
 
     /**
-     * Sets the data of a message in this form
+     * Sets the data of a notification in this form
      *
-     * @param message $message Existing message data
+     * @param notification $notification Existing notification data
      */
-    public function set_message_data(message $message): void {
+    public function set_notification_data(notification $notification): void {
         $this->set_data([
-            'id' => $message->id,
-            'title' => $message->subject,
-            'message' => ['text' => $message->fullmessage, 'format' => $message->fullmessageformat],
-            'category' => $message->categoryid,
-            'visibility' => $message->visibility,
-            'startdate' => $message->timestart,
-            'enddate' => $message->timeend,
+            'id' => $notification->id,
+            'title' => $notification->subject,
+            'message' => [
+                'text' => $notification->fullmessage,
+                'format' => $notification->fullmessageformat
+            ],
+            'category' => $notification->categoryid,
+            'visibility' => $notification->visibility,
+            'startdate' => $notification->timestart,
+            'enddate' => $notification->timeend,
         ]);
     }
 

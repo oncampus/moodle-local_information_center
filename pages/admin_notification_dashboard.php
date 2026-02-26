@@ -25,10 +25,10 @@
 require('../../../config.php');
 
 use core\di;
-use local_information_center\form\filter_button;
-use local_information_center\form\message_filter_form;
-use local_information_center\form\message_table;
-use local_information_center\message_handle\contracts\i_message_manager;
+use local_information_center\form\notification_filter_area;
+use local_information_center\form\notification_filter_form;
+use local_information_center\form\notification_admin_table;
+use local_information_center\notification\contracts\NotificationManager;
 
 require_login();
 $context = context_system::instance();
@@ -36,27 +36,27 @@ require_capability('local/information_center:can_view_message_control_board', $c
 
 // Set PAGE variables.
 $PAGE->set_context($context);
-$baseurl = new moodle_url('/local/information_center/pages/message_overview.php');
+$baseurl = new moodle_url('/local/information_center/pages/admin_notification_dashboard.php');
 $PAGE->set_pagelayout('admin');
 $PAGE->set_url($baseurl);
 $PAGE->set_title(get_string('page:message_overview', 'local_information_center'));
 $PAGE->set_heading(get_string('page:message_overview', 'local_information_center'));
 
 // Overview.
-$table = new message_table($baseurl);
+$table = new notification_admin_table($baseurl);
 $table->setup();
-$filterform = new message_filter_form();
+$filterform = new notification_filter_form();
 $filterform->set_filters($table);
-$filterrenderer = new filter_button($filterform->render());
+$filterrenderer = new notification_filter_area($filterform->render());
 
-$messagemanager = di::get(i_message_manager::class);
+$messagemanager = di::get(NotificationManager::class);
 $messages = $table->get_data();
 
 echo $OUTPUT->header();
 echo $OUTPUT->render($filterrenderer);
 
 foreach ($messages as $msg) {
-    $table->add_message_data($msg);
+    $table->add_notification_data($msg);
 }
 $table->finish_output();
 

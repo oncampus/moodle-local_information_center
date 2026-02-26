@@ -1,0 +1,58 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_information_center/notification_filter_area
+
+    Area for configuring filters for the message admin dashboard
+    For example search for deleted notifications
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * filtersform -> html
+
+    Example context (json):
+    {
+        filtersform: "<Rendered moodle form>"
+    }
+}}
+
+{{! Filters button }}
+<button id="remote_notification_dropdown_btn" class="btn btn-outline-secondary ms-2" type="button"
+        data-toggle="collapse" data-target="#remote_notification_dropdown" aria-expanded="false"
+        title="{{#str}} filters, moodle {{/str}}">
+    {{#pix}} i/filter, core {{/pix}}
+    <span data-region="filter-button-label">
+        {{#str}} filters, moodle {{/str}}
+    </span>
+</button>
+
+{{! Filters content }}
+<div id="remote_notification_dropdown" class="collapse" aria-labelledby="dropdownFiltersButton">
+    <div id="filters" class="reportbuilder-filters-sidebar scroll-shadow" data-region="report-filters">
+        <div class="px-3 pt-3">
+            <div class="reportbuilder-filters-wrapper" data-region="filters-form">
+                {{{filtersform}}}
+            </div>
+        </div>
+    </div>
+</div>
+

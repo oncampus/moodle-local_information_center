@@ -1,3 +1,86 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_information_center/infocenter
+
+    User dashboard, where notifications are received from users
+
+    * Uses the templates:
+        * infocenter_header
+        * infocenter_search_and_filter
+        * notification
+        * pagination
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * shortcuturl -> URL to the admin dashboard, if the user is a manager
+    * component -> Hidden notification component value (For further search requests)
+    * category -> Hidden category value (For further search requests)
+    * search -> Search value (For further search requests)
+    * categories
+        * link -> URL to access the filtered page
+        * disabled -> Show button gray
+        * name -> name of category tag
+    * notifications
+        * icon -> Icon class, for example from Font Awesome
+        * unreadmarker -> True, if the notification was unread
+        * sended_time_ago -> Time at which the notification was send
+        * message -> The actual body of the notification
+    * firstpage
+    * pages
+    * lastpage
+
+    Example context (json):
+    {
+        shortcuturl: "/local/information_center/pages/admin_notification_dashboard.php"
+        component: "information_center"
+        category: 3
+        search: "Sports"
+        categories: [{
+            link: "/local/information_center/pages/user_notification_dashboard.php?category=4
+            disabled: true
+            name: "Event"
+        }, ...]
+        notifications: [{
+            icon: "circle-user",
+            unreadmarker: True,
+            sended_time_ago: "5 seconds ago",
+            message: "<p>Hello everyone!</p>"
+        }, ...]
+        firstpage: {
+            link: "...user_notification_dashboard.php?page=0"
+        }
+        pages [{
+            link: "...user_notification_dashboard.php?page=1"
+            num: 2
+            active: false
+        }, ...]
+        lastpage: {
+            link: "...user_notification_dashboard.php?page=30"
+            num: 31
+        }
+    }
+}}
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-12">

@@ -26,16 +26,16 @@ use moodle_url;
 use stdClass;
 
 /**
- * Table of all messages, with edit, delete and resend buttons
+ * Table of all notifications, with edit, delete and resend buttons
  *
  * @author Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright 2025, oncampus GmbH, <support@oncampus.de>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_table extends flexible_table implements filterable_table {
-    /** @var string EDIT_LINK Link to the edit page for messages */
+class notification_admin_table extends flexible_table implements FilterableTable {
+    /** @var string EDIT_LINK Link to the edit page for notifications */
     private const EDIT_LINK = '/local/information_center/pages/edit_notification.php';
-    /** @var string EDIT_LINK Link to the deletion page for messages */
+    /** @var string EDIT_LINK Link to the deletion page for notifications */
     private const DELETE_LINK = '/local/information_center/pages/delete_notification.php';
     /** @var array Applied filters with field and way */
     private array $filters = [];
@@ -68,7 +68,7 @@ class message_table extends flexible_table implements filterable_table {
     }
 
     /**
-     * Applies an filter to the messages in the table
+     * Applies an filter to the notifications in the table
      *
      * @param string $field Database field
      * @param mixed $value Value to compare with
@@ -89,21 +89,21 @@ class message_table extends flexible_table implements filterable_table {
     }
 
     /**
-     * Fetches the message data from the database (Does not load it in the table!!!)
+     * Fetches the notification data from the database (Does not load it in the table!!!)
      *
-     * @return array Message data as array
+     * @return array notification data as array
      * @throws dml_exception Cannot connect to the database
      */
     public function get_data(): array {
-        $messageorder = "";
+        $notificationorder = "";
         if ($order = $this->get_sql_sort()) {
-            $messageorder = "ORDER BY $order";
+            $notificationorder = "ORDER BY $order";
         }
 
-        $messagefilters = "";
+        $notificationfilters = "";
         if (!empty($this->filters)) {
-            $messagefilters .= " WHERE ";
-            $messagefilters .= implode(' AND ', $this->filters);
+            $notificationfilters .= " WHERE ";
+            $notificationfilters .= implode(' AND ', $this->filters);
         }
 
         $sql = ("
@@ -125,8 +125,8 @@ class message_table extends flexible_table implements filterable_table {
                 ON m.useridfrom = u.id
             LEFT JOIN {local_information_center_categories} mc
                 ON m.categoryid = mc.id
-            $messagefilters
-            $messageorder
+            $notificationfilters
+            $notificationorder
         ");
 
         $db = di::get(moodle_database::class);
@@ -134,20 +134,20 @@ class message_table extends flexible_table implements filterable_table {
     }
 
     /**
-     * Adds a message to the shown entries
+     * Adds a notification to the shown entries
      *
-     * @param stdClass $message
+     * @param stdClass $notification
      * @return void
      * @throws \core\exception\moodle_exception
      * @throws coding_exception
      */
-    public function add_message_data(stdClass $message): void {
+    public function add_notification_data(stdClass $notification): void {
         global $USER;
 
         $edit = "";
         $delete = "";
-        if ($message->useridfrom == $USER->id && $message->timedeleted === null) {
-            $msgid = $message->id;
+        if ($notification->useridfrom == $USER->id && $notification->timedeleted === null) {
+            $msgid = $notification->id;
 
             $editurl = new moodle_url(self::EDIT_LINK, ['id' => $msgid]);
             $edit = action_icon::make($editurl, 'fa-edit', 'edit');
@@ -156,19 +156,19 @@ class message_table extends flexible_table implements filterable_table {
             $delete = action_icon::make($deleteurl, 'fa-trash', 'delete');
         }
 
-        $userurl = new moodle_url('/user/profile.php', ['id' => $message->useridfrom]);
-        $name = fullname($message);
-        if ($message->useridfrom == 2) {
+        $userurl = new moodle_url('/user/profile.php', ['id' => $notification->useridfrom]);
+        $name = fullname($notification);
+        if ($notification->useridfrom == 2) {
             $name = get_string('table:createdby:extern', 'local_information_center') . " ($name)";
         }
         $userlink = html_writer::link($userurl, $name);
 
         $this->add_data([
-            $message->subject,
-            date('d.m.o', $message->timestart),
-            date('d.m.o', $message->timeend),
+            $notification->subject,
+            date('d.m.o', $notification->timestart),
+            date('d.m.o', $notification->timeend),
             $userlink,
-            get_string("category:$message->categoryname", 'local_information_center'),
+            get_string("category:$notification->categoryname", 'local_information_center'),
             $edit,
             $delete,
         ]);

@@ -26,7 +26,7 @@ require('../../../config.php');
 
 use core\di;
 use core\output\notification;
-use local_information_center\message_handle\contracts\i_message_manager;
+use local_information_center\notification\contracts\NotificationManager;
 
 require_login();
 $context = context_system::instance();
@@ -40,10 +40,10 @@ $PAGE->set_title(get_string('pluginname', 'local_information_center'));
 $PAGE->set_heading(get_string('form:header', 'local_information_center'));
 
 $id = optional_param('id', 0, PARAM_INT);
-$return = new moodle_url('/local/information_center/pages/message_overview.php');
+$return = new moodle_url('/local/information_center/pages/admin_notification_dashboard.php');
 
 if (!empty($id) && confirm_sesskey()) {
-    $manager = di::get(i_message_manager::class);
+    $manager = di::get(NotificationManager::class);
 
     if ($manager->delete($id)) {
         redirect(

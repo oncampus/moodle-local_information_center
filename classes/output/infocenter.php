@@ -24,10 +24,10 @@ use core\di;
 use core\output\renderer_base;
 use dml_exception;
 use Exception;
-use local_information_center\message_handle\contracts\i_message_category;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\i_message_read;
-use local_information_center\message_handle\contracts\message_query_data;
+use local_information_center\notification\contracts\NotificationCategory;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\NotificationsRead;
+use local_information_center\notification\contracts\notification_query_data;
 use moodle_url;
 use renderable;
 use stdClass;
@@ -42,10 +42,12 @@ use ValueError;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class infocenter implements renderable, templatable {
-    /** @var i_message_manager Message manager */
-    private i_message_manager $messagemanager;
+    /** @var NotificationManager Message manager */
+    private NotificationManager $messagemanager;
     /** @var moodle_url Base url for the page */
     private moodle_url $url;
+    /** @var moodle_url Notification managing url */
+    private moodle_url $manageurl;
     /** @var string|null Text input of the user search */
     private ?string $search;
     /** @var int Page, that should be rendered */
@@ -54,8 +56,8 @@ class infocenter implements renderable, templatable {
     private int $pagesize;
     /** @var int|null Message category to filter for */
     private ?int $category;
-    /** @var message_query_data Search request object */
-    private message_query_data $searchrequest;
+    /** @var notification_query_data Search request object */
+    private notification_query_data $searchrequest;
     /** @var string Message component to filter for */
     private string $component;
 
@@ -63,6 +65,7 @@ class infocenter implements renderable, templatable {
      * Constructor
      *
      * @param moodle_url $url Pages base url
+     * @param moodle_url $manageurl Notification managing url
      * @param string $component Whether to search for 'external' or 'internal' messages
      * @param string|null $search User input in search field
      * @param int $page Page ID
@@ -71,6 +74,7 @@ class infocenter implements renderable, templatable {
      */
     public function __construct(
         moodle_url $url,
+        moodle_url $manageurl,
         string $component,
         ?string $search = null,
         int $page = 0,
@@ -83,15 +87,16 @@ class infocenter implements renderable, templatable {
             throw new ValueError("Cannot open negative pages");
         }
 
-        $this->messagemanager = di::get(i_message_manager::class);
+        $this->messagemanager = di::get(NotificationManager::class);
         $this->url = $url;
         $this->search = $search;
         $this->page = $page;
         $this->category = $category;
         $this->pagesize = $pagesize;
         $this->component = $component;
+        $this->manageurl = $manageurl;
 
-        $searchrequest = new message_query_data();
+        $searchrequest = new notification_query_data();
         $searchrequest->userid = $USER->id;
         $searchrequest->titlesearch = $search;
         $searchrequest->category = $category;
@@ -123,10 +128,8 @@ class infocenter implements renderable, templatable {
             throw new Exception("Cannot load system context");
         }
 
-        $shortcuttarget = null;
-        if (has_capability('local/information_center:update_or_create_messages', $context)) {
-            $shortcuttarget = new moodle_url('/local/information_center/pages/message_overview.php');
-        }
+        $hasmanagecap = has_capability('local/information_center:update_or_create_messages', $context);
+        $shortcuttarget = $hasmanagecap ? $this->manageurl : null;
 
         return $pages + [
                 'categories' => $this->prepare_categories($this->url),
@@ -151,7 +154,7 @@ class infocenter implements renderable, templatable {
         $usertimestart = max($message->timestart, $message->timemodified);
         $secondsago = di::get(clock::class)->time() - $usertimestart;
 
-        $readmng = di::get(i_message_read::class);
+        $readmng = di::get(NotificationsRead::class);
         $isread = $readmng->is_read((int)$message->id, $USER->id);
 
         $message->fullmessagehtml = null;
@@ -250,7 +253,7 @@ class infocenter implements renderable, templatable {
         $messagecategories = $this->messagemanager->get_with_request($searchrequest);
         $messagecategories = array_column($messagecategories, 'categoryid');
 
-        $categorymanager = di::get(i_message_category::class);
+        $categorymanager = di::get(NotificationCategory::class);
         $categories = $categorymanager->get_all();
 
         $output = [];

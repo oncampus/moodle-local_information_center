@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle;
+namespace local_information_center\notification;
 
 use coding_exception;
 use core\clock;
 use core\di;
 use dml_exception;
-use local_information_center\message_handle\contracts\message_query_data;
-use local_information_center\message_handle\contracts\visibility;
+use local_information_center\notification\contracts\notification_query_data;
+use local_information_center\notification\contracts\visibility;
 
 /**
  * Query object for calling messages
@@ -30,17 +30,17 @@ use local_information_center\message_handle\contracts\visibility;
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_query {
-    /** @var message_query_data Query data object */
-    private message_query_data $data;
+class notification_query {
+    /** @var notification_query_data Query data object */
+    private notification_query_data $data;
 
     /**
      * Constructor.
      *
-     * @param message_query_data $data Query data object
+     * @param notification_query_data $data Query data object
      */
     public function __construct(
-        message_query_data $data
+        notification_query_data $data
     ) {
         $this->data = $data;
     }

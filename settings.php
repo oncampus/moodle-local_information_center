@@ -34,7 +34,7 @@ $ADMIN->add('root', new admin_category('local_information_center', get_string('p
 $settings = new admin_externalpage(
     'tool_oc_remote_notification_message_overview',
     get_string('page:message_overview', 'local_information_center'),
-    new moodle_url('/local/information_center/pages/message_overview.php'),
+    new moodle_url('/local/information_center/pages/admin_notification_dashboard.php'),
 );
 $ADMIN->add('local_information_center', $settings);
 

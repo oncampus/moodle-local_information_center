@@ -29,9 +29,9 @@ require_once($CFG->libdir . '/tablelib.php');
 
 use core\di;
 use local_information_center\form\edit_notification_form;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\i_message_read;
-use local_information_center\message_handle\contracts\message;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\NotificationsRead;
+use local_information_center\notification\contracts\notification;
 
 require_login();
 $context = context_system::instance();
@@ -47,12 +47,12 @@ $PAGE->set_heading(get_string('form:header', 'local_information_center'));
 
 // Instantiate the myform form from within the plugin.
 $mform = new edit_notification_form();
-$messagemanager = di::get(i_message_manager::class);
+$messagemanager = di::get(NotificationManager::class);
 
 if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/local/information_center/pages/message_overview.php'));
+    redirect(new moodle_url('/local/information_center/pages/admin_notification_dashboard.php'));
 } else if ($fromform = $mform->get_data()) {
-    $message = new message();
+    $message = new notification();
     $message->id = $fromform->id == -1 ? null : $fromform->id;
     $message->useridfrom = $USER->id;
     $message->subject = $fromform->title;
@@ -74,16 +74,16 @@ if ($mform->is_cancelled()) {
     $messagemanager->add_or_update($message);
 
     if ($fromform->renotify == 1) {
-        $readmng = di::get(i_message_read::class);
+        $readmng = di::get(NotificationsRead::class);
         $readmng->reset_readcount($message->id);
     }
 
-    redirect(new moodle_url('/local/information_center/pages/message_overview.php'));
+    redirect(new moodle_url('/local/information_center/pages/admin_notification_dashboard.php'));
 }
 
 if ($id && $id != -1) {
     $message = $messagemanager->get($id);
-    $mform->set_message_data($message);
+    $mform->set_notification_data($message);
 }
 
 echo $OUTPUT->header();

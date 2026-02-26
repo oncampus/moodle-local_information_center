@@ -18,9 +18,9 @@ namespace tool_oc_remote_notification;
 
 use core\di;
 use dml_exception;
-use local_information_center\message_handle\contracts\i_message_manager;
-use local_information_center\message_handle\contracts\message;
-use local_information_center\message_handle\contracts\visibility;
+use local_information_center\notification\contracts\NotificationManager;
+use local_information_center\notification\contracts\notification;
+use local_information_center\notification\contracts\visibility;
 
 /**
  * Generates plugin-specific data
@@ -33,12 +33,12 @@ class generator {
     /**
      * Creates a message in the database
      *
-     * @return message Message data object
+     * @return notification Message data object
      * @throws dml_exception Database connection failed
      */
-    public static function create_message(): message {
-        $message = self::generate_message();
-        $manager = di::get(i_message_manager::class);
+    public static function create_notification(): notification {
+        $message = self::generate_notification();
+        $manager = di::get(NotificationManager::class);
         $message->id = $manager->add_or_update($message);
         return $message;
     }
@@ -46,10 +46,10 @@ class generator {
     /**
      * Generates a message data object and returns it
      *
-     * @return message Message data object
+     * @return notification Message data object
      */
-    public static function generate_message(): message {
-        $message = new message();
+    public static function generate_notification(): notification {
+        $message = new notification();
         $message->component = 'message_manager';
         $message->categoryid = 1;
         $message->visibility = visibility::VISIBILITY_STUDENT->value;

@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-use local_information_center\tasks\message_cleanup;
+use local_information_center\tasks\notification_cleanup;
 
 $tasks = [
     [
-        'classname' => message_cleanup::class,
+        'classname' => notification_cleanup::class,
         'minute' => '0',
         'hour' => '2',
         'day' => '*',

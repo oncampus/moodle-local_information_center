@@ -29,7 +29,7 @@ use templatable;
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_button implements renderable, templatable {
+class notification_filter_area implements renderable, templatable {
     /** @var string HTML-Moodleform to render in the template */
     private string $form;
 

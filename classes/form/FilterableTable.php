@@ -23,7 +23,7 @@ namespace local_information_center\form;
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface filterable_table {
+interface FilterableTable {
     /**
      * Adds an additional filter
      *

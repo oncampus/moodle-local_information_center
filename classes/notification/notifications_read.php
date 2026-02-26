@@ -14,22 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle;
+namespace local_information_center\notification;
 
 use core\clock;
 use dml_exception;
-use local_information_center\message_handle\contracts\i_message_read;
-use local_information_center\message_handle\contracts\visibility;
+use local_information_center\notification\contracts\NotificationsRead;
+use local_information_center\notification\contracts\visibility;
 use moodle_database;
 
 /**
- * Manages the read status of messages
+ * Manages the read status of notifications
  *
  * @author      Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_read implements i_message_read {
+class notifications_read implements NotificationsRead {
     /** @var moodle_database Moodle Database */
     private moodle_database $db;
     /** @var clock Clock */

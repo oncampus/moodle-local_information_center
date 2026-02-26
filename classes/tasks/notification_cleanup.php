@@ -30,7 +30,7 @@ use moodle_database;
  * @copyright  onCampus GmbH, 2025
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_cleanup extends scheduled_task {
+class notification_cleanup extends scheduled_task {
     /**
      * Returns the task name
      *

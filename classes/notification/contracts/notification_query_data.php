@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\message_handle\contracts;
+namespace local_information_center\notification\contracts;
 
 /**
  * Prepares a request to call messages from the plugin
@@ -23,7 +23,7 @@ namespace local_information_center\message_handle\contracts;
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_query_data {
+class notification_query_data {
     /** @var string $select Fields to give back, where m is the message and c the category */
     public string $select = "m.*, c.name, c.priority, c.icon, c.color";
 

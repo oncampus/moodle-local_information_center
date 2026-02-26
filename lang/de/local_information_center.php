@@ -81,6 +81,7 @@ $string['overview:internal'] = 'Intern';
 $string['overview:sendmessages'] = 'Nachrichten verwalten';
 $string['overview:title'] = 'Benachrichtigungen';
 
+$string['page'] = 'Seite';
 $string['page:message_overview'] = 'Benachrichtigungsübersicht';
 
 $string['pluginname'] = 'Informationszentrum';
@@ -103,6 +104,8 @@ $string['privacy:metadata:local_information_center_messages:timemodified'] = 'De
 $string['privacy:metadata:local_information_center_messages:timestart'] = 'Der Zeitpunkt, ab dem die Nachricht sichtbar ist.';
 $string['privacy:metadata:local_information_center_messages:useridfrom'] = 'Die ID des Benutzers, der die Nachricht gesendet hat.';
 $string['privacy:metadata:local_information_center_messages:visibility'] = 'Für welche Benutzer die Nachricht sichtbar ist.';
+
+$string['search'] = "Suchen";
 
 $string['settings:auto_delete'] = 'Automatisch löschen';
 $string['settings:auto_delete_desc'] = 'Legt fest, ob eine Benachrichtigung nach Ablauf des Enddatums automatisch gelöscht wird';
