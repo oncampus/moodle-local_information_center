@@ -88,11 +88,9 @@ foreach (['internal', 'external'] as $component) {
         );
     }
 
-    $taburl = clone $url;
-    $taburl->param('component', $component);
     $tabs[] = new tabobject(
         $component,
-        $taburl,
+        new moodle_url($url, ['component' => $component]),
         $text,
         get_string("overview:$component", 'local_information_center')
     );

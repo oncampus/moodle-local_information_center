@@ -160,7 +160,7 @@ class edit_notification_form extends moodleform {
             'title' => $notification->subject,
             'message' => [
                 'text' => $notification->fullmessage,
-                'format' => $notification->fullmessageformat
+                'format' => $notification->fullmessageformat,
             ],
             'category' => $notification->categoryid,
             'visibility' => $notification->visibility,

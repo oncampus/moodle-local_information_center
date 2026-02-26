@@ -77,9 +77,9 @@ class create_message extends external_api {
 
         $message = new notification();
         $message->useridfrom = $USER->id;
-        $message->timestart = $messagedata['timestart'];
-        $message->timeend = $messagedata['timeend'];
-        $message->timedeleted = $messagedata['timedeleted'];
+        $message->timestart = $messagedata['timestart'] ?? null;
+        $message->timeend = $messagedata['timeend'] ?? null;
+        $message->timedeleted = $messagedata['timedeleted'] ?? null;
         $message->categoryid = $messagedata['categoryid'];
         $message->fullmessageformat = $messagedata['fullmessageformat'];
         $message->fullmessage = $messagedata['fullmessage'];
@@ -171,7 +171,7 @@ class create_message extends external_api {
                 'fullmessage' => new external_value(PARAM_RAW, 'Full message'),
                 'fullmessageformat' => new external_value(PARAM_INT, 'Full message format'),
                 'smallmessage' => new external_value(PARAM_RAW, 'Small message'),
-                'visibility' => new external_value(PARAM_TEXT, 'Visibility', VALUE_OPTIONAL),
+                'visibility' => new external_value(PARAM_TEXT, 'Visibility'),
                 'subject' => new external_value(PARAM_TEXT, 'Subject'),
             ]),
             'renotify' => new external_value(PARAM_BOOL, 'renotify, if message is edited', VALUE_DEFAULT, default: false),
