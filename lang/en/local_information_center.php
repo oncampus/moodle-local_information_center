@@ -40,13 +40,11 @@ $string['form:after'] = 'After';
 $string['form:any'] = 'Any';
 $string['form:before'] = 'Before';
 $string['form:category'] = 'Category';
-$string['form:category_help'] = (
-    '<ul>' .
-    '<li><strong>Information <i class="fa fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>' .
-    '<li><strong>Events <i class="fa-regular fa-calendar-plus"></i>.</strong> Information about events, dates, or activities (Medium priority)</li>' .
-    '<li><strong>Administration <i class="fa fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>' .
-    '</ul>'
-);
+$string['form:category_help'] = '<ul>
+<li><strong>Information <i class="fa fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>
+<li><strong>Events <i class="fa-regular fa-calendar-plus"></i>.</strong> Information about events, dates, or activities (Medium priority)</li>
+<li><strong>Administration <i class="fa fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>
+</ul>';
 $string['form:categoryname'] = 'category';
 $string['form:contains'] = 'Contains';
 $string['form:deleted'] = 'Show deleted';
@@ -59,16 +57,14 @@ $string['form:renotify'] = 'Notify again';
 $string['form:title'] = 'Title';
 $string['form:validation:date'] = 'The enddate must be later then the startdate';
 $string['form:visibility'] = 'Visibility';
-$string['form:visibility_help'] = (
-    'The roles have a tiered visibility. ' .
-    'Higher-level roles automatically include all visibility levels of lower-level roles:
-    <ol>
-    <li><strong>Learners. can only see their own messages.</li>
-    <li><strong>Teachers. see messages for teachers and learners.</li>
-    <li><strong>Managers. see messages for managers, teachers and learners.</li>
-    <li><strong>Administrators. see all messages.
-    </ol>'
-);
+$string['form:visibility_help'] = 'The roles have a tiered visibility. 
+Higher-level roles automatically include all visibility levels of lower-level roles:
+<ol>
+<li><strong>Learners. can only see their own messages.</li>
+<li><strong>Teachers. see messages for teachers and learners.</li>
+<li><strong>Managers. see messages for managers, teachers and learners.</li>
+<li><strong>Administrators. see all messages.
+</ol>';
 
 $string['local/information_center:delete_messages'] = 'Can delete messages in the information center';
 $string['local/information_center:read_admin_messages'] = 'Can see admin messages in the information center';

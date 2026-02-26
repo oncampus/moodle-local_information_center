@@ -40,13 +40,11 @@ $string['form:after'] = 'Nach';
 $string['form:any'] = 'Beliebig';
 $string['form:before'] = 'Vor';
 $string['form:category'] = 'Kategorie';
-$string['form:category_help'] = (
-    '<ul>' .
-    '<li><strong>Informationen <i class="fa fa-newspaper"></i>.</strong> Allgemeine Nachrichten und Mitteilungen (Prio Niedrig)</li>' .
-    '<li><strong>Veranstaltungen <i class="fa-regular fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)' .
-    '<li><strong>Verwaltung <i class="fa fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>' .
-    '</ul>'
-);
+$string['form:category_help'] = '<ul>
+    <li><strong>Informationen <i class="fa fa-newspaper"></i>.</strong> Allgemeine Nachrichten und Mitteilungen (Prio Niedrig)</li>
+    <li><strong>Veranstaltungen <i class="fa-regular fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)
+    <li><strong>Verwaltung <i class="fa fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>
+</ul>';
 $string['form:categoryname'] = 'Kategorie';
 $string['form:contains'] = 'Enthält';
 $string['form:deleted'] = 'Gelöschte anzeigen';
@@ -59,16 +57,14 @@ $string['form:renotify'] = 'Erneut benachrichtigen';
 $string['form:title'] = 'Titel';
 $string['form:validation:date'] = 'Das Enddatum muss nach dem Startdatum liegen';
 $string['form:visibility'] = 'Sichtbarkeit';
-$string['form:visibility_help'] = (
-    'Die Rollen verfügen über eine gestufte Sichtbarkeit. ' .
-    'Höherrangige Rollen schließen automatisch alle Sichtbarkeiten der niedrigeren Rollen mit ein:
-    <ol>
-    <li><strong>Schüler*innen.</strong> sehen nur Ihre Nachrichten.</li>
-    <li><strong>Lehrkräfte.</strong> sehen Nachrichten für Lehrkräfte und Schüler*innen.</li>
-    <li><strong>Manager*innen.</strong> sehen Nachrichten für Manager*innen, Lehrkräfte und Schüler*innen.</li>
-    <li><strong>Administrator*innen.</strong> sehen sämtliche Nachrichten</li>
-    </ol>'
-);
+$string['form:visibility_help'] = 'Die Rollen verfügen über eine gestufte Sichtbarkeit.
+Höherrangige Rollen schließen automatisch alle Sichtbarkeiten der niedrigeren Rollen mit ein:
+<ol>
+<li><strong>Schüler*innen.</strong> sehen nur Ihre Nachrichten.</li>
+<li><strong>Lehrkräfte.</strong> sehen Nachrichten für Lehrkräfte und Schüler*innen.</li>
+<li><strong>Manager*innen.</strong> sehen Nachrichten für Manager*innen, Lehrkräfte und Schüler*innen.</li>
+<li><strong>Administrator*innen.</strong> sehen sämtliche Nachrichten</li>
+</ol>';
 
 $string['local/information_center:delete_messages'] = 'Kann Nachrichten löschen';
 $string['local/information_center:read_admin_messages'] = 'Kann Nachrichten von Administratoren im Informationszentrum sehen';
@@ -118,9 +114,7 @@ $string['settings:enable_desc'] = 'Legt fest, ob alle Benachrichtigungen aktivie
 $string['table:createdby'] = 'Erstellt von';
 $string['table:createdby:extern'] = 'Extern';
 $string['table:enddate'] = 'Enddatum';
-$string['table:enddate_help'] = (
-'Nachrichten werden nach dem Datum unsichtbar. Man kann sie im Managementbereich sehen.'
-);
+$string['table:enddate_help'] = 'Nachrichten werden nach dem Datum unsichtbar. Man kann sie im Managementbereich sehen.';
 $string['table:messagecategory'] = 'Kategorie';
 $string['table:startdate'] = 'Startdatum';
 $string['table:title'] = 'Titel';
