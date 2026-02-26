@@ -31,31 +31,31 @@ function xmldb_local_information_center_install(): bool {
     $categories = [
         [
             'name' => 'infos',
-            'color' => '#17a2b8', // Türkis = Nachrichten/Infos.
+            'color' => '#17a2b8', // Turquoise = Messages/Information.
             'priority' => 30,
             'icon' => 'fa fa-newspaper',
         ],
         [
             'name' => 'innovations',
-            'color' => '#28a745', // Grün = Verbesserung.
+            'color' => '#28a745', // Green = Improvement.
             'priority' => 30,
             'icon' => 'fa fa-gear',
         ],
         [
             'name' => 'events',
-            'color' => '#9b59b6', // Violett = Veranstaltungen.
+            'color' => '#9b59b6', // Violet = Events.
             'priority' => 60,
             'icon' => 'fa-regular fa-calendar-plus',
         ],
         [
             'name' => 'administrative',
-            'color' => '#dc3545', // Rot = wichtig/offiziell.
+            'color' => '#dc3545', // Red = important/official.
             'priority' => 80,
             'icon' => 'fa fa-graduation-cap',
         ],
         [
             'name' => 'maintenance',
-            'color' => '#ff6600', // Orange = Warnung/Arbeiten.
+            'color' => '#ff6600', // Orange = Warning/Maintenance work.
             'priority' => 90,
             'icon' => 'fa fa-heartbeat',
         ],
