@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\notification;
+namespace local_information_center\tests\unit;
 
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/generator.php');
@@ -28,7 +28,6 @@ use frozen_clock;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
 use local_information_center\tasks\notification_cleanup;
-use tool_oc_remote_notification\generator;
 
 /**
  * Tests if the notification manager is working correctly
