@@ -30,6 +30,22 @@ use local_information_center\message_handle\contracts\i_message_read;
 use local_information_center\output\infocenter;
 
 require_login();
+$context = context_system::instance();
+if (
+    !has_any_capability([
+        'local/information_center:read_student_messages',
+        'local/information_center:read_teacher_messages',
+        'local/information_center:read_manager_messages',
+        'local/information_center:read_admin_messages',
+    ], $context)
+) {
+    throw new required_capability_exception(
+        $context,
+        'local/information_center:read_student_messages',
+        'nopermission',
+        ''
+    );
+}
 
 $params = [
     'query' => optional_param('query', null, PARAM_TEXT),
@@ -39,7 +55,7 @@ $params = [
 ];
 
 $url = new moodle_url('/local/information_center/pages/overview.php');
-$PAGE->set_context(context_system::instance());
+$PAGE->set_context($context);
 $PAGE->set_url($url);
 $PAGE->set_title(get_string('pluginname', 'local_information_center'));
 $PAGE->set_heading(get_string('overview:title', 'local_information_center'));

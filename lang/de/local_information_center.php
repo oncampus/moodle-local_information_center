@@ -66,12 +66,13 @@ Höherrangige Rollen schließen automatisch alle Sichtbarkeiten der niedrigeren 
 <li><strong>Administrator*innen.</strong> sehen sämtliche Nachrichten</li>
 </ol>';
 
-$string['local/information_center:delete_messages'] = 'Kann Nachrichten löschen';
-$string['local/information_center:read_admin_messages'] = 'Kann Nachrichten von Administratoren im Informationszentrum sehen';
-$string['local/information_center:read_manager_messages'] = 'Kann Nachrichten von Managern im Informationszentrum sehen';
-$string['local/information_center:read_student_messages'] = 'Kann Nachrichten von Studierenden im Informationszentrum sehen';
-$string['local/information_center:read_teacher_messages'] = 'Kann Nachrichten von Lehrenden im Informationszentrum sehen';
-$string['local/information_center:update_or_create_messages'] = 'Kann Nachrichten editieren und erstellen';
+$string['information_center:can_view_message_control_board'] = 'Erlaubt das Adminkontrollzentrum für Benachrichtigungen zu sehen';
+$string['information_center:delete_messages'] = 'Kann Nachrichten löschen';
+$string['information_center:read_admin_messages'] = 'Kann Nachrichten von Administratoren im Informationszentrum sehen';
+$string['information_center:read_manager_messages'] = 'Kann Nachrichten von Managern im Informationszentrum sehen';
+$string['information_center:read_student_messages'] = 'Kann Nachrichten von Studierenden im Informationszentrum sehen';
+$string['information_center:read_teacher_messages'] = 'Kann Nachrichten von Lehrenden im Informationszentrum sehen';
+$string['information_center:update_or_create_messages'] = 'Kann Nachrichten editieren und erstellen';
 
 $string['navigationnode:unreadcount'] = '{$a} ungelesene Nachrichten';
 

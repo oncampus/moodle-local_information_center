@@ -16,6 +16,7 @@
 
 namespace local_information_center\local;
 
+use context_system;
 use core\clock;
 use core\di;
 use core\hook\di_configuration;
@@ -83,6 +84,17 @@ class hook_callbacks {
      */
     public static function extend_primary_navigation(primary_extend $hook): void {
         global $USER;
+
+        if (
+            !has_any_capability([
+                'local/information_center:read_student_messages',
+                'local/information_center:read_teacher_messages',
+                'local/information_center:read_manager_messages',
+                'local/information_center:read_admin_messages',
+            ], context_system::instance())
+        ) {
+            return;
+        }
 
         // Data: unread count for current user.
         $readmng = di::get(i_message_read::class);

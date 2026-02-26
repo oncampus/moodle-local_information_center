@@ -66,12 +66,13 @@ Higher-level roles automatically include all visibility levels of lower-level ro
 <li><strong>Administrators. see all messages.
 </ol>';
 
-$string['local/information_center:delete_messages'] = 'Can delete messages in the information center';
-$string['local/information_center:read_admin_messages'] = 'Can see admin messages in the information center';
-$string['local/information_center:read_manager_messages'] = 'Can see manager messages in the information center';
-$string['local/information_center:read_student_messages'] = 'Can see student messages in the information center';
-$string['local/information_center:read_teacher_messages'] = 'Can see teacher messages in the information center';
-$string['local/information_center:update_or_create_messages'] = 'Can update and create messages in the information center';
+$string['information_center:can_view_message_control_board'] = 'Allows the admin control center to view notifications.';
+$string['information_center:delete_messages'] = 'Can delete messages in the information center';
+$string['information_center:read_admin_messages'] = 'Can see admin messages in the information center';
+$string['information_center:read_manager_messages'] = 'Can see manager messages in the information center';
+$string['information_center:read_student_messages'] = 'Can see student messages in the information center';
+$string['information_center:read_teacher_messages'] = 'Can see teacher messages in the information center';
+$string['information_center:update_or_create_messages'] = 'Can update and create messages in the information center';
 
 $string['navigationnode:unreadcount'] = '{$a} unread messages';
 

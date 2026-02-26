@@ -34,7 +34,8 @@ use local_information_center\message_handle\contracts\i_message_read;
 use local_information_center\message_handle\contracts\message;
 
 require_login();
-require_admin();
+$context = context_system::instance();
+require_capability('local/information_center:update_or_create_messages', $context);
 
 $id = optional_param('id', null, PARAM_INT);
 

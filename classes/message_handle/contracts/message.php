@@ -19,7 +19,7 @@ namespace local_information_center\message_handle\contracts;
 use stdClass;
 
 /**
- * Dataobject for messages
+ * Data object for messages
  *
  * @author     Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
@@ -38,23 +38,23 @@ class message {
     public ?int $fullmessageformat = null;
     /** @var string|null Short form of the body */
     public ?string $smallmessage = null;
-    /** @var int|null Start time, when its visible */
+    /** @var int|null Start time, when it is visible */
     public ?int $timestart = null;
-    /** @var int|null End time, when its gets hidden */
+    /** @var int|null End time, when it gets hidden */
     public ?int $timeend = null;
-    /** @var int|null Time, where the message got deleted */
+    /** @var int|null Time when the message was deleted */
     public ?int $timedeleted = null;
-    /** @var string|null Visibility, like visible for teachers, admins… */
+    /** @var string|null Visibility, e.g., visible to teachers, admins… */
     public ?string $visibility = null;
-    /** @var string|null Creating plugin of this message */
+    /** @var string|null Plugin that created this message */
     public ?string $component = null;
     /** @var int|null Category ID */
     public ?int $categoryid = null;
 
     /**
-     * Converts stdClass data to this class
+     * Converts a stdClass object to this class
      *
-     * @param stdClass $data Converts a stdClass into this data object
+     * @param stdClass $data A stdClass object to convert into this data object
      */
     public static function from_stdclass(stdClass $data): message {
         $message = new message();

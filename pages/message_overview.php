@@ -31,9 +31,11 @@ use local_information_center\form\message_table;
 use local_information_center\message_handle\contracts\i_message_manager;
 
 require_login();
+$context = context_system::instance();
+require_capability('local/information_center:can_view_message_control_board', $context);
 
 // Set PAGE variables.
-$PAGE->set_context(context_system::instance());
+$PAGE->set_context($context);
 $baseurl = new moodle_url('/local/information_center/pages/message_overview.php');
 $PAGE->set_pagelayout('admin');
 $PAGE->set_url($baseurl);

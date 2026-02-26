@@ -29,7 +29,8 @@ use core\output\notification;
 use local_information_center\message_handle\contracts\i_message_manager;
 
 require_login();
-require_admin();
+$context = context_system::instance();
+require_capability('local/information_center:delete_messages', $context);
 
 // Set PAGE variables.
 $PAGE->set_context(context_system::instance());

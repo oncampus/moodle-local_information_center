@@ -28,7 +28,6 @@ use local_information_center\message_handle\contracts\message;
 use local_information_center\message_handle\contracts\message_query_data;
 use local_information_center\message_handle\contracts\visibility;
 use moodle_database;
-use required_capability_exception;
 use stdClass;
 
 /**
@@ -67,15 +66,8 @@ class message_manager implements i_message_manager {
      * @param message $message Message object
      * @return int ID of the saved message
      * @throws dml_exception
-     * @throws required_capability_exception
      */
     public function add_or_update(message $message): int {
-        $ctx = context_system::instance();
-        if (!$ctx instanceof context) {
-            throw new Exception("Failed to fetch context");
-        }
-        require_capability('local/information_center:update_or_create_messages', $ctx);
-
         $data = (object) get_object_vars($message);
         $data->timemodified = $this->clock->time();
 
@@ -198,15 +190,8 @@ class message_manager implements i_message_manager {
      * @param int $id Message ID
      * @return bool True if successful
      * @throws dml_exception
-     * @throws required_capability_exception
      */
     public function delete(int $id): bool {
-        $ctx = context_system::instance();
-        if (!$ctx instanceof context) {
-            throw new Exception("Failed to fetch context");
-        }
-        require_capability('local/information_center:delete_messages', $ctx);
-
         if (!$record = $this->db->get_record(self::TABLE, ["id" => $id])) {
             return false;
         }
