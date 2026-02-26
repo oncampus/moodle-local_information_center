@@ -63,7 +63,7 @@ if ($mform->is_cancelled()) {
     $message->timeend = $fromform->enddate;
     $message->categoryid = $fromform->category;
     $message->visibility = $fromform->visibility;
-    $message->component = 'tool_oc_notification';
+    $message->component = 'local_information_center';
 
     $errors = $messagemanager->validate($message);
     if (!empty($errors)) {
