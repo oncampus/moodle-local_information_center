@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+namespace local_information_center;
+
 use core\di;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
