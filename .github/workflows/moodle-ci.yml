@@ -77,7 +77,7 @@ jobs:
 
       - name: Moodle Code Checker
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpcs --exclude=moodle.Commenting.Package.Missing --max-warnings 0
+        run: moodle-plugin-ci phpcs --exclude="moodle.Commenting.Package" --max-warnings 0
 
       - name: Moodle PHPDoc Checker
         if: ${{ !cancelled() }}
