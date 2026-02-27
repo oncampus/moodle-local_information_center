@@ -249,6 +249,6 @@ class notification_manager implements NotificationManager {
     public function get_with_request(notification_query_data $request): array {
         $query = new notification_query($request);
         $sql = $query->get_sql();
-        return $this->db->get_records_sql($sql[0], $sql[1]);
+        return $this->db->get_records_sql($sql[0], $sql[1], $sql[2], $sql[3]);
     }
 }

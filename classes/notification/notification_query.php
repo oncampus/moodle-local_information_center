@@ -48,23 +48,21 @@ class notification_query {
     /**
      * Returns the request sql
      *
-     * @return array [sql, params]
+     * @return array [sql, params, offset, limit]
      * @throws coding_exception Get in or equals failed
      * @throws dml_exception Database cannot be reached
      */
     public function get_sql(): array {
         $filters = $this->get_filters();
-        $paging = $this->get_paging();
 
         $sql = "SELECT {$this->data->select}
                   FROM {local_information_center_messages} m
              LEFT JOIN {local_information_center_categories} c
                     ON m.categoryid = c.id
                  WHERE $filters[0]
-                       {$this->data->order}
-                       $paging[0]";
+                       {$this->data->order}";
 
-        return [$sql, $filters[1] + $paging[1]];
+        return [$sql, $filters[1], $this->data->offset, $this->data->limit];
     }
 
     /**
@@ -124,27 +122,5 @@ class notification_query {
         }
 
         return [implode(" AND ", $sqlparts), $params];
-    }
-
-    /**
-     * Returns the limit and offset part for sql request
-     *
-     * @return array [sql, params]
-     */
-    private function get_paging(): array {
-        $params = [
-            'limit' => $this->data->limit,
-            'offset' => $this->data->offset,
-        ];
-
-        $limitsql = '';
-        if ($params['limit'] !== null) {
-            $limitsql = 'LIMIT :limit';
-        }
-        if ($params['offset'] !== null) {
-            $limitsql .= ' OFFSET :offset';
-        }
-
-        return [$limitsql, $params];
     }
 }
