@@ -31,7 +31,8 @@ class action_icon {
      * Helper functions to show icons in the settings menu (delete and edit)
      *
      * @param moodle_url $url URL to do the action
-     * @param string $name Name of the icon to render
+     * @param string $icon Icon class to render (see font awesome or other supported libs)
+     * @param string $name Name of the icon, to get the title (action:$name)
      * @return string String to render the icon
      */
     public static function make(moodle_url $url, string $icon, string $name): string {

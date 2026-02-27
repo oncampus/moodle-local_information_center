@@ -51,14 +51,14 @@ class create_message extends external_api {
     /**
      * Adds a message and sends it to the specified users
      *
-     * @param $messagedata
-     * @param bool $renotify
-     * @return stdClass Errors to return
+     * @param array $messagedata Data of the notification to create or update
+     * @param bool $renotify True, if notification status should be resetted for all users
+     * @return stdClass Validation errors of the notification
      * @throws dml_exception Database cannot be reached
      * @throws invalid_parameter_exception Input parameters are not valid
      * @throws required_capability_exception Capability are not meet to send this message
      */
-    public static function execute($messagedata, bool $renotify): stdClass {
+    public static function execute(array $messagedata, bool $renotify): stdClass {
         global $USER;
 
         [
