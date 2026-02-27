@@ -1,6 +1,5 @@
 @local @local_information_center @oncampus
-Feature: Messages can be seen in the message overview.
-  Checks if permissions are correctly handled.
+Feature: Notifications are restricted to specific user roles.
 
   Background:
     Given the following "users" exist:
@@ -18,7 +17,7 @@ Feature: Messages can be seen in the message overview.
       | user    | course | role    |
       | teacher | C1     | teacher |
 
-  Scenario Template: A simple external message get shown
+  Scenario Template: Notifications for equal or lower roles are visible
     Given the following information center messages exist:
       | component | subject   | fullmessage  | fullmessageformat | categoryid | visibility   | useridfrom |
       | external  | mymessage | external msg | 1                 | 1          | <visibility> | 2          |
@@ -32,7 +31,7 @@ Feature: Messages can be seen in the message overview.
       | teacher | teacher    |
       | user    | student    |
 
-  Scenario Template: The user do not have permissions to see the message
+  Scenario Template: Notifications for higher roles are not visible
     Given the following information center messages exist:
       | component | subject   | fullmessage  | fullmessageformat | categoryid | visibility   | useridfrom |
       | external  | mymessage | external msg | 1                 | 1          | <visibility> | 2          |

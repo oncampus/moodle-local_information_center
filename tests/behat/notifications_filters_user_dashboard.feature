@@ -1,6 +1,5 @@
 @local @local_information_center @oncampus
-Feature: Messages can be seen in the message overview.
-  Checks if the messages can be filtered.
+Feature: Notifications can be seen in the message overview and filtered.
 
   Background:
     Given I log in as "admin"
@@ -11,11 +10,11 @@ Feature: Messages can be seen in the message overview.
       | testing   | my_event | internal msg | 1                 | 3          | student    | 2          |
     And I am in the "internal" Infocenter
 
-  Scenario: A simple internal message get shown
+  Scenario: A simple internal message is visible in the user notification dashboard
     Given I click on "Infos" "link"
     Then I should see "news"
 
-  Scenario: A simple internal message get shown
+  Scenario: Search for my_event in the user admin dashboard
     Given I click on "Events" "link"
     And I should see "events"
     And I should see "my_event"
