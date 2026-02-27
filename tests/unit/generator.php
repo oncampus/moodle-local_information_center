@@ -14,10 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\tests\unit;
-
 use core\di;
-use dml_exception;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
 use local_information_center\notification\contracts\visibility;

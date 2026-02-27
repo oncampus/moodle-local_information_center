@@ -14,17 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\tests\unit;
-
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/generator.php');
 require_once(__DIR__ . '/../../../../lib/testing/classes/frozen_clock.php');
 
-use advanced_testcase;
 use core\clock;
 use core\di;
-use dml_exception;
-use frozen_clock;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
 use local_information_center\tasks\notification_cleanup;

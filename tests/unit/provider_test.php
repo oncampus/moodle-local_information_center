@@ -14,20 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\tests\unit;
-
-use coding_exception;
-use context_system;
 use core\di;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\provider_testcase;
-use dml_exception;
 use local_information_center\privacy\provider;
-use moodle_database;
-use stdClass;
 
 /**
  * Tests if the privacy provider is working correctly
