@@ -32,18 +32,20 @@
 
     Example context (json):
     {
-        firstpage: {
-            link: "...user_notification_dashboard.php?page=0"
+      "firstpage": {
+        "link": "...user_notification_dashboard.php?page=0"
+      },
+      "pages": [
+        {
+          "link": "...user_notification_dashboard.php?page=1",
+          "num": 2,
+          "active": false
         }
-        pages [{
-            link: "...user_notification_dashboard.php?page=1"
-            num: 2
-            active: false
-        }, ...]
-        lastpage: {
-            link: "...user_notification_dashboard.php?page=30"
-            num: 31
-        }
+      ],
+      "lastpage": {
+        "link": "...user_notification_dashboard.php?page=30",
+        "num": 31
+      }
     }
 }}
 

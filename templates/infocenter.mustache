@@ -51,33 +51,39 @@
 
     Example context (json):
     {
-        shortcuturl: "/local/information_center/pages/admin_notification_dashboard.php"
-        component: "information_center"
-        category: 3
-        search: "Sports"
-        categories: [{
-            link: "/local/information_center/pages/user_notification_dashboard.php?category=4
-            disabled: true
-            name: "Event"
-        }, ...]
-        notifications: [{
-            icon: "circle-user",
-            unreadmarker: True,
-            sended_time_ago: "5 seconds ago",
-            message: "<p>Hello everyone!</p>"
-        }, ...]
-        firstpage: {
-            link: "...user_notification_dashboard.php?page=0"
+      "shortcuturl": "/local/information_center/pages/admin_notification_dashboard.php",
+      "component": "information_center",
+      "category": 3,
+      "search": "Sports",
+      "categories": [
+        {
+          "link": "/local/information_center/pages/user_notification_dashboard.php?category=4",
+          "disabled": true,
+          "name": "Event"
         }
-        pages [{
-            link: "...user_notification_dashboard.php?page=1"
-            num: 2
-            active: false
-        }, ...]
-        lastpage: {
-            link: "...user_notification_dashboard.php?page=30"
-            num: 31
+      ],
+      "notifications": [
+        {
+          "icon": "circle-user",
+          "unreadmarker": true,
+          "sended_time_ago": "5 seconds ago",
+          "message": "<p>Hello everyone!</p>"
         }
+      ],
+      "firstpage": {
+        "link": "...user_notification_dashboard.php?page=0"
+      },
+      "pages": [
+        {
+          "link": "...user_notification_dashboard.php?page=1",
+          "num": 2,
+          "active": false
+        }
+      ],
+      "lastpage": {
+        "link": "...user_notification_dashboard.php?page=30",
+        "num": 31
+      }
     }
 }}
 
