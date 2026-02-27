@@ -42,17 +42,25 @@
 
 <div class="notification-item bg-white">
     <div class="d-flex">
-        <div class="notification-icon text-info mr-3" style="background-color: {{iconbgcolor}}">
+        <div
+            class="notification-icon text-info mr-3"
+            {{#iconbgcolor}}style="background-color: {{iconbgcolor}}"{{/iconbgcolor}}
+        >
             <i class="{{icon}}" style="color: black"></i>
         </div>
         <div class="flex-grow-1">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="mb-0">{{title}}
-                    {{#unreadmarker}}<span class="infocenter-unread-dot"></span>{{/unreadmarker}}
-                </h6>
+                {{#title}}
+                    <h6 class="mb-0">
+                        {{title}}
+                        {{#unreadmarker}}<span class="infocenter-unread-dot"></span>{{/unreadmarker}}
+                    </h6>
+                {{/title}}
                 <span class="notification-date">{{sended_time_ago}}</span>
             </div>
-            <p class="text-muted mb-2">{{{message}}}</p>
+            {{#message}}
+                <p class="text-muted mb-2">{{{message}}}</p>
+            {{/message}}
         </div>
     </div>
 </div>
