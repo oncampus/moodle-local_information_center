@@ -32,7 +32,7 @@ $string['category:all'] = 'All';
 $string['category:events'] = 'Events';
 $string['category:infos'] = 'Infos';
 $string['category:innovations'] = 'Innovations';
-$string['category:maintenance'] = 'Maintenance/Malfunction';
+$string['category:maintenance'] = 'Maintenance / Malfunction';
 
 $string['deletion_success'] = 'The notification was successfully deleted';
 
@@ -41,44 +41,44 @@ $string['form:any'] = 'Any';
 $string['form:before'] = 'Before';
 $string['form:category'] = 'Category';
 $string['form:category_help'] = '<ul>
-<li><strong>Information <i class="fa fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>
+<li><strong>Infos <i class="fa fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>
 <li><strong>Events <i class="fa-regular fa-calendar-plus"></i>.</strong> Information about events, dates, or activities (Medium priority)</li>
-<li><strong>Administration <i class="fa fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>
+<li><strong>Administrative <i class="fa fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>
 </ul>';
-$string['form:categoryname'] = 'category';
+$string['form:categoryname'] = 'Category';
 $string['form:contains'] = 'Contains';
 $string['form:deleted'] = 'Show deleted';
 $string['form:equals'] = 'Equals';
-$string['form:firstname'] = 'firstname';
+$string['form:firstname'] = 'First name';
 $string['form:header'] = 'New Notification';
-$string['form:lastname'] = 'lastname';
+$string['form:lastname'] = 'Last name';
 $string['form:message'] = 'Message';
 $string['form:renotify'] = 'Notify again';
 $string['form:title'] = 'Title';
-$string['form:validation:date'] = 'The enddate must be later then the startdate';
+$string['form:validation:date'] = 'The end date must be later than the start date';
 $string['form:visibility'] = 'Visibility';
-$string['form:visibility_help'] = 'The roles have a tiered visibility.
+$string['form:visibility_help'] = 'Roles have tiered visibility.
  Higher-level roles automatically include all visibility levels of lower-level roles:
 <ol>
-<li><strong>Learners. can only see their own messages.</li>
-<li><strong>Teachers. see messages for teachers and learners.</li>
-<li><strong>Managers. see messages for managers, teachers and learners.</li>
-<li><strong>Administrators. see all messages.
+<li><strong>Learners.</strong> can only see their own notifications.</li>
+<li><strong>Teachers.</strong> see notifications for teachers and learners.</li>
+<li><strong>Managers.</strong> see notifications for managers, teachers and learners.</li>
+<li><strong>Administrators.</strong> see all notifications.</li>
 </ol>';
 
 $string['information_center:can_view_message_control_board'] = 'Allows the admin control center to view notifications.';
-$string['information_center:delete_messages'] = 'Can delete messages in the information center';
-$string['information_center:read_admin_messages'] = 'Can see admin messages in the information center';
-$string['information_center:read_manager_messages'] = 'Can see manager messages in the information center';
-$string['information_center:read_student_messages'] = 'Can see student messages in the information center';
-$string['information_center:read_teacher_messages'] = 'Can see teacher messages in the information center';
-$string['information_center:update_or_create_messages'] = 'Can update and create messages in the information center';
+$string['information_center:delete_messages'] = 'Can delete notifications in the information center';
+$string['information_center:read_admin_messages'] = 'Can see admin notifications in the information center';
+$string['information_center:read_manager_messages'] = 'Can see manager notifications in the information center';
+$string['information_center:read_student_messages'] = 'Can see student notifications in the information center';
+$string['information_center:read_teacher_messages'] = 'Can see teacher notifications in the information center';
+$string['information_center:update_or_create_messages'] = 'Can update and create notifications in the information center';
 
-$string['navigationnode:unreadcount'] = '{$a} unread messages';
+$string['navigationnode:unreadcount'] = '{$a} unread notifications';
 
 $string['overview:external'] = 'External (BW)';
 $string['overview:internal'] = 'Internal';
-$string['overview:sendmessages'] = 'Manage messages';
+$string['overview:sendmessages'] = 'Manage notifications';
 $string['overview:title'] = 'Notifications';
 
 $string['page'] = 'Page';
@@ -86,54 +86,48 @@ $string['page:message_overview'] = 'Notification overview';
 
 $string['pluginname'] = 'Information Center';
 
-$string['privacy:metadata:local_information_center'] = 'Stores information about messages that a user has read in the information center.';
-$string['privacy:metadata:local_information_center:messageid'] = 'The ID of the message.';
-$string['privacy:metadata:local_information_center:userid'] = 'The ID of the user who read a message.';
+$string['privacy:metadata:local_information_center'] = 'Stores information about notifications that a user has read in the information center.';
+$string['privacy:metadata:local_information_center:messageid'] = 'The ID of the notification.';
+$string['privacy:metadata:local_information_center:userid'] = 'The ID of the user who read a notification.';
 
-$string['privacy:metadata:local_information_center_messages'] = 'Stores messages sent via the information center.';
-$string['privacy:metadata:local_information_center_messages:categoryid'] = 'The ID of the category this message belongs to.';
-$string['privacy:metadata:local_information_center_messages:component'] = 'The Moodle component or plugin that generated the message.';
-$string['privacy:metadata:local_information_center_messages:fullmessage'] = 'The full body text of the message.';
-$string['privacy:metadata:local_information_center_messages:fullmessageformat'] = 'The format of the full message (e.g., HTML or plain text).';
-$string['privacy:metadata:local_information_center_messages:smallmessage'] = 'A short summary or preview of the message.';
-$string['privacy:metadata:local_information_center_messages:subject'] = 'The subject of the message.';
-$string['privacy:metadata:local_information_center_messages:timecreated'] = 'The time when the message was created.';
-$string['privacy:metadata:local_information_center_messages:timedeleted'] = 'The time when the message was deleted, if applicable.';
-$string['privacy:metadata:local_information_center_messages:timeend'] = 'The time when the message is no longer visible.';
-$string['privacy:metadata:local_information_center_messages:timemodified'] = 'The time when the message was last modified.';
-$string['privacy:metadata:local_information_center_messages:timestart'] = 'The time when the message becomes visible.';
-$string['privacy:metadata:local_information_center_messages:useridfrom'] = 'The ID of the user who sent the message.';
-$string['privacy:metadata:local_information_center_messages:visibility'] = 'To which users the message is visible.';
+$string['privacy:metadata:local_information_center_messages'] = 'Stores notifications sent via the information center.';
+$string['privacy:metadata:local_information_center_messages:categoryid'] = 'The ID of the category this notification belongs to.';
+$string['privacy:metadata:local_information_center_messages:component'] = 'The Moodle component or plugin that generated the notification.';
+$string['privacy:metadata:local_information_center_messages:fullmessage'] = 'The full body text of the notification.';
+$string['privacy:metadata:local_information_center_messages:fullmessageformat'] = 'The format of the full notification (e.g., HTML or plain text).';
+$string['privacy:metadata:local_information_center_messages:smallmessage'] = 'A short summary or preview of the notification.';
+$string['privacy:metadata:local_information_center_messages:subject'] = 'The subject of the notification.';
+$string['privacy:metadata:local_information_center_messages:timecreated'] = 'The time when the notification was created.';
+$string['privacy:metadata:local_information_center_messages:timedeleted'] = 'The time when the notification was deleted, if applicable.';
+$string['privacy:metadata:local_information_center_messages:timeend'] = 'The time when the notification is no longer visible.';
+$string['privacy:metadata:local_information_center_messages:timemodified'] = 'The time when the notification was last modified.';
+$string['privacy:metadata:local_information_center_messages:timestart'] = 'The time when the notification becomes visible.';
+$string['privacy:metadata:local_information_center_messages:useridfrom'] = 'The ID of the user who sent the notification.';
+$string['privacy:metadata:local_information_center_messages:visibility'] = 'To which users the notification is visible.';
 
-$string['search'] = "Search";
+$string['search'] = 'Search';
 
-$string['settings:auto_delete'] = 'Auto delete';
-$string['settings:auto_delete_desc'] = 'Toggles whether a notification that go past the set end-date is automatically deleted';
-$string['settings:auto_delete_duration'] = 'Auto delete duration';
-$string['settings:auto_delete_duration_desc'] = 'Sets the time duration when the notification should be deleted after the set end-date';
-$string['settings:btn_add'] = 'Add new Notification';
+$string['settings:btn_add'] = 'Add new notification';
 $string['settings:enable'] = 'Enable';
 $string['settings:enable_desc'] = 'Toggles whether all notifications are enabled/disabled';
 
 $string['table:createdby'] = 'Created by';
 $string['table:createdby:extern'] = 'External';
-$string['table:enddate'] = 'End Date';
-$string['table:enddate_help'] = (
-'Messages will become invisible after this time. You can view them afterwards in the management area.'
-);
+$string['table:enddate'] = 'End date';
+$string['table:enddate_help'] = 'Notifications will become invisible after this time. You can view them afterwards in the management area.';
 $string['table:messagecategory'] = 'Category';
-$string['table:startdate'] = 'Start Date';
+$string['table:startdate'] = 'Start date';
 $string['table:title'] = 'Title';
 $string['table:type'] = 'Type';
 $string['table:visibility'] = 'Visibility';
 
-$string['task:message_cleanup'] = 'Message cleanup';
+$string['task:message_cleanup'] = 'Notification cleanup task';
 
 $string['validation:category:notexist'] = 'Category {$a} does not exist';
-$string['validation:timeend:aftertimestart'] = 'Should be later than start time';
-$string['validation:timeend:notnegative'] = 'End time can not be negative';
-$string['validation:timestart:notnegative'] = 'Start time can not be negative';
-$string['validation:useridfrom:cannotbechanged'] = 'The owner of messages cannot be changed';
+$string['validation:timeend:aftertimestart'] = 'The end time must be later than the start time';
+$string['validation:timeend:notnegative'] = 'End time cannot be negative';
+$string['validation:timestart:notnegative'] = 'Start time cannot be negative';
+$string['validation:useridfrom:cannotbechanged'] = 'The owner of notifications cannot be changed';
 $string['validation:useridfrom:notexist'] = 'User with ID {$a} does not exist';
 $string['validation:visibility:invalid'] = 'Visibility {$a} is not valid';
 
