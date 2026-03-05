@@ -105,7 +105,7 @@ class create_message extends external_api {
         $message->id = self::get_local_id($messagedata['id']);
         $id = $messagemanager->add_or_update($message);
         if ($message->id === null) {
-            self::save_local_id($message->id, $id);
+            self::save_local_id($id, $messagedata['id']);
         }
 
         if ($renotify) {
