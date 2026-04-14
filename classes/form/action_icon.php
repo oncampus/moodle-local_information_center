@@ -43,7 +43,7 @@ class action_icon {
             html_writer::tag(
                 'i',
                 '',
-                ['class' => "icon fa $icon", 'title' => $title, 'role' => 'img']
+                ['class' => "icon fa-solid $icon", 'title' => $title, 'role' => 'img']
             )
         );
     }

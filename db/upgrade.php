@@ -50,10 +50,10 @@ function upgrade_fa_icons(): void {
     $db = di::get(moodle_database::class);
     foreach ($categories as $name => $icon) {
         $db->set_field(
-           'local_information_center_categories',
-           'icon',
-           $icon,
-           ['name' => $name]
+            'local_information_center_categories',
+            'icon',
+            $icon,
+            ['name' => $name]
         );
     }
 }
