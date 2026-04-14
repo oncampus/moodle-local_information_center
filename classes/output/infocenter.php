@@ -121,7 +121,7 @@ class infocenter implements renderable, templatable {
         $messages = array_map(fn ($msg) => self::export_notification($msg), $messages);
         $messages = array_values($messages);
 
-        $pages = $this->prepare_paging($this->page, $this->url);
+        $pagination = $this->prepare_paging($this->page, $this->url);
 
         $context = context_system::instance();
         if (!$context instanceof context) {
@@ -131,13 +131,14 @@ class infocenter implements renderable, templatable {
         $hasmanagecap = has_capability('local/information_center:update_or_create_messages', $context);
         $shortcuttarget = $hasmanagecap ? $this->manageurl : null;
 
-        return $pages + [
+        return [
                 'categories' => $this->prepare_categories($this->url),
                 'notifications' => $messages,
                 'shortcuturl' => $shortcuttarget?->out(false),
                 'search' => $this->search,
                 'component' => $this->component,
                 'category' => $this->category,
+                'pagination' => $pagination,
             ];
     }
 
@@ -179,59 +180,18 @@ class infocenter implements renderable, templatable {
      *
      * @param int $currentpage Current page we are on
      * @param moodle_url $url Url we are currently on
-     * @return array Exported parameters for the template
+     * @return string Rendered html for pagination
      */
-    private function prepare_paging(int $currentpage, moodle_url $url): array {
+    private function prepare_paging(int $currentpage, moodle_url $url): string {
+        global $OUTPUT;
         $msgcount = $this->messagemanager->count_with_request($this->searchrequest);
-        $pagecount = ceil($msgcount / $this->pagesize) - 1;
-        $output = [];
 
-        if ($pagecount > 0) {
-            $endpage = min($currentpage + 6, $pagecount);
-            $beginpage = max($currentpage - (10 - ($endpage - $currentpage)), 0);
-            $output['pages'] = [];
-
-            $link = (clone $url);
-            $link->param('page', 0);
-
-            if ($beginpage == 1) {
-                $output['pages'][] = [
-                    'link' => $link->out(false),
-                    'num' => 1,
-                ];
-            } else if ($beginpage >= 2) {
-                $output['firstpage'] = [
-                    'link' => $link->out(false),
-                ];
-            }
-
-            foreach (range($beginpage, $endpage) as $navpage) {
-                $link = (clone $url);
-                $link->param('page', $navpage);
-                $output['pages'][] = [
-                    'link' => $link->out(false),
-                    'num' => $navpage + 1,
-                    'active' => $navpage == $currentpage,
-                ];
-            }
-
-            $link = (clone $url);
-            $link->param('page', $pagecount);
-
-            if ($endpage == $pagecount - 1) {
-                $output['pages'][] = [
-                    'link' => $link->out(false),
-                    'num' => $pagecount + 1,
-                ];
-            } else if ($endpage <= $pagecount - 2) {
-                $output['lastpage'] = [
-                    'link' => $link->out(false),
-                    'num' => $pagecount + 1,
-                ];
-            }
-        }
-
-        return $output;
+        return $OUTPUT->paging_bar(
+            $msgcount,
+            $currentpage,
+            $this->pagesize,
+            $url
+        );
     }
 
     /**
