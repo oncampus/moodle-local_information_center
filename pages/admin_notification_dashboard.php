@@ -63,6 +63,6 @@ $table->finish_output();
 echo html_writer::link(
     new moodle_url('/local/information_center/pages/edit_notification.php'),
     get_string('settings:btn_add', 'local_information_center'),
-    ['class' => 'btn btn-secondary instance mb-3']
+    ['class' => 'btn btn-secondary mt-3']
 );
 echo $OUTPUT->footer();
