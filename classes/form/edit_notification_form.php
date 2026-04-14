@@ -68,7 +68,9 @@ class edit_notification_form extends moodleform {
         $mform->addRule('message', null, 'required');
 
         // Type.
-        $mform->addElement('select', 'category', get_string('form:category', "local_information_center"), $this->get_categories());
+        $categorymanager = di::get(NotificationCategory::class);
+        $categories = $categorymanager->get_options();
+        $mform->addElement('select', 'category', get_string('form:category', "local_information_center"), $categories);
         $mform->addHelpButton('category', 'form:category', 'local_information_center');
 
         // Target.
@@ -106,31 +108,6 @@ class edit_notification_form extends moodleform {
 
         // When ready, add your action buttons.
         $this->add_action_buttons(false, get_string('savechanges'));
-    }
-
-    /**
-     * Get categories, that are allowed to be sent locally
-     *
-     * @return array List of notification type categories, as id => displayname
-     * @throws dml_exception Database cannot be reached
-     * @throws coding_exception Could not fetch language string
-     */
-    public static function get_categories(): array {
-        $allowedcategories = ['infos', 'events', 'administrative'];
-        $categorymanager = di::get(NotificationCategory::class);
-        $categories = $categorymanager->get_all();
-
-        $categoryselect = [];
-        foreach ($categories as $category) {
-            // Filter out categories not allowed for local sending.
-            if (!in_array($category->name, $allowedcategories)) {
-                continue;
-            }
-
-            $categoryselect[$category->id] = $category->out;
-        }
-
-        return $categoryselect;
     }
 
     /**

@@ -20,7 +20,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 use coding_exception;
+use core\di;
 use dml_exception;
+use local_information_center\notification\contracts\NotificationCategory;
 use moodleform;
 
 /**
@@ -87,7 +89,9 @@ class notification_filter_form extends moodleform {
         $mform->hideIf('lastname', 'lastname_ftype', 'eq', '');
 
         $mform->addElement('select', 'categoryid_ftype', get_string('form:categoryname', self::PLUGIN_NAME), $selectoptions);
-        $categories = edit_notification_form::get_categories();
+
+        $categorymanager = di::get(NotificationCategory::class);
+        $categories = $categorymanager->get_options();
         $mform->addElement('select', 'categoryid', '', $categories);
         $mform->hideIf('categoryid', 'categoryid_ftype', 'eq', '');
 

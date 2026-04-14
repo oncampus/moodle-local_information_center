@@ -25,7 +25,7 @@ use core\output\html_writer;
 use local_information_center\notification\contracts\NotificationCategory;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\NotificationsRead;
-use local_information_center\notification\notification_category;
+use local_information_center\notification\notification_category_manager;
 use local_information_center\notification\notification_manager;
 use local_information_center\notification\notifications_read;
 use moodle_database;
@@ -62,7 +62,7 @@ class hook_callbacks {
             definition: function (
                 moodle_database $db,
             ): NotificationCategory {
-                return new notification_category($db);
+                return new notification_category_manager($db);
             }
         );
 

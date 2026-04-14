@@ -29,10 +29,26 @@ use stdClass;
  */
 interface NotificationCategory {
     /**
+     * Get category options, that are allowed to be sent locally
+     *
+     * @return array List of notification type categories, as id => displayname
+     * @throws dml_exception Database cannot be reached
+     * @throws coding_exception Could not fetch language string
+     */
+    public function get_options(): array;
+
+    /**
+     * Get a single category
+     *
+     * @return notification_category|false Single category
+     * @throws dml_exception Database not reachable
+     */
+    public function get(int $id): notification_category|false;
+
+    /**
      * Returns all categories with their visualisation
      *
-     * @return stdClass[] All categories with [id, name, out]
-     * @throws coding_exception Could not fetch language string
+     * @return notification_category[] All categories
      * @throws dml_exception Database not reachable
      */
     public function get_all(): array;

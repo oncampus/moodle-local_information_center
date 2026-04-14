@@ -100,7 +100,7 @@ class notification_query {
         }
 
         if ($params['category']) {
-            $sqlparts[] = "c.id = :category";
+            $sqlparts[] = "m.categoryid = :category";
         }
 
         if ($this->data->titlesearch !== null) {

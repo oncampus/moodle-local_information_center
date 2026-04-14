@@ -33,13 +33,13 @@ function xmldb_local_information_center_install(): bool {
             'name' => 'infos',
             'color' => '#17a2b8', // Turquoise = Messages/Information.
             'priority' => 30,
-            'icon' => 'fa fa-newspaper',
+            'icon' => 'fa-newspaper',
         ],
         [
             'name' => 'innovations',
             'color' => '#28a745', // Green = Improvement.
             'priority' => 30,
-            'icon' => 'fa fa-gear',
+            'icon' => 'fa-gear',
         ],
         [
             'name' => 'events',
@@ -51,13 +51,13 @@ function xmldb_local_information_center_install(): bool {
             'name' => 'administrative',
             'color' => '#dc3545', // Red = important/official.
             'priority' => 80,
-            'icon' => 'fa fa-graduation-cap',
+            'icon' => 'fa-graduation-cap',
         ],
         [
             'name' => 'maintenance',
             'color' => '#ff6600', // Orange = Warning/Maintenance work.
             'priority' => 90,
-            'icon' => 'fa fa-heartbeat',
+            'icon' => 'fa-heartbeat',
         ],
     ];
 

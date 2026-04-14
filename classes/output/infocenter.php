@@ -160,13 +160,16 @@ class infocenter implements renderable, templatable {
 
         $message->fullmessagehtml = null;
 
+        $categorymng = di::get(NotificationCategory::class);
+        $category = $categorymng->get($message->categoryid);
+
         $data = [
             'title' => clean_param($message->subject, PARAM_TEXT),
             'message' => message_format_message_text($message),
-            'iconbgcolor' => $message->color,
             'sended_time_ago' => get_string('ago', 'message', format_time($secondsago)),
-            'icon' => $message->icon,
             'unreadmarker' => !$isread,
+            'iconbgcolor' => $category->color,
+            'icon' => $category->get_icon(),
         ];
 
         if (!$isread) {
@@ -210,11 +213,8 @@ class infocenter implements renderable, templatable {
         $searchrequest->titlesearch = null;
         $searchrequest->select = "DISTINCT categoryid";
         $searchrequest->order = "";
-        $messagecategories = $this->messagemanager->get_with_request($searchrequest);
-        $messagecategories = array_column($messagecategories, 'categoryid');
-
-        $categorymanager = di::get(NotificationCategory::class);
-        $categories = $categorymanager->get_all();
+        $usedcategories = $this->messagemanager->get_with_request($searchrequest);
+        $usedcategories = array_column($usedcategories, 'categoryid');
 
         $output = [];
 
@@ -226,17 +226,19 @@ class infocenter implements renderable, templatable {
             'link' => $alllink->out(false),
         ];
 
-        foreach ($categories as $key => $category) {
-            if (!in_array($key, $messagecategories)) {
+        $categorymanager = di::get(NotificationCategory::class);
+        foreach ($usedcategories as $categoryid) {
+            $category = $categorymanager->get($categoryid);
+            if (!$category) {
                 continue;
             }
 
-            $link = (clone $url);
-            $link->param('category', $key);
+            $link = new moodle_url($url);
+            $link->param('category', $category->id);
 
             $output[] = [
-                'name' => $category->out,
-                'disabled' => $key == $this->category,
+                'name' => $category->get_label(),
+                'disabled' => $category->id == $this->category,
                 'link' => $link->out(false),
             ];
         }
