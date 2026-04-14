@@ -45,7 +45,7 @@ function xmldb_local_information_center_install(): bool {
             'name' => 'events',
             'color' => '#9b59b6', // Violet = Events.
             'priority' => 60,
-            'icon' => 'fa-regular fa-calendar-plus',
+            'icon' => 'fa-calendar-plus',
         ],
         [
             'name' => 'administrative',

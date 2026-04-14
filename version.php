@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026030501;
+$plugin->version   = 2026041400;
 $plugin->requires  = 2024100100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'local_information_center';
