@@ -23,12 +23,17 @@ use core\param;
 use core\router\route;
 use core\router\route_controller;
 use core\router\schema\parameters\path_parameter;
+use core\router\schema\request_body;
+use core\router\schema\response\content\payload_response_type;
 use core\router\schema\response\payload_response;
+use core\router\schema\response\response;
 use dml_exception;
 use invalid_parameter_exception;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\notification\contracts\notification;
+use local_information_center\route\api\schemes\notification_schema;
+use local_information_center\route\api\schemes\ok;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use required_capability_exception;
@@ -65,6 +70,7 @@ class message_api {
                 type: param::INT,
             ),
         ],
+        responses: [new ok()]
     )]
     public function renotify(
         int $id,
@@ -119,9 +125,18 @@ class message_api {
                 type: param::INT,
             ),
         ],
+        requestbody: new request_body(
+            description: 'Notification details to create or update',
+            content: new payload_response_type(
+                schema: new notification_schema()
+            ),
+            required: true,
+        ),
+        responses: [new ok()]
     )]
     public function add_or_update_message(
         int $id,
+        ResponseInterface $response,
         ServerRequestInterface $request,
         NotificationManager $notificationmanager,
     ): payload_response {
@@ -157,6 +172,7 @@ class message_api {
         return new payload_response(
             payload: [],
             request: $request,
+            response: $response
         );
     }
 
@@ -169,43 +185,27 @@ class message_api {
      */
     private function parse_to_notification(array|null|object $notificationdata): notification {
         global $USER;
+
         if (!is_array($notificationdata)) {
             throw new invalid_parameter_exception('Request body must be a JSON object.');
         }
 
-        $required = [
-            'categoryid',
-            'fullmessage',
-            'fullmessageformat',
-            'smallmessage',
-            'visibility',
-            'subject',
-        ];
-
-        foreach ($required as $field) {
-            if (!array_key_exists($field, $notificationdata)) {
-                throw new invalid_parameter_exception("Missing required field: {$field}");
-            }
-        }
-
         $message = new notification();
         $message->useridfrom = $USER->id;
-        $message->timestart = array_key_exists('timestart', $notificationdata)
-            ? clean_param($notificationdata['timestart'], PARAM_INT)
-            : null;
-        $message->timeend = array_key_exists('timeend', $notificationdata)
-            ? clean_param($notificationdata['timeend'], PARAM_INT)
-            : null;
-        $message->timedeleted = array_key_exists('timedeleted', $notificationdata)
-            ? clean_param($notificationdata['timedeleted'], PARAM_INT)
-            : null;
-        $message->categoryid = clean_param($notificationdata['categoryid'], PARAM_INT);
-        $message->fullmessage = clean_param($notificationdata['fullmessage'], PARAM_RAW);
-        $message->fullmessageformat = clean_param($notificationdata['fullmessageformat'], PARAM_INT);
-        $message->smallmessage = clean_param($notificationdata['smallmessage'], PARAM_RAW);
-        $message->visibility = clean_param($notificationdata['visibility'], PARAM_TEXT);
-        $message->subject = clean_param($notificationdata['subject'], PARAM_TEXT);
+
+        $message->timestart = $notificationdata['timestart'] ?? null;
+        $message->timeend = $notificationdata['timeend'] ?? null;
+        $message->timedeleted = $notificationdata['timedeleted'] ?? null;
+
+        $message->categoryid = $notificationdata['categoryid'];
+        $message->fullmessage = $notificationdata['fullmessage'];
+        $message->fullmessageformat = $notificationdata['fullmessageformat'];
+        $message->smallmessage = $notificationdata['smallmessage'];
+        $message->visibility = $notificationdata['visibility'];
+        $message->subject = $notificationdata['subject'];
+
         $message->component = 'external';
+
         return $message;
     }
 }
