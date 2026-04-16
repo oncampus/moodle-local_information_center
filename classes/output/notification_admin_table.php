@@ -14,13 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\route\controller;
+namespace local_information_center\output;
 
 use coding_exception;
 use core\di;
 use core\output\html_writer;
 use dml_exception;
 use flexible_table;
+use local_information_center\route\controller\paths;
 use moodle_database;
 use moodle_url;
 use stdClass;
