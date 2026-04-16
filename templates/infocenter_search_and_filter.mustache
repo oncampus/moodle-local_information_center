@@ -52,8 +52,7 @@
 <div class="row g-3 mb-4">
     <form class="col-md-6">
         <div class="input-group">
-            <input type="hidden" name="component" value="{{component}}">
-            <input type="hidden" name="category" value="{{category}}">
+            {{#category}}<input type="hidden" name="category" value="{{category}}">{{/category}}
             <input type="text" class="form-control" value="{{search}}" placeholder="Suchen" aria-label="Suchen"
                    name="query" data-region="input" autocomplete="off">
             <button type="submit" class="btn btn-primary">

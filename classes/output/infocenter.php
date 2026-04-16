@@ -218,7 +218,7 @@ class infocenter implements renderable, templatable {
 
         $output = [];
 
-        $alllink = (clone $url);
+        $alllink = new moodle_url($url);
         $alllink->remove_params('category');
         $output[] = [
             'name' => get_string('category:all', 'local_information_center'),

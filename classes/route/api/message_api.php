@@ -157,9 +157,7 @@ class message_api {
             foreach ($errors as $field => $error) {
                 $errordesc .= "$field: $error\n";
             }
-            throw new invalid_parameter_exception(
-                  $errordesc
-            );
+            throw new invalid_parameter_exception($errordesc);
         }
 
         // Search if the message exists locally.
