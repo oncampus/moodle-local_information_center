@@ -155,11 +155,8 @@ class notification_admin_table extends flexible_table implements FilterableTable
 
         $userurl = new moodle_url('/user/profile.php', ['id' => $notification->useridfrom]);
         $name = fullname($notification);
-        if (
-            $notification->component != 'tool_oc_notification'
-            || $notification->component != 'local_information_center'
-        ) {
-            $name = get_string('table:createdby:extern', 'local_information_center') . " ($name)";
+        if ($notification->component != 'local_information_center') {
+            $name = get_string('table:createdby:extern', 'local_information_center') . $notification->component . " ($name)";
         }
         $userlink = html_writer::link($userurl, $name);
 
