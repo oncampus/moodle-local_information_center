@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\form;
+namespace local_information_center\route\controller;
 
 use core\output\html_writer;
 use moodle_url;

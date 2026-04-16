@@ -18,8 +18,10 @@ namespace local_information_center\route\api;
 
 defined('MOODLE_INTERNAL') || die();
 
+use context_system;
 use core\context\system;
 use core\param;
+use core\router\require_login;
 use core\router\route;
 use core\router\route_controller;
 use core\router\schema\parameters\path_parameter;
@@ -45,7 +47,7 @@ use required_capability_exception;
  * @copyright  2025, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class message_api {
+class notification_api {
     use route_controller;
 
     /**
@@ -117,7 +119,7 @@ class message_api {
         title: 'Create or update a notification',
         description: 'Create or update a notification',
         security: [],
-        path: '/messages/{id}',
+        path: '/notifications/{id}',
         method: ['PUT', 'POST'],
         pathtypes: [
             new path_parameter(
@@ -165,6 +167,48 @@ class message_api {
         $localid = $notificationmanager->add_or_update($message);
         if ($message->id === null) {
             $idhelper->save_local_id($localid, $id);
+        }
+
+        return new payload_response(
+            payload: [],
+            request: $request,
+            response: $response
+        );
+    }
+
+    #[route(
+        title: 'Delete notification',
+        description: 'Hard deletes a notification (think about a soft delete)',
+        path: '/notifications/{id}',
+        method: ['DELETE'],
+        pathtypes: [
+            new path_parameter(
+                name: 'id',
+                type: param::INT,
+                required: true,
+                description: 'Component external or internal',
+            ),
+        ],
+        requirelogin: new require_login(),
+    )]
+    public function delete(
+        int $id,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        NotificationManager $manager,
+    ): payload_response {
+        $context = context_system::instance();
+        require_capability('local/information_center:delete_messages', $context);
+
+        if (
+            confirm_sesskey() &&
+            $manager->delete($id)
+        ) {
+            return new payload_response(
+                payload: [],
+                request: $request,
+                response: $response
+            );
         }
 
         return new payload_response(

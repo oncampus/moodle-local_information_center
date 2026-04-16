@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\form;
+namespace local_information_center\route\controller;
 
 use coding_exception;
 use core\di;
@@ -33,10 +33,6 @@ use stdClass;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notification_admin_table extends flexible_table implements FilterableTable {
-    /** @var string EDIT_LINK Link to the edit page for notifications */
-    private const EDIT_LINK = '/local/information_center/pages/edit_notification.php';
-    /** @var string EDIT_LINK Link to the deletion page for notifications */
-    private const DELETE_LINK = '/local/information_center/pages/delete_notification.php';
     /** @var array Applied filters with field and way */
     private array $filters = [];
     /** @var array Applied filter values */
@@ -150,10 +146,10 @@ class notification_admin_table extends flexible_table implements FilterableTable
         if ($notification->useridfrom == $USER->id && $notification->timedeleted === null) {
             $msgid = $notification->id;
 
-            $editurl = new moodle_url(self::EDIT_LINK, ['id' => $msgid]);
+            $editurl = paths::edit_notification($msgid);
             $edit = action_icon::make($editurl, 'fa-edit', 'edit');
 
-            $deleteurl = new moodle_url(self::DELETE_LINK, ['id' => $msgid, 'sesskey' => sesskey()]);
+            $deleteurl = paths::delete_notification($msgid);
             $delete = action_icon::make($deleteurl, 'fa-trash', 'delete');
         }
 

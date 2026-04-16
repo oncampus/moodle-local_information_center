@@ -14,26 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace local_information_center\form;
+namespace local_information_center\route\controller;
+
+use core\output\renderer_base;
+use renderable;
+use templatable;
 
 /**
- * Filterable Table, multiple filters can be applied
+ * UI Component for rendering the message filter area,
+ * to search messages
  *
  * @author      Konrad Ebel <konrad.ebel@oncampus.de>
  * @copyright   2025, oncampus GmbH, <support@oncampus.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface FilterableTable {
+class notification_filter_area implements renderable, templatable {
+    /** @var string HTML-Moodleform to render in the template */
+    private string $form;
+
     /**
-     * Adds an additional filter
+     * Constructor
      *
-     * @param string $field Query language field to filter by
-     * @param mixed $value Value to compare with (null if not needed)
-     * @param string $comparator Compator like (=, <, >, <>, IS NULL …)
+     * @param string $form HTML-Moodleform to render
      */
-    public function add_filter(
-        string $field,
-        mixed $value,
-        string $comparator = "="
-    ): void;
+    public function __construct(string $form) {
+        $this->form = $form;
+    }
+
+    /**
+     * Export values for template
+     *
+     * @param renderer_base $output Renderer to use
+     * @return string[] Template parameters
+     */
+    public function export_for_template(renderer_base $output) {
+        return [
+            'filtersform' => $this->form,
+        ];
+    }
 }

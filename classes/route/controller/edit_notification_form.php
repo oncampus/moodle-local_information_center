@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_information_center\form;
+namespace local_information_center\route\controller;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -22,9 +22,8 @@ require_once($CFG->libdir . '/formslib.php');
 
 use coding_exception;
 use core\di;
-use dml_exception;
-use local_information_center\notification\contracts\NotificationCategory;
 use local_information_center\notification\contracts\notification;
+use local_information_center\notification\contracts\NotificationCategory;
 use local_information_center\notification\contracts\visibility;
 use moodleform;
 

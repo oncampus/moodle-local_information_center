@@ -27,7 +27,7 @@ class user_dashboard_controller {
     }
 
     #[route(
-        path: '[/{component}]',
+        path: paths::USER_DASHBOARD . '[/{component}]',
         pathtypes: [
             new path_parameter(
                 name: 'component',
@@ -67,6 +67,7 @@ class user_dashboard_controller {
         global $USER, $OUTPUT, $PAGE;
 
         $context = context_system::instance();
+        $component = $component ?? 'external';
 
         if (
             !has_any_capability([
@@ -84,7 +85,7 @@ class user_dashboard_controller {
             );
         }
 
-        $url = new moodle_url($request->getUri()->getPath());
+        $url = paths::user_dashboard($component);
         $PAGE->set_context($context);
         $PAGE->set_url($url);
         $PAGE->set_title(get_string('pluginname', 'local_information_center'));
@@ -95,7 +96,7 @@ class user_dashboard_controller {
         $renderer = $PAGE->get_renderer('core', 'message');
         $infocenter = new infocenter(
             $redirecturl,
-            new moodle_url('/local/information_center/pages/admin_notification_dashboard.php'),
+            new moodle_url(paths::admin_dashboard()),
             $component,
             $queryparams['query'],
             $queryparams['page'],
@@ -105,7 +106,7 @@ class user_dashboard_controller {
         $tabs = [];
         foreach (['internal', 'external'] as $tabcomponent) {
             $unreadmsgs = $notificationsread->count_unread($USER->id, $tabcomponent == 'external');
-            $tabs[] = $this->get_notification_tab($tabcomponent, $unreadmsgs, $url);
+            $tabs[] = $this->get_notification_tab($tabcomponent, $unreadmsgs);
         }
 
         $response->withStatus(200);
@@ -137,7 +138,7 @@ class user_dashboard_controller {
 
         return new tabobject(
             $component,
-            new moodle_url("/local_information_center/$component"),
+            paths::user_dashboard($component),
             $text,
             get_string("overview:$component", 'local_information_center')
         );

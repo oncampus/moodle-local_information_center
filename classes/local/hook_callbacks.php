@@ -28,6 +28,7 @@ use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\notification\notification_category_manager;
 use local_information_center\notification\notification_manager;
 use local_information_center\notification\notifications_read;
+use local_information_center\route\controller\paths;
 use moodle_database;
 use moodle_url;
 use navigation_node;
@@ -118,7 +119,7 @@ class hook_callbacks {
         $label = get_string('overview:title', 'local_information_center') . $iconwithbadge;
 
         // Target URL.
-        $url = new moodle_url('/local/information_center/pages/user_notification_dashboard.php');
+        $url = paths::user_dashboard();
 
         // Create and add node.
         $node = navigation_node::create($label, $url);
