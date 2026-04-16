@@ -16,6 +16,8 @@
 
 namespace local_information_center\notification\contracts;
 
+use core\clock;
+use core\di;
 use core\uuid;
 use invalid_parameter_exception;
 use stdClass;
@@ -47,6 +49,8 @@ class notification {
         public string $component,
         /** @var int Category ID */
         public int $categoryid,
+        /** @var int|null Time, when the notification got modified last time */
+        public int $timemodified,
         /** @var int|null Start time, when it is visible */
         public ?int $timestart = null,
         /** @var int|null End time, when it gets hidden */
@@ -66,8 +70,7 @@ class notification {
     }
 
     public function get_time_visible(): int {
-        // TODO: $this->timemodified.
-        return $this->timestart;
+        return max($this->timestart, $this->timemodified);
     }
 
     public static function create(
@@ -123,6 +126,7 @@ class notification {
             $visibilityparsed,
             $component,
             $categoryid,
+            di::get(clock::class)->now(),
             $timestart,
             $timeend,
             null,

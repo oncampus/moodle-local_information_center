@@ -68,7 +68,7 @@ class notification_manager implements NotificationManager {
      */
     public function add_or_update(notification $notification): void {
         $data = new stdClass();
-        $data->timemodified = $this->clock->time();
+        $data->timemodified = $notification->timemodified;
         $data->subject = $notification->subject;
         $data->fullmessage = $notification->fullmessage;
         $data->fullmessageformat = $notification->fullmessageformat;
@@ -213,6 +213,7 @@ class notification_manager implements NotificationManager {
             $visibility,
             $data->component,
             $data->categoryid,
+            $data->timemodified,
             $data->timestart,
             $data->timeend,
             $data->timedeleted,
