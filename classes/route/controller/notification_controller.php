@@ -6,10 +6,13 @@ use context_system;
 use core\output\html_writer;
 use core\param;
 use core\router;
+use core\router\require_login;
 use core\router\route;
 use core\router\route_controller;
 use core\router\schema\parameters\path_parameter;
+use core\router\schema\response\payload_response;
 use Exception;
+use invalid_parameter_exception;
 use local_information_center\notification\contracts\notification;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\NotificationsRead;
@@ -157,6 +160,44 @@ class notification_controller {
         );
 
         return $response;
+    }
+
+    #[route(
+        title: 'Delete notification',
+        description: 'Soft deletes a notification',
+        path: paths::ADMIN_DASHBOARD . '/delete/{id}',
+        pathtypes: [
+            new path_parameter(
+                name: 'id',
+                type: param::INT,
+                required: true,
+                description: 'Component external or internal',
+            ),
+        ],
+        requirelogin: new require_login(),
+    )]
+    public function delete(
+        int $id,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        NotificationManager $manager,
+    ): ResponseInterface {
+        $context = context_system::instance();
+        require_capability('local/information_center:delete_messages', $context);
+
+        if (!confirm_sesskey()) {
+            throw new invalid_parameter_exception(
+                "Sesskey is not valid! Deletion was aborted for security reasons."
+            );
+        }
+
+        $manager->delete($id);
+        $response->withStatus(200);
+        \core\notification::success(get_string('deletion_success', 'local_information_center'));
+        return self::redirect(
+            $response,
+            paths::admin_dashboard()
+        );
     }
 
     private function init_admin_page(

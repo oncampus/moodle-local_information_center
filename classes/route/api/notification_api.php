@@ -176,48 +176,6 @@ class notification_api {
         );
     }
 
-    #[route(
-        title: 'Delete notification',
-        description: 'Hard deletes a notification (think about a soft delete)',
-        path: '/notifications/{id}',
-        method: ['DELETE'],
-        pathtypes: [
-            new path_parameter(
-                name: 'id',
-                type: param::INT,
-                required: true,
-                description: 'Component external or internal',
-            ),
-        ],
-        requirelogin: new require_login(),
-    )]
-    public function delete(
-        int $id,
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        NotificationManager $manager,
-    ): payload_response {
-        $context = context_system::instance();
-        require_capability('local/information_center:delete_messages', $context);
-
-        if (
-            confirm_sesskey() &&
-            $manager->delete($id)
-        ) {
-            return new payload_response(
-                payload: [],
-                request: $request,
-                response: $response
-            );
-        }
-
-        return new payload_response(
-            payload: [],
-            request: $request,
-            response: $response
-        );
-    }
-
     /**
      * Validate and normalise the incoming message data.
      *
