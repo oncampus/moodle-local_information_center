@@ -24,6 +24,7 @@ use core\di;
 use core\output\renderer_base;
 use dml_exception;
 use Exception;
+use local_information_center\notification\contracts\notification;
 use local_information_center\notification\contracts\NotificationCategory;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\NotificationsRead;
@@ -117,9 +118,9 @@ class infocenter implements renderable, templatable {
      * @throws dml_exception Database connection failed
      */
     public function export_for_template(renderer_base $output): array {
-        $messages = $this->messagemanager->get_with_request($this->searchrequest);
-        $messages = array_map(fn ($msg) => self::export_notification($msg), $messages);
-        $messages = array_values($messages);
+        $notifications = $this->messagemanager->get_with_request($this->searchrequest);
+        $notificationsout = array_map(fn ($msg) => self::export_notification($msg), $notifications);
+        $notificationsout = array_values($notificationsout);
 
         $pagination = $this->prepare_paging($this->page, $this->url);
 
@@ -133,7 +134,7 @@ class infocenter implements renderable, templatable {
 
         return [
                 'categories' => $this->prepare_categories($this->url),
-                'notifications' => $messages,
+                'notifications' => $notificationsout,
                 'shortcuturl' => $shortcuttarget?->out(false),
                 'search' => $this->search,
                 'component' => $this->component,
@@ -143,29 +144,26 @@ class infocenter implements renderable, templatable {
     }
 
     /**
-     * Exports one message for beeing output in the info center
+     * Exports one notification for being output in the info center
      *
-     * @param stdClass $message Messagedata with categorydata
+     * @param notification $notification Notification
      * @return array Array of parameters for the template
      * @throws coding_exception Failed to fetch lang string
      */
-    private static function export_notification(stdClass $message): array {
+    private static function export_notification(notification $notification): array {
         global $USER;
 
-        $usertimestart = max($message->timestart, $message->timemodified);
-        $secondsago = di::get(clock::class)->time() - $usertimestart;
+        $secondsago = di::get(clock::class)->time() - $notification->get_time_visible();
 
         $readmng = di::get(NotificationsRead::class);
-        $isread = $readmng->is_read((int)$message->id, $USER->id);
-
-        $message->fullmessagehtml = null;
+        $isread = $readmng->is_read($notification->uuid, $USER->id);
 
         $categorymng = di::get(NotificationCategory::class);
-        $category = $categorymng->get($message->categoryid);
+        $category = $categorymng->get($notification->categoryid);
 
         $data = [
-            'title' => clean_param($message->subject, PARAM_TEXT),
-            'message' => message_format_message_text($message),
+            'title' => clean_param($notification->subject, PARAM_TEXT),
+            'message' => $notification->get_message_body(),
             'sended_time_ago' => get_string('ago', 'message', format_time($secondsago)),
             'unreadmarker' => !$isread,
             'iconbgcolor' => $category->color,
@@ -173,7 +171,7 @@ class infocenter implements renderable, templatable {
         ];
 
         if (!$isread) {
-            $readmng->set_read((int)$message->id, $USER->id);
+            $readmng->set_read($notification->uuid, $USER->id);
         }
         return $data;
     }
@@ -206,15 +204,9 @@ class infocenter implements renderable, templatable {
      * @throws dml_exception Categories could not be fetched
      */
     private function prepare_categories(moodle_url $url): array {
-        $searchrequest = clone $this->searchrequest;
-        $searchrequest->limit = null;
-        $searchrequest->offset = null;
-        $searchrequest->category = null;
-        $searchrequest->titlesearch = null;
-        $searchrequest->select = "DISTINCT categoryid";
-        $searchrequest->order = "";
-        $usedcategories = $this->messagemanager->get_with_request($searchrequest);
-        $usedcategories = array_column($usedcategories, 'categoryid');
+        $usedcategories = $this->messagemanager->get_categories_with_messages(
+            $this->searchrequest->external ? 'external' : 'local_information_center',
+        );
 
         $output = [];
 

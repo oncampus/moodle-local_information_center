@@ -52,34 +52,34 @@ class notifications_read implements NotificationsRead {
     /**
      * Sets the message to read
      *
-     * @param int $messageid Message ID
+     * @param string $messageuuid Message UUID
      * @param int $userid User ID
      * @return void
      * @throws dml_exception
      */
-    public function set_read(int $messageid, int $userid): void {
-        if ($this->is_read($messageid, $userid)) {
+    public function set_read(string $messageuuid, int $userid): void {
+        if ($this->is_read($messageuuid, $userid)) {
             return;
         }
 
         $this->db->insert_record('local_information_center', [
             'userid'    => $userid,
-            'messageid' => $messageid,
+            'messageuuid' => $messageuuid,
         ]);
     }
 
     /**
      * Checks if the user have read this message
      *
-     * @param int $messageid Message ID
+     * @param string $messageuuid Message ID
      * @param int $userid User ID
      * @return bool True if read
      * @throws dml_exception
      */
-    public function is_read(int $messageid, int $userid): bool {
+    public function is_read(string $messageuuid, int $userid): bool {
         return $this->db->record_exists('local_information_center', [
             'userid'    => $userid,
-            'messageid' => $messageid,
+            'messageuuid' => $messageuuid,
         ]);
     }
 
@@ -124,7 +124,8 @@ class notifications_read implements NotificationsRead {
                AND NOT EXISTS (
                     SELECT 1
                       FROM {local_information_center} r
-                     WHERE r.messageid = m.id AND r.userid = :userid
+                     WHERE r.messageuuid = m.uuid
+                       AND r.userid = :userid
                )";
 
         $now = $this->clock->time();
@@ -137,13 +138,13 @@ class notifications_read implements NotificationsRead {
     /**
      * Resets, that the message is read for all users
      *
-     * @param int $messageid Message ID
+     * @param string $messageuuid Message UUID
      * @return void
      * @throws dml_exception
      */
-    public function reset_readcount(int $messageid): void {
+    public function reset_readcount(string $messageuuid): void {
         $this->db->delete_records('local_information_center', [
-            'messageid' => $messageid,
+            'messageuuid' => $messageuuid,
         ]);
     }
 }

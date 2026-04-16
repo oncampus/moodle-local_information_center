@@ -21,18 +21,18 @@ class paths {
         return new moodle_url($baseurl);
     }
 
-    public static function edit_notification(?int $id = null): moodle_url {
+    public static function edit_notification(?string $uuid = null): moodle_url {
         $baseurl = self::BASE_URL . self::ADMIN_DASHBOARD . "/edit";
-        if ($id) {
-            $baseurl .= "/$id";
+        if ($uuid) {
+            $baseurl .= "/$uuid";
         }
         return new moodle_url($baseurl);
     }
 
-    public static function delete_notification(int $id): moodle_url {
+    public static function delete_notification(string $uuid): moodle_url {
         $baseurl = self::BASE_URL . self::ADMIN_DASHBOARD . "/delete";
-        if ($id) {
-            $baseurl .= "/$id";
+        if ($uuid) {
+            $baseurl .= "/$uuid";
         }
         return new moodle_url($baseurl, ['sesskey' => sesskey()]);
     }

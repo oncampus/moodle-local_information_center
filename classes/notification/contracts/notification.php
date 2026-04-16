@@ -16,6 +16,8 @@
 
 namespace local_information_center\notification\contracts;
 
+use core\uuid;
+use invalid_parameter_exception;
 use stdClass;
 
 /**
@@ -26,45 +28,104 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notification {
-    /** @var int|null Notification ID */
-    public ?int $id = null;
-    /** @var int|null Notification author */
-    public ?int $useridfrom = null;
-    /** @var string|null Title of the notification */
-    public ?string $subject = null;
-    /** @var string|null Body of the notification */
-    public ?string $fullmessage = null;
-    /** @var int|null Format, like html */
-    public ?int $fullmessageformat = null;
-    /** @var string|null Short form of the body */
-    public ?string $smallmessage = null;
-    /** @var int|null Start time, when it is visible */
-    public ?int $timestart = null;
-    /** @var int|null End time, when it gets hidden */
-    public ?int $timeend = null;
-    /** @var int|null Time when the notification was deleted */
-    public ?int $timedeleted = null;
-    /** @var string|null Visibility, e.g., visible to teachers, admins… */
-    public ?string $visibility = null;
-    /** @var string|null Plugin that created this notification */
-    public ?string $component = null;
-    /** @var int|null Category ID */
-    public ?int $categoryid = null;
+    public function __construct(
+        /** @var string Notification UUID */
+        public string $uuid,
+        /** @var int Notification author */
+        public int $useridfrom,
+        /** @var string Title of the notification */
+        public string $subject,
+        /** @var string Body of the notification */
+        public string $fullmessage,
+        /** @var int Format, like html */
+        public int $fullmessageformat,
+        /** @var string Short form of the body */
+        public string $smallmessage,
+        /** @var visibility Visibility, e.g., visible to teachers, admins… */
+        public visibility $visibility,
+        /** @var string|null Plugin that created this notification */
+        public string $component,
+        /** @var int Category ID */
+        public int $categoryid,
+        /** @var int|null Start time, when it is visible */
+        public ?int $timestart = null,
+        /** @var int|null End time, when it gets hidden */
+        public ?int $timeend = null,
+        /** @var int|null Time when the notification was deleted */
+        public ?int $timedeleted = null,
+    ) {
+    }
 
-    /**
-     * Converts a stdClass object to this class
-     *
-     * @param stdClass $data A stdClass object to convert into this data object
-     */
-    public static function from_stdclass(stdClass $data): notification {
-        $message = new notification();
+    public function get_message_body(): string {
+        return message_format_message_text((object) [
+            'fullmessageformat' => $this->fullmessageformat,
+            'smallmessage' => $this->smallmessage,
+            'fullmessage' => $this->fullmessage,
+            'fullmessagehtml' => null,
+        ]);
+    }
 
-        foreach ($data as $key => $value) {
-            if (property_exists($message, $key)) {
-                $message->$key = $value;
-            }
+    public function get_time_visible(): int {
+        // TODO: $this->timemodified.
+        return $this->timestart;
+    }
+
+    public static function create(
+        string $subject,
+        string $fullmessage,
+        int $fullmessageformat,
+        string $smallmessage,
+        string $visibility,
+        int $categoryid,
+        ?int $timestart = null,
+        ?int $timeend = null,
+        string $component = 'local_information_center',
+        ?string $uuid = null,
+    ): self {
+        global $USER;
+
+        if (!$visibilityparsed = visibility::tryFrom($visibility)) {
+            throw new invalid_parameter_exception(get_string(
+                'validation:visibility:invalid',
+                'local_information_center',
+                $visibility
+            ));
         }
 
-        return $message;
+        if ($timestart && $timestart < 0) {
+            throw new invalid_parameter_exception(get_string(
+                'validation:timestart:notnegative',
+                'local_information_center',
+            ));
+        }
+
+        if ($timeend && $timeend < 0) {
+            throw new invalid_parameter_exception(get_string(
+                'validation:timeend:notnegative',
+                'local_information_center',
+            ));
+        }
+
+        if ($timestart && $timeend && $timestart > $timeend) {
+            throw new invalid_parameter_exception(get_string(
+                'validation:timeend:aftertimestart',
+                'local_information_center',
+            ));
+        }
+
+        return new self(
+            $uuid ?? uuid::generate(),
+            $USER->id,
+            $subject,
+            $fullmessage,
+            $fullmessageformat,
+            $smallmessage,
+            $visibilityparsed,
+            $component,
+            $categoryid,
+            $timestart,
+            $timeend,
+            null,
+        );
     }
 }

@@ -34,6 +34,7 @@ use invalid_parameter_exception;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\notification\contracts\notification;
+use local_information_center\route\api\schemes\notification_id;
 use local_information_center\route\api\schemes\notification_schema;
 use local_information_center\route\api\schemes\ok;
 use Psr\Http\Message\ResponseInterface;
@@ -54,7 +55,6 @@ class notification_api {
      * Reset the read status of receivers of a notification
      *
      * @param int $id
-     * @param notification_id_helper $idhelper
      * @param NotificationsRead $readstatusmanager
      * @return void
      * @throws dml_exception
@@ -68,24 +68,18 @@ class notification_api {
         method: ['PUT', 'POST'],
         pathtypes: [
             new path_parameter(
-                name: 'id',
-                type: param::INT,
+                name: 'uuid',
+                type: param::ALPHANUMEXT,
             ),
         ],
         responses: [new ok()]
     )]
     public function renotify(
-        int $id,
+        string $uuid,
         ServerRequestInterface $request,
         NotificationsRead $readstatusmanager,
     ): payload_response {
-        global $DB;
-        $idhelper = new notification_id_helper($DB);
-        $localid = $idhelper->get_local_id($id);
-        if ($localid === null) {
-            throw new invalid_parameter_exception("ID is not valid");
-        }
-        $readstatusmanager->reset_readcount($localid);
+        $readstatusmanager->reset_readcount($uuid);
         return new payload_response(
             [],
             $request
@@ -121,12 +115,7 @@ class notification_api {
         security: [],
         path: '/notifications/{id}',
         method: ['PUT', 'POST'],
-        pathtypes: [
-            new path_parameter(
-                name: 'id',
-                type: param::INT,
-            ),
-        ],
+        pathtypes: [new notification_id(true)],
         requestbody: new request_body(
             description: 'Notification details to create or update',
             content: new payload_response_type(
@@ -137,7 +126,7 @@ class notification_api {
         responses: [new ok()]
     )]
     public function add_or_update_message(
-        int $id,
+        string $uuid,
         ResponseInterface $response,
         ServerRequestInterface $request,
         NotificationManager $notificationmanager,
@@ -148,26 +137,9 @@ class notification_api {
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
-        $idhelper = new notification_id_helper($DB);
-
         $body = $request->getParsedBody();
-        $message = $this->parse_to_notification($body);
-
-        $errors = $notificationmanager->validate($message);
-        if (!empty($errors)) {
-            $errordesc = "";
-            foreach ($errors as $field => $error) {
-                $errordesc .= "$field: $error\n";
-            }
-            throw new invalid_parameter_exception($errordesc);
-        }
-
-        // Search if the message exists locally.
-        $message->id = $idhelper->get_local_id($id);
-        $localid = $notificationmanager->add_or_update($message);
-        if ($message->id === null) {
-            $idhelper->save_local_id($localid, $id);
-        }
+        $notification = $this->parse_to_notification($body);
+        $notificationmanager->add_or_update($notification);
 
         return new payload_response(
             payload: [],
@@ -184,28 +156,24 @@ class notification_api {
      * @throws invalid_parameter_exception
      */
     private function parse_to_notification(array|null|object $notificationdata): notification {
-        global $USER;
-
         if (!is_array($notificationdata)) {
             throw new invalid_parameter_exception('Request body must be a JSON object.');
         }
 
-        $message = new notification();
-        $message->useridfrom = $USER->id;
+        $notification = notification::create(
+            $notificationdata['subject'],
+            $notificationdata['fullmessage'],
+            $notificationdata['fullmessageformat'],
+            $notificationdata['smallmessage'],
+            $notificationdata['visibility'],
+            $notificationdata['categoryid'],
+            $notificationdata['timestart'] ?? null,
+            $notificationdata['timeend'] ?? null,
+            'external',
+            $notificationdata['uuid']
+        );
+        $notification->timedeleted = $notificationdata['timedeleted'] ?? null;
 
-        $message->timestart = $notificationdata['timestart'] ?? null;
-        $message->timeend = $notificationdata['timeend'] ?? null;
-        $message->timedeleted = $notificationdata['timedeleted'] ?? null;
-
-        $message->categoryid = $notificationdata['categoryid'];
-        $message->fullmessage = $notificationdata['fullmessage'];
-        $message->fullmessageformat = $notificationdata['fullmessageformat'];
-        $message->smallmessage = $notificationdata['smallmessage'];
-        $message->visibility = $notificationdata['visibility'];
-        $message->subject = $notificationdata['subject'];
-
-        $message->component = 'external';
-
-        return $message;
+        return $notification;
     }
 }

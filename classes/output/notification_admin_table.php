@@ -21,6 +21,7 @@ use core\di;
 use core\output\html_writer;
 use dml_exception;
 use flexible_table;
+use local_information_center\notification\contracts\notification;
 use local_information_center\route\controller\paths;
 use moodle_database;
 use moodle_url;
@@ -104,7 +105,7 @@ class notification_admin_table extends flexible_table implements FilterableTable
         }
 
         $sql = ("
-            SELECT m.id AS id,
+            SELECT m.uuid AS uuid,
                    m.subject AS subject,
                    m.timestart AS timestart,
                    m.timeend AS timeend,
@@ -145,12 +146,10 @@ class notification_admin_table extends flexible_table implements FilterableTable
         $edit = "";
         $delete = "";
         if ($notification->useridfrom == $USER->id && $notification->timedeleted === null) {
-            $msgid = $notification->id;
-
-            $editurl = paths::edit_notification($msgid);
+            $editurl = paths::edit_notification($notification->uuid);
             $edit = action_icon::make($editurl, 'fa-edit', 'edit');
 
-            $deleteurl = paths::delete_notification($msgid);
+            $deleteurl = paths::delete_notification($notification->uuid);
             $delete = action_icon::make($deleteurl, 'fa-trash', 'delete');
         }
 

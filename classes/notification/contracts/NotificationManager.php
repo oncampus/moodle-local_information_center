@@ -31,41 +31,40 @@ interface NotificationManager {
      * Adds or updates a message in the database
      *
      * @param notification $notification The notification data
-     * @return int ID of the added notification
+     * @return void
      * @throws dml_exception
      */
-    public function add_or_update(notification $notification): int;
-
-    /**
-     * Validates the data of a message
-     *
-     * @param notification $notification Data of the new notification (change)
-     * @return string[] Array of errors
-     * @throws dml_exception Database cannot be reached
-     */
-    public function validate(notification $notification): array;
+    public function add_or_update(notification $notification): void;
 
     /**
      * Returns a list of all non-deleted messages
      *
-     * @return stdClass[] List of messages
+     * @return notification[] List of messages
      */
     public function get_all(): array;
 
     /**
      * Returns all data of a message
      *
-     * @param int $id ID of the message
+     * @param string $uuid UUID of the message
      * @return notification|false Data object of the message
      * @throws dml_exception Could not connect to database
      */
-    public function get(int $id): notification|false;
+    public function get(string $uuid): notification|false;
+
+    /**
+     * All category ids with existing messages
+     *
+     * @param string $component Component to filter by
+     * @return int[] All categories with existing messages
+     */
+    public function get_categories_with_messages(string $component): array;
 
     /**
      * Filters out messages according to the given get_request
      *
      * @param notification_query_data $request Request with applied filters
-     * @return stdClass[] Data according to the request
+     * @return notification[] Data according to the request
      * @throws dml_exception Could not reach the database
      */
     public function get_with_request(notification_query_data $request): array;
@@ -82,9 +81,9 @@ interface NotificationManager {
     /**
      * Soft deletes the message
      *
-     * @param int $id ID of the message to delete
-     * @return bool True if the soft delete was successful
+     * @param string $uuid UUID of the message to delete
+     * @return void
      * @throws dml_exception Database cannot be reached
      */
-    public function delete(int $id): bool;
+    public function delete(int $uuid): void;
 }

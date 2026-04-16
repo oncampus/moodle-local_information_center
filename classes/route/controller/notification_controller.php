@@ -20,6 +20,7 @@ use local_information_center\output\edit_notification_form;
 use local_information_center\output\notification_admin_table;
 use local_information_center\output\notification_filter_area;
 use local_information_center\output\notification_filter_form;
+use local_information_center\route\api\schemes\notification_id;
 use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -60,10 +61,10 @@ class notification_controller {
         $filterform->set_filters($table);
         $filterrenderer = new notification_filter_area($filterform->render());
 
-        $messages = $table->get_data();
+        $notifications = $table->get_data();
 
         ob_start();
-        foreach ($messages as $msg) {
+        foreach ($notifications as $msg) {
             $table->add_notification_data($msg);
         }
         $table->finish_output();
@@ -87,24 +88,17 @@ class notification_controller {
     #[route(
         path: paths::ADMIN_DASHBOARD . '/edit[/{id}]',
         method: ['GET', 'POST'],
-        pathtypes: [
-            new path_parameter(
-                name: 'id',
-                type: param::INT,
-                default: null,
-                description: 'ID of the notification to edit',
-            ),
-        ],
+        pathtypes: [new notification_id(false)],
         requirelogin: new router\require_login(),
     )]
     public function edit(
-        ?int $id,
+        ?string $uuid,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationsRead $notificationsread,
         NotificationManager $messagemanager
     ): ResponseInterface {
-        global $CFG, $OUTPUT, $USER;
+        global $CFG, $OUTPUT;
         require_once($CFG->libdir . '/tablelib.php');
 
         $context = context_system::instance();
@@ -121,35 +115,31 @@ class notification_controller {
         if ($mform->is_cancelled()) {
             redirect(paths::admin_dashboard());
         } else if ($fromform = $mform->get_data()) {
-            $message = new notification();
-            $message->id = $fromform->id == -1 ? null : $fromform->id;
-            $message->useridfrom = $USER->id;
-            $message->subject = $fromform->title;
-            $message->fullmessage = $fromform->message['text'];
-            $message->fullmessageformat = $fromform->message['format'];
-            $message->smallmessage = '';
-            $message->timestart = $fromform->startdate;
-            $message->timeend = $fromform->enddate;
-            $message->categoryid = $fromform->category;
-            $message->visibility = $fromform->visibility;
-            $message->component = 'local_information_center';
-
-            $errors = $messagemanager->validate($message);
-            if (!empty($errors)) {
-                throw new Exception(var_export($errors, true));
-            }
-
-            $messagemanager->add_or_update($message);
+            $notification = notification::create(
+                $fromform->title,
+                $fromform->message['text'],
+                $fromform->message['format'],
+                '',
+                $fromform->visibility,
+                $fromform->category,
+                $fromform->startdate,
+                $fromform->enddate,
+                uuid: $uuid,
+            );
+            $messagemanager->add_or_update($notification);
 
             if ($fromform->renotify == 1) {
-                $notificationsread->reset_readcount($message->id);
+                $notificationsread->reset_readcount($notification->uuid);
             }
 
-            redirect(paths::admin_dashboard());
+            return self::redirect(
+                $response,
+                paths::admin_dashboard()
+            );
         }
 
-        if ($id && $id != -1) {
-            $message = $messagemanager->get($id);
+        if ($uuid) {
+            $message = $messagemanager->get($uuid);
             $mform->set_notification_data($message);
         }
 
@@ -166,18 +156,11 @@ class notification_controller {
         title: 'Delete notification',
         description: 'Soft deletes a notification',
         path: paths::ADMIN_DASHBOARD . '/delete/{id}',
-        pathtypes: [
-            new path_parameter(
-                name: 'id',
-                type: param::INT,
-                required: true,
-                description: 'Component external or internal',
-            ),
-        ],
+        pathtypes: [new notification_id(true)],
         requirelogin: new require_login(),
     )]
     public function delete(
-        int $id,
+        string $uuid,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationManager $manager,
@@ -191,7 +174,7 @@ class notification_controller {
             );
         }
 
-        $manager->delete($id);
+        $manager->delete($uuid);
         $response->withStatus(200);
         \core\notification::success(get_string('deletion_success', 'local_information_center'));
         return self::redirect(

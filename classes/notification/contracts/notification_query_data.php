@@ -24,9 +24,6 @@ namespace local_information_center\notification\contracts;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notification_query_data {
-    /** @var string $select Fields to give back, where m is the message and c the category */
-    public string $select = "m.*";
-
     /** @var string $order Fields to order the messages by */
     public string $order = "ORDER BY c.priority DESC, m.timestart DESC";
 

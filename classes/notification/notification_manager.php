@@ -21,6 +21,7 @@ use core\clock;
 use core\di;
 use dml_exception;
 use Exception;
+use invalid_parameter_exception;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
 use local_information_center\notification\contracts\notification_query_data;
@@ -62,127 +63,75 @@ class notification_manager implements NotificationManager {
      * Adds or updates the message
      *
      * @param notification $notification Message object
-     * @return int ID of the saved message
+     * @return void
      * @throws dml_exception
      */
-    public function add_or_update(notification $notification): int {
-        $data = (object) get_object_vars($notification);
+    public function add_or_update(notification $notification): void {
+        $data = new stdClass();
         $data->timemodified = $this->clock->time();
-
-        if ($notification->id !== null) {
-            $success = $this->db->update_record(self::TABLE, $data);
-            if (!$success) {
-                throw new Exception("Failed to update record");
-            }
-            return $notification->id;
-        } else {
-            unset($data->id);
-            $data->timecreated = di::get(clock::class)->time();
-            $successorid = $this->db->insert_record(self::TABLE, $data);
-            if ($successorid === false) {
-                throw new Exception("Failed to insert record");
-            }
-            return $successorid;
-        }
-    }
-
-    /**
-     * Gets a message with the given id
-     *
-     * @param int $id Message ID
-     * @return notification|false The message data or false if not found
-     * @throws dml_exception
-     */
-    public function get(int $id): notification|false {
-        $data = $this->db->get_record(self::TABLE, ['id' => $id]);
-        if (!$data) {
-            return false;
-        }
-        return notification::from_stdClass($data);
-    }
-
-    /**
-     * Validate the data of a message
-     *
-     * @param notification $notification Message data object
-     * @return string[] Param => Validation error reason
-     * @throws dml_exception
-     */
-    public function validate(notification $notification): array {
-        $error = [];
+        $data->subject = $notification->subject;
+        $data->fullmessage = $notification->fullmessage;
+        $data->fullmessageformat = $notification->fullmessageformat;
+        $data->smallmessage = $notification->smallmessage;
+        $data->visibility = $notification->visibility->value;
+        $data->component = $notification->component;
+        $data->categoryid = $notification->categoryid;
+        $data->timestart = $notification->timestart;
+        $data->timeend = $notification->timeend;
+        $data->timedeleted = $notification->timedeleted;
 
         if (!$this->db->record_exists('local_information_center_categories', ['id' => $notification->categoryid])) {
-            $error['categoryid'] = get_string(
+            throw new invalid_parameter_exception(get_string(
                 'validation:category:notexist',
                 'local_information_center',
                 $notification->categoryid
-            );
-        }
-
-        if (
-            $notification->timestart !== null
-            && $notification->timestart < 0
-        ) {
-            $error['timestart'] = get_string(
-                'validation:timestart:notnegative',
-                'local_information_center',
-            );
-        }
-
-        if (
-            $notification->timeend !== null
-            && $notification->timeend < 0
-        ) {
-            $error['timeend'] = get_string(
-                'validation:timeend:notnegative',
-                'local_information_center',
-            );
-        }
-
-        if (
-            $notification->timestart !== null
-            && $notification->timeend !== null
-            && $notification->timestart > $notification->timeend
-        ) {
-            $error['timeend'] = get_string(
-                'validation:timeend:aftertimestart',
-                'local_information_center',
-            );
-        }
-
-        if (
-            $notification->visibility !== null
-            && visibility::tryFrom($notification->visibility) == null
-        ) {
-            $error['visibility'] = get_string(
-                'validation:visibility:invalid',
-                'local_information_center',
-                $notification->visibility
-            );
+            ));
         }
 
         if (!$this->db->record_exists('user', ['id' => $notification->useridfrom])) {
-            $error['useridfrom'] = get_string(
+            throw new invalid_parameter_exception(get_string(
                 'validation:useridfrom:notexist',
                 'local_information_center',
                 $notification->useridfrom
-            );
+            ));
         }
 
-        // Only check on update.
-        if ($notification->id !== null) {
-            $useridfrom = $this->db->get_field(self::TABLE, 'useridfrom', ['id' => $notification->id]);
+        $id = $this->db->get_field(self::TABLE, 'id', ['uuid' => $notification->uuid]);
+
+        if (!$id) {
+            $data->timecreated = di::get(clock::class)->time();
+            $data->useridfrom = $notification->useridfrom;
+            $data->uuid = $notification->uuid;
+            $this->db->insert_record(self::TABLE, $data);
+        } else {
+            $useridfrom = $this->db->get_field(self::TABLE, 'useridfrom', ['id' => $id]);
 
             if ($useridfrom != $notification->useridfrom) {
-                $error['useridfrom'] = get_string(
+                throw new Exception(get_string(
                     'validation:useridfrom:cannotbechanged',
                     'local_information_center',
                     $notification->useridfrom
-                );
+                ));
             }
-        }
 
-        return $error;
+            $data->id = $id;
+            $this->db->update_record(self::TABLE, $data);
+        }
+    }
+
+    /**
+     * Gets a message with the given uuid
+     *
+     * @param string $uuid Message UUID
+     * @return notification|false The message data or false if not found
+     * @throws dml_exception
+     */
+    public function get(string $uuid): notification|false {
+        $data = $this->db->get_record(self::TABLE, ['uuid' => $uuid]);
+        if (!$data) {
+            return false;
+        }
+        return $this->parse_to_notification($data);
     }
 
     /**
@@ -198,35 +147,33 @@ class notification_manager implements NotificationManager {
     ): int {
         global $DB;
         $request = clone $request;
-        $request->select = "COUNT(1)";
         $request->order = "";
         $request->offset = null;
         $request->limit = null;
         $query = new notification_query($request);
-        $sql = $query->get_sql();
+        $sql = $query->get_sql('COUNT(1)');
         return $DB->count_records_sql($sql[0], $sql[1]);
     }
 
     /**
      * Deletes the message with the given ID
      *
-     * @param int $id Message ID
-     * @return bool True if successful
+     * @param int $uuid Message UUID
      * @throws dml_exception
      */
-    public function delete(int $id): bool {
-        if (!$record = $this->db->get_record(self::TABLE, ["id" => $id])) {
-            return false;
+    public function delete(int $uuid): void {
+        if (!$record = $this->db->get_record(self::TABLE, ["uuid" => $uuid])) {
+            return;
         }
 
         $record->timedeleted = di::get(clock::class)->time();
-        return $this->db->update_record(self::TABLE, $record);
+        $this->db->update_record(self::TABLE, $record);
     }
 
     /**
      * Returns all non-deleted messages
      *
-     * @return stdClass[] Message data
+     * @return notification[] Message data
      * @throws dml_exception
      */
     public function get_all(): array {
@@ -239,16 +186,44 @@ class notification_manager implements NotificationManager {
     }
 
     /**
-     * Gets messages with the given request
+     * Gets notifications with the given request
      *
-     * @param notification_query_data $request Message data request
-     * @return stdClass[] Message data
+     * @param notification_query_data $request Notification data request
+     * @return notification[] Notifications
      * @throws coding_exception
      * @throws dml_exception
      */
     public function get_with_request(notification_query_data $request): array {
         $query = new notification_query($request);
-        $sql = $query->get_sql();
-        return $this->db->get_records_sql($sql[0], $sql[1], $sql[2], $sql[3]);
+        $sql = $query->get_sql('m.*');
+        $rawdata = $this->db->get_records_sql($sql[0], $sql[1], $sql[2], $sql[3]);
+        return array_map(fn ($record) => $this->parse_to_notification($record), $rawdata);
+    }
+
+    private function parse_to_notification(stdClass $data): notification {
+        $visibility = visibility::from($data->visibility);
+
+        return new notification(
+            $data->uuid,
+            $data->useridfrom,
+            $data->subject,
+            $data->fullmessage,
+            $data->fullmessageformat,
+            $data->smallmessage,
+            $visibility,
+            $data->component,
+            $data->categoryid,
+            $data->timestart,
+            $data->timeend,
+            $data->timedeleted,
+        );
+    }
+
+    public function get_categories_with_messages(string $component): array {
+        return $this->db->get_fieldset(
+            self::TABLE,
+            'DISTINCT categoryid',
+            ['timedeleted' => null, 'component' => $component]
+        );
     }
 }

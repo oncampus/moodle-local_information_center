@@ -30,21 +30,21 @@ interface NotificationsRead {
     /**
      * Marks the message as read for the user.
      *
-     * @param int $messageid
+     * @param string $messageuuid
      * @param int $userid
      * @throws dml_exception Database cannot be reached.
      */
-    public function set_read(int $messageid, int $userid): void;
+    public function set_read(string $messageuuid, int $userid): void;
 
     /**
      * Returns whether the user already has a read-marker for this message.
      *
-     * @param int $messageid
+     * @param string $messageuuid
      * @param int $userid
      * @return bool true if read, false otherwise
      * @throws dml_exception Database cannot be reached.
      */
-    public function is_read(int $messageid, int $userid): bool;
+    public function is_read(string $messageuuid, int $userid): bool;
 
     /**
      * Counts unread messages for a user.
@@ -59,7 +59,7 @@ interface NotificationsRead {
     /**
      * Resets the message read status for a message (to unread)
      *
-     * @param int $messageid ID of the message
+     * @param string $messageuuid ID of the message
      */
-    public function reset_readcount(int $messageid): void;
+    public function reset_readcount(string $messageuuid): void;
 }

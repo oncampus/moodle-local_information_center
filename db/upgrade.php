@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 use core\di;
+use core\uuid;
 
 /**
  * Upgrade code for the information center
@@ -35,7 +36,113 @@ function xmldb_local_information_center_upgrade($oldversion): bool {
         upgrade_plugin_savepoint(true, 2026041400, 'local', 'information_center');
     }
 
+    if ($oldversion < 2026041600) {
+        add_uuid_to_notifications($dbman);
+        upgrade_plugin_savepoint(true, 2026041600, 'local', 'information_center');
+    }
+
+    if ($oldversion < 2026041601) {
+        adapt_is_read_table_to_uuid($dbman);
+        upgrade_plugin_savepoint(true, 2026041601, 'local', 'information_center');
+    }
+
     return true;
+}
+
+function adapt_is_read_table_to_uuid(database_manager $dbman): void {
+    $table = new xmldb_table('local_information_center');
+
+    $field = new xmldb_field(
+        'messageuuid',
+        XMLDB_TYPE_CHAR,
+        '36',
+        null,
+        null,
+        null,
+        null
+    );
+
+    if (!$dbman->field_exists($table, $field)) {
+        $dbman->add_field($table, $field);
+    }
+
+    $db = di::get(moodle_database::class);
+    $readstatuslist = $db->get_records(
+        'local_information_center',
+        fields: 'id, messageid'
+    );
+
+    $translationlist = $db->get_records_menu(
+        'local_information_center_messages',
+        fields: 'id, uuid'
+    );
+    foreach ($readstatuslist as $readstatus) {
+        $readstatus->messageuuid = $translationlist[$readstatus->messageid] ?? null;
+        if ($readstatus->messageuuid) {
+            $db->update_record('local_information_center', $readstatus);
+        } else {
+            $db->delete_records('local_information_center', ['id' => $readstatus->id]);
+        }
+    }
+
+    $index = new xmldb_index(
+        'mes_ix',
+        XMLDB_INDEX_NOTUNIQUE,
+        ['messageid']
+    );
+
+    if ($dbman->index_exists($table, $index)) {
+        $dbman->drop_index($table, $index);
+    }
+
+    $oldfield = new xmldb_field('messageid');
+    if ($dbman->field_exists($table, $oldfield)) {
+        $dbman->drop_field($table, $oldfield);
+    }
+}
+
+function add_uuid_to_notifications(database_manager $dbman): void {
+    $db = di::get(moodle_database::class);
+
+    // Add uuid field.
+    $table = new xmldb_table('local_information_center_messages');
+    $field = new xmldb_field(
+        'uuid',
+        XMLDB_TYPE_CHAR,
+        '36',
+        null,
+        XMLDB_NOTNULL,
+        null,
+        'NOT_INITIALIZED'
+    );
+    if (!$dbman->field_exists($table, $field)) {
+        $dbman->add_field($table, $field);
+    }
+
+    // Migrate old external ids into uuid field.
+    $oldtable = new xmldb_table('local_information_center_external_ids');
+    if ($dbman->table_exists($oldtable)) {
+        $externalids = $db->get_records_menu(
+            'local_information_center_external_ids',
+            fields: "messageid, externalid"
+        );
+        $notifications = $db->get_fieldset(
+            'local_information_center_messages',
+            'id'
+        );
+
+        foreach ($notifications as $notificationid) {
+            $db->update_record(
+                'local_information_center_messages',
+                [
+                    'id' => $notificationid,
+                    'uuid' => $externalids[$notificationid] ?? uuid::generate(),
+                ]
+            );
+        }
+
+        $dbman->drop_table($oldtable);
+    }
 }
 
 function upgrade_fa_icons(): void {

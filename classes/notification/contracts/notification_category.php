@@ -19,6 +19,6 @@ readonly class notification_category {
     }
 
     public function get_icon(): string {
-        return "fa-regular $this->icon";
+        return "fa-solid $this->icon";
     }
 }

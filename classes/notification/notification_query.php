@@ -52,10 +52,10 @@ class notification_query {
      * @throws coding_exception Get in or equals failed
      * @throws dml_exception Database cannot be reached
      */
-    public function get_sql(): array {
+    public function get_sql(string $select): array {
         $filters = $this->get_filters();
 
-        $sql = "SELECT {$this->data->select}
+        $sql = "SELECT {$select}
                   FROM {local_information_center_messages} m
              LEFT JOIN {local_information_center_categories} c
                     ON m.categoryid = c.id
