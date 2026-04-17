@@ -36,13 +36,13 @@ None
 
 This plugin defines the following rights:
 
-| Name                                             | Description                                          | Standard role           |
-|--------------------------------------------------|------------------------------------------------------|-------------------------|
-| `local/information_center:read_student_messages` | Allows the user to read messages for students        | Authenticated users     |
-| `local/information_center:read_teacher_messages` | Allows the user to read messages for teachers        | Editingteacher, Teacher |
-| `local/information_center:read_manager_messages` | Allows the user to read messages for managers        | Manager                 |
-| `local/information_center:read_admin_messages`   | Allows the user to read messages for administrators  |                         |
-| `local/information_center:create_message`        | Allows the user to create messages                   | Manager                 |
+| Name                                             | Description                                         | Standard role           |
+|--------------------------------------------------|-----------------------------------------------------|-------------------------|
+| `local/information_center:read_student_messages` | Allows the user to read messages for students       | Authenticated users     |
+| `local/information_center:read_teacher_messages` | Allows the user to read messages for teachers       | Editingteacher, Teacher |
+| `local/information_center:read_manager_messages` | Allows the user to read messages for managers       | Manager                 |
+| `local/information_center:read_admin_messages`   | Allows the user to read messages for administrators |                         |
+| `local/information_center:create_message`        | Allows the user to create messages                  | Manager                 |
 
 ## Cron jobs
 
