@@ -49,6 +49,12 @@ class edit_notification_form extends moodleform {
         // A reference to the form is stored in $this->form.
         // A common convention is to store it in a variable, such as `$mform`.
         $mform = $this->_form; // Don't forget the underscore!
+        $id = $this->_customdata;
+
+        // UUID.
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_ALPHANUMEXT);
+        $mform->setDefault('id', $id);
 
         // Title.
         $mform->addElement('text', 'title', get_string('form:title', 'local_information_center'));
@@ -82,28 +88,18 @@ class edit_notification_form extends moodleform {
         $mform->addElement('date_time_selector', 'enddate', get_string('table:enddate', 'local_information_center'));
         $mform->addHelpButton('enddate', 'table:enddate', 'local_information_center');
 
-        // Schools.
-        $id = $this->optional_param('id', false, PARAM_INT);
-        if ($id === false || $id == -1) {
-            $mform->addElement('hidden', 'renotify');
-            $mform->setType('renotify', PARAM_INT);
-            $mform->setDefault('renotify', 0);
-        } else {
-            $radioarray = [];
-            $radioarray[] = $mform->createElement('radio', 'renotify', '', get_string('yes'), 1);
-            $radioarray[] = $mform->createElement('radio', 'renotify', '', get_string('no'), 0);
-            $mform->addGroup(
-                $radioarray,
-                'renotify_group',
-                get_string('form:renotify', 'local_information_center'),
-                ['<br />'],
-                false
-            );
-        }
-
-        $mform->addElement('hidden', 'id');
-        $mform->setType('id', PARAM_INT);
-        $mform->setDefault('id', -1);
+        // Renotify option.
+        $radioarray = [];
+        $radioarray[] = $mform->createElement('radio', 'renotify', '', get_string('yes'), 1);
+        $radioarray[] = $mform->createElement('radio', 'renotify', '', get_string('no'), 0);
+        $mform->addGroup(
+            $radioarray,
+            'renotify_group',
+            get_string('form:renotify', 'local_information_center'),
+            ['<br />'],
+            false
+        );
+        $mform->hideIf('renotify_group', 'id', 'eq', null);
 
         // When ready, add your action buttons.
         $this->add_action_buttons(false, get_string('savechanges'));
@@ -132,7 +128,6 @@ class edit_notification_form extends moodleform {
      */
     public function set_notification_data(notification $notification): void {
         $this->set_data([
-            'id' => $notification->uuid,
             'title' => $notification->subject,
             'message' => [
                 'text' => $notification->fullmessage,

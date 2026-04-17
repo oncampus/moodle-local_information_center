@@ -150,7 +150,7 @@ class notification_controller {
         requirelogin: new router\require_login(),
     )]
     public function edit(
-        ?string $uuid,
+        ?string $id,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationsRead $notificationsread,
@@ -168,7 +168,7 @@ class notification_controller {
             get_string('form:header', 'local_information_center')
         );
 
-        $mform = new edit_notification_form();
+        $mform = new edit_notification_form(customdata: $id);
 
         if ($mform->is_cancelled()) {
             redirect(paths::admin_dashboard());
@@ -182,7 +182,7 @@ class notification_controller {
                 $fromform->category,
                 $fromform->startdate,
                 $fromform->enddate,
-                uuid: $uuid,
+                uuid: $id,
             );
             $messagemanager->add_or_update($notification);
 
@@ -196,8 +196,8 @@ class notification_controller {
             );
         }
 
-        if ($uuid) {
-            $message = $messagemanager->get($uuid);
+        if ($id) {
+            $message = $messagemanager->get($id);
             $mform->set_notification_data($message);
         }
 
