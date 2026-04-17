@@ -168,7 +168,7 @@ class notification_controller {
             get_string('form:header', 'local_information_center')
         );
 
-        $mform = new edit_notification_form(customdata: $id);
+        $mform = new edit_notification_form(customdata: $uuid);
 
         if ($mform->is_cancelled()) {
             redirect(paths::admin_dashboard());
@@ -182,12 +182,12 @@ class notification_controller {
                 $fromform->category,
                 $fromform->startdate,
                 $fromform->enddate,
-                uuid: $id,
+                uuid: $uuid,
             );
             $messagemanager->add_or_update($notification);
 
             if ($fromform->renotify == 1) {
-                $notificationsread->reset_readcount($notification->uuid);
+                $notificationsread->reset_readcount($uuid);
             }
 
             return self::redirect(
@@ -196,8 +196,8 @@ class notification_controller {
             );
         }
 
-        if ($id) {
-            $message = $messagemanager->get($id);
+        if ($uuid) {
+            $message = $messagemanager->get($uuid);
             $mform->set_notification_data($message);
         }
 
