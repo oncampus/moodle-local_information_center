@@ -19,7 +19,19 @@ namespace local_information_center\route\api\schemes;
 use core\param;
 use core\router\schema\parameters\path_parameter;
 
+/**
+ * ID Path Parameter.
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class notification_id extends path_parameter {
+    /**
+     * Constructor.
+     *
+     * @param bool $required
+     */
     public function __construct(bool $required) {
         parent::__construct(
             name: 'uuid',

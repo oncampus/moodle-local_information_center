@@ -16,9 +16,22 @@
 
 namespace local_information_center\route\api\schemes;
 
+use core\exception\coding_exception;
 use core\router\schema\response\response;
 
-class ok extends response {
+/**
+ * OK Response for an action.
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class ok_response extends response {
+    /**
+     * Ok Response without data
+     *
+     * @throws coding_exception
+     */
     public function __construct() {
         parent::__construct(
             statuscode: 200,

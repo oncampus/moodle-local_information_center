@@ -225,6 +225,13 @@ class notification_manager implements NotificationManager {
         );
     }
 
+    /**
+     * Get category ids for every component where an undeleted message exists
+     *
+     * @param string $component
+     * @return int[]
+     * @throws dml_exception
+     */
     public function get_categories_with_messages(string $component): array {
         return $this->db->get_fieldset(
             self::TABLE,

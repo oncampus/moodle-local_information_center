@@ -17,9 +17,16 @@
 namespace local_information_center\notification\contracts;
 
 use core\exception\coding_exception;
-use mod_booking\booking_rules\conditions\select_booking_manager;
-use stdClass;
 
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Notification category (Data object)
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 readonly class notification_category {
     /**
      * Constructor

@@ -17,6 +17,9 @@
 namespace local_information_center\route\controller;
 
 use context_system;
+use core\exception\coding_exception;
+use core\exception\moodle_exception;
+use core\exception\required_capability_exception;
 use core\output\html_writer;
 use core\param;
 use core\router;
@@ -25,6 +28,7 @@ use core\router\route;
 use core\router\route_controller;
 use core\router\schema\parameters\path_parameter;
 use core\router\schema\response\payload_response;
+use dml_exception;
 use Exception;
 use invalid_parameter_exception;
 use local_information_center\notification\contracts\notification;
@@ -39,14 +43,41 @@ use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-readonly class notification_controller {
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Admin dashboard with create, edit, and delete functionalities.
+ * The index contains an table with all messages and actions.
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class notification_controller {
     use route_controller;
 
+    /**
+     * Constructor
+     *
+     * @param router $router
+     */
     public function __construct(
-        private router $router,
+        /** @var router router needed for controllers */
+        private readonly router $router,
     ) {
     }
 
+    /**
+     * Notifications table, with filters, actions and create button
+     *
+     * @param ServerRequestInterface $request HTTP Request
+     * @param ResponseInterface $response Empty HTTP Response
+     * @return ResponseInterface HTTP Response
+     * @throws coding_exception
+     * @throws moodle_exception
+     * @throws dml_exception
+     * @throws required_capability_exception
+     */
     #[route(
         path: paths::ADMIN_DASHBOARD,
         method: ['GET', 'POST'],
@@ -99,6 +130,21 @@ readonly class notification_controller {
         return $response;
     }
 
+    /**
+     * Edit or create a notification
+     *
+     * @param string|null $uuid UUID of notification to edit, or null to create
+     * @param ServerRequestInterface $request HTTP Request
+     * @param ResponseInterface $response Empty HTTP Response
+     * @param NotificationsRead $notificationsread Manager for notification read status
+     * @param NotificationManager $messagemanager Manager for notifications
+     * @return ResponseInterface HTTP Response
+     * @throws coding_exception
+     * @throws moodle_exception
+     * @throws required_capability_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     */
     #[route(
         path: paths::ADMIN_DASHBOARD . '/edit[/{id}]',
         method: ['GET', 'POST'],
@@ -166,6 +212,20 @@ readonly class notification_controller {
         return $response;
     }
 
+    /**
+     * Delete target notification
+     *
+     * @param string $uuid UUID to delete
+     * @param ServerRequestInterface $request HTTP Request
+     * @param ResponseInterface $response Empty HTTP Response
+     * @param NotificationManager $manager Notification manager
+     * @return ResponseInterface HTTP Response
+     * @throws coding_exception
+     * @throws required_capability_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     */
     #[route(
         title: 'Delete notification',
         description: 'Soft deletes a notification',
@@ -197,6 +257,16 @@ readonly class notification_controller {
         );
     }
 
+    /**
+     * Initializes a admin page context, title...
+     *
+     * @param moodle_url $url URL of page
+     * @param string $title Title of page
+     * @param string $header Header of page
+     * @return void
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     private function init_admin_page(
         moodle_url $url,
         string $title,
@@ -210,6 +280,13 @@ readonly class notification_controller {
         $PAGE->set_heading($header);
     }
 
+    /**
+     * Get url of request
+     *
+     * @param ServerRequestInterface $request HTTP Request
+     * @return moodle_url URL of request
+     * @throws moodle_exception
+     */
     private function get_baseurl(ServerRequestInterface $request): moodle_url {
         return new moodle_url($request->getUri()->getPath());
     }

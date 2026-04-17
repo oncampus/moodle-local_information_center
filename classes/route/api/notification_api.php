@@ -16,8 +16,6 @@
 
 namespace local_information_center\route\api;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use core\context\system;
 use core\exception\coding_exception;
@@ -37,16 +35,18 @@ use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\notification\contracts\notification;
 use local_information_center\route\api\schemes\notification_id;
 use local_information_center\route\api\schemes\notification_schema;
-use local_information_center\route\api\schemes\ok;
+use local_information_center\route\api\schemes\ok_response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use required_capability_exception;
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Routing endpoint to create or update an information center message.
  *
  * @author     Konrad Ebel <konrad.ebel@oncampus.de>
- * @copyright  2025, onCampus GmbH <support@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notification_api {
@@ -72,7 +72,7 @@ class notification_api {
                 type: param::ALPHANUMEXT,
             ),
         ],
-        responses: [new ok()]
+        responses: [new ok_response()]
     )]
     public function renotify(
         string $uuid,
@@ -126,7 +126,7 @@ class notification_api {
             ),
             required: true,
         ),
-        responses: [new ok()]
+        responses: [new ok_response()]
     )]
     public function add_or_update_message(
         string $uuid,

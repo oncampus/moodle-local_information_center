@@ -17,6 +17,8 @@
 namespace local_information_center\route\controller;
 
 use context_system;
+use core\exception\coding_exception;
+use core\exception\moodle_exception;
 use core\exception\required_capability_exception;
 use core\output\tabobject;
 use core\param;
@@ -25,6 +27,7 @@ use core\router\route;
 use core\router\route_controller;
 use core\router\schema\parameters\path_parameter;
 use core\router\schema\parameters\query_parameter;
+use dml_exception;
 use html_writer;
 use local_information_center\notification\contracts\NotificationsRead;
 use local_information_center\output\infocenter;
@@ -32,14 +35,40 @@ use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-readonly class user_dashboard_controller {
+/**
+ * Notification inbox for users, separated in two tabs external and internal.
+ *
+ * @author     Konrad Ebel <konrad.ebel@oncampus.de>
+ * @copyright  2026, onCampus GmbH <support@oncampus.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class user_dashboard_controller {
     use route_controller;
 
+    /**
+     * Constructor
+     *
+     * @param router $router
+     */
     public function __construct(
-        private router $router,
+        /** @var router router needed for controllers */
+        private readonly router $router,
     ) {
     }
 
+    /**
+     * Inbox area, where users receive notifications
+     *
+     * @param string|null $component External or internal
+     * @param ServerRequestInterface $request HTTP Request
+     * @param ResponseInterface $response Empty HTTP response
+     * @param NotificationsRead $notificationsread Manager for read status
+     * @return ResponseInterface HTTP Response
+     * @throws coding_exception
+     * @throws moodle_exception
+     * @throws dml_exception
+     * @throws required_capability_exception
+     */
     #[route(
         path: paths::USER_DASHBOARD . '[/{component}]',
         pathtypes: [
@@ -134,6 +163,14 @@ readonly class user_dashboard_controller {
         return $response;
     }
 
+    /**
+     * Creates a tab for the inbox area
+     *
+     * @param string $component External or internal
+     * @param int $unreadmsgs Count of unread notifications for this tab
+     * @return tabobject
+     * @throws coding_exception
+     */
     public function get_notification_tab(
         string $component,
         int $unreadmsgs
