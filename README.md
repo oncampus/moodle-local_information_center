@@ -28,7 +28,7 @@ None
 
 ## Nutzung
 
-- The messages are visible at `/local/information_centre/pages/user_notification_dashboard.php`
+- The messages are visible at `/local_information_centre/inbox`
 - Messages can be made visible to different user roles (e.g. students, teachers, managers, administrators).
 - The plugin enables administrators to communicate important information to specific user groups in a targeted manner.
 
@@ -56,9 +56,10 @@ This plugin defines the following cron jobs:
 
 This plugin provides the following web service functions:
 
-| Web Service Function                      | Description                       |
-|-------------------------------------------|-----------------------------------|
-| `local_information_center_create_message` | Send a message to specific users. |
+| Web Service Function      | Description                                  |
+|---------------------------|----------------------------------------------|
+| `/messages/{id}/renotify` | Reset read status of specified notification. |
+| `/notifications/{id}`     | Send a notification to specified user group. |
 
 ## License
 
