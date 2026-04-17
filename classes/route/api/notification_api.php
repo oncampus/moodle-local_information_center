@@ -40,8 +40,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use required_capability_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Routing endpoint to create or update an information center message.
  *

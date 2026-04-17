@@ -43,8 +43,6 @@ use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Admin dashboard with create, edit, and delete functionalities.
  * The index contains an table with all messages and actions.

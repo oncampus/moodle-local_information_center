@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2026, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-readonly class notification_category {
+class notification_category {
     /**
      * Constructor
      *
@@ -38,13 +38,13 @@ readonly class notification_category {
      */
     public function __construct(
         /** @var int Sequence-ID of the category */
-        public int $id,
+        public readonly int $id,
         /** @var string Unique shortname of category */
-        public string $name,
+        public readonly string $name,
         /** @var string Color, like #234212 */
-        public string $color,
+        public readonly string $color,
         /** @var string Font awesome icon, like fa-gear */
-        public string $icon,
+        public readonly string $icon,
     ) {
     }
 
