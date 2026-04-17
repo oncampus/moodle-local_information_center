@@ -29,7 +29,7 @@ use local_information_center\notification\contracts\notification;
  */
 class behat_local_information_center_messages extends behat_base {
     /**
-     * Creates messages from an list, each message needs the following infos:
+     * Creates messages from a list, each message needs the following infos:
      * - categoryid
      * - fullmessage
      * - fullmessageformat
@@ -43,6 +43,7 @@ class behat_local_information_center_messages extends behat_base {
      */
     public function given_the_following_messages_exist(TableNode $table): void {
         foreach ($table as $row) {
+            $row = (object) $row;
             $notification = notification::create(
                 $row->subject,
                 $row->fullmessage,
