@@ -65,13 +65,20 @@ class notification_api {
         path: '/messages/{id}/renotify',
         method: ['PUT', 'POST'],
         pathtypes: [new notification_id(true)],
-        responses: [new ok_response()]
+        responses: [new ok_response()],
+        requirelogin: new require_login()
     )]
     public function renotify(
         string $id,
         ServerRequestInterface $request,
         NotificationsRead $readstatusmanager,
     ): payload_response {
+        global $PAGE;
+
+        $ctx = system::instance();
+        $PAGE->set_context($ctx);
+        require_capability('local/information_center:update_or_create_messages', $ctx);
+
         $readstatusmanager->reset_readcount($id);
         return new payload_response(
             [],
@@ -119,7 +126,8 @@ class notification_api {
             ),
             required: true,
         ),
-        responses: [new ok_response()]
+        responses: [new ok_response()],
+        requirelogin: new require_login()
     )]
     public function add_or_update_message(
         string $id,
