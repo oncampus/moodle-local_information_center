@@ -123,7 +123,9 @@ final class notification_manager_test extends advanced_testcase {
 
         $this->manager->delete($exspectednotification->uuid);
         di::set(clock::class, new frozen_clock(31 * 24 * 3600));
+        ob_start();
         (new notification_cleanup())->execute();
+        ob_end_clean();
 
         $notification = $this->manager->get($exspectednotification->uuid);
         $this->assertFalse($notification);

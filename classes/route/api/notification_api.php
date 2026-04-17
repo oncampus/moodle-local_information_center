@@ -153,6 +153,7 @@ class notification_api {
     /**
      * Validate and normalise the incoming message data.
      *
+     * @param string $id UUID of notification
      * @param array|null|object $notificationdata Body data
      * @return notification Parsed notification
      * @throws invalid_parameter_exception
