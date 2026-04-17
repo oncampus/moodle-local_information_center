@@ -161,10 +161,20 @@ class notification_admin_table extends flexible_table implements FilterableTable
         }
         $userlink = html_writer::link($userurl, $name);
 
+        $timestart = "";
+        if ($notification->timestart) {
+            $timestart = date('d.m.o', $notification->timestart);
+        }
+
+        $timeend = "";
+        if ($notification->timeend) {
+            $timeend = date('d.m.o', $notification->timeend);
+        }
+
         $this->add_data([
             $notification->subject,
-            date('d.m.o', $notification->timestart),
-            date('d.m.o', $notification->timeend),
+            $timestart,
+            $timeend,
             $userlink,
             get_string("category:$notification->categoryname", 'local_information_center'),
             $edit,
