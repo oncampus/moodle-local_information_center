@@ -120,7 +120,6 @@ final class notification_manager_test extends advanced_testcase {
     public function test_delete_notification_cron(): void {
         $exspectednotification = generator::generate_notification();
         $this->manager->add_or_update($exspectednotification);
-        di::set(clock::class, new frozen_clock(1));
 
         $this->manager->delete($exspectednotification->uuid);
         di::set(clock::class, new frozen_clock(31 * 24 * 3600));
@@ -139,6 +138,7 @@ final class notification_manager_test extends advanced_testcase {
         parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
+        di::set(clock::class, new frozen_clock(1));
         $this->manager = di::get(NotificationManager::class);
     }
 }
