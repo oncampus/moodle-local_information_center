@@ -61,22 +61,23 @@ class notification_api {
     #[route(
         title: 'Notification Renotify',
         description: 'Reset the read status of a notification',
-        security: [],
-        path: '/messages/{id}/renotify',
+        path: '/messages/{uuid}/renotify',
         method: ['PUT', 'POST'],
-        pathtypes: [
-            new path_parameter(
-                name: 'uuid',
-                type: param::ALPHANUMEXT,
-            ),
-        ],
-        responses: [new ok_response()]
+        pathtypes: [new notification_id(true)],
+        responses: [new ok_response()],
+        requirelogin: new require_login()
     )]
     public function renotify(
         string $uuid,
         ServerRequestInterface $request,
         NotificationsRead $readstatusmanager,
     ): payload_response {
+        global $PAGE;
+
+        $ctx = system::instance();
+        $PAGE->set_context($ctx);
+        require_capability('local/information_center:update_or_create_messages', $ctx);
+
         $readstatusmanager->reset_readcount($uuid);
         return new payload_response(
             [],
@@ -113,8 +114,7 @@ class notification_api {
     #[route(
         title: 'Create or update a notification',
         description: 'Create or update a notification',
-        security: [],
-        path: '/notifications/{id}',
+        path: '/notifications/{uuid}',
         method: ['PUT', 'POST'],
         pathtypes: [new notification_id(true)],
         requestbody: new request_body(
@@ -124,7 +124,8 @@ class notification_api {
             ),
             required: true,
         ),
-        responses: [new ok_response()]
+        responses: [new ok_response()],
+        requirelogin: new require_login()
     )]
     public function add_or_update_message(
         string $uuid,
@@ -132,14 +133,14 @@ class notification_api {
         ServerRequestInterface $request,
         NotificationManager $notificationmanager,
     ): payload_response {
-        global $PAGE, $DB;
+        global $PAGE;
 
         $ctx = system::instance();
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
         $body = $request->getParsedBody();
-        $notification = $this->parse_to_notification($body);
+        $notification = $this->parse_to_notification($uuid, $body);
         $notificationmanager->add_or_update($notification);
 
         return new payload_response(
@@ -152,11 +153,12 @@ class notification_api {
     /**
      * Validate and normalise the incoming message data.
      *
+     * @param string $id UUID of notification
      * @param array|null|object $notificationdata Body data
      * @return notification Parsed notification
      * @throws invalid_parameter_exception
      */
-    private function parse_to_notification(array|null|object $notificationdata): notification {
+    private function parse_to_notification(string $id, array|null|object $notificationdata): notification {
         if (!is_array($notificationdata)) {
             throw new invalid_parameter_exception('Request body must be a JSON object.');
         }
@@ -164,14 +166,14 @@ class notification_api {
         $notification = notification::create(
             $notificationdata['subject'],
             $notificationdata['fullmessage'],
-            $notificationdata['fullmessageformat'],
-            $notificationdata['smallmessage'],
+            FORMAT_HTML,
+            '',
             $notificationdata['visibility'],
             $notificationdata['categoryid'],
             $notificationdata['timestart'] ?? null,
             $notificationdata['timeend'] ?? null,
             'external',
-            $notificationdata['uuid']
+            $id
         );
         $notification->timedeleted = $notificationdata['timedeleted'] ?? null;
 

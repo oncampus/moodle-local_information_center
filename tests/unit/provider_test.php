@@ -83,7 +83,7 @@ final class provider_test extends provider_testcase {
         ];
         $db->insert_record('local_information_center', $read);
 
-        $user = $db->get_record('user', $read->userid);
+        $user = $db->get_record('user', ['id' => $read->userid]);
         $approvedcontextlist = new approved_contextlist($user, 'local_information_center', [$context->id]);
         provider::export_user_data($approvedcontextlist);
 

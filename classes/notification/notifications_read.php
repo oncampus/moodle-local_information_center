@@ -118,8 +118,8 @@ class notifications_read implements NotificationsRead {
         $sql = "SELECT COUNT(m.id)
               FROM {local_information_center_messages} m
              WHERE m.timedeleted IS NULL
-               AND m.timestart <= :now
-               AND m.timeend   >= :now2
+               AND (m.timestart <= :now OR m.timestart IS NULL)
+               AND (m.timeend   >= :now2 OR m.timeend IS NULL)
                AND m.visibility $insql
                $sqlcomponent
                AND NOT EXISTS (
