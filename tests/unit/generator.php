@@ -49,7 +49,7 @@ class generator {
      * @return notification Message data object
      */
     public static function generate_notification(): notification {
-        return notification::create(
+        $notification = notification::create(
             'test',
             '<p>test</p>',
             FORMAT_HTML,
@@ -59,5 +59,7 @@ class generator {
             1761126208,
             1761136208
         );
+        $notification->useridfrom = 2;
+        return $notification;
     }
 }
