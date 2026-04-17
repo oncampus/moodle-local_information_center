@@ -52,10 +52,9 @@ final class notification_manager_test extends advanced_testcase {
     public function test_create_and_get_notification(): void {
         $exspectednotification = generator::generate_notification();
 
-        $id = $this->manager->add_or_update($exspectednotification);
-        $savednotification = $this->manager->get($id);
+        $this->manager->add_or_update($exspectednotification);
+        $savednotification = $this->manager->get($exspectednotification->uuid);
 
-        $savednotification->id = null;
         $this->assertEquals($exspectednotification, $savednotification);
     }
 
@@ -73,9 +72,7 @@ final class notification_manager_test extends advanced_testcase {
         $notifications = $this->manager->get_all();
 
         $this->assertCount(1, $notifications);
-        $firstnotification = notification::from_stdClass(reset($notifications));
-        $firstnotification->id = null;
-        $this->assertEquals($exspectednotification, $firstnotification);
+        $this->assertEquals($exspectednotification, reset($notifications));
     }
 
     /**
@@ -87,13 +84,12 @@ final class notification_manager_test extends advanced_testcase {
      */
     public function test_update_and_get_notification(): void {
         $exspectednotification = generator::generate_notification();
-        $id = $this->manager->add_or_update($exspectednotification);
-        $exspectednotification->id = $id;
-        $exspectednotification->subject = 'New Subject';
-
         $this->manager->add_or_update($exspectednotification);
-        $savednotification = $this->manager->get($id);
 
+        $exspectednotification->subject = 'New Subject';
+        $this->manager->add_or_update($exspectednotification);
+
+        $savednotification = $this->manager->get($exspectednotification->uuid);
         $this->assertEquals($exspectednotification, $savednotification);
     }
 
@@ -106,9 +102,9 @@ final class notification_manager_test extends advanced_testcase {
      */
     public function test_delete_notification(): void {
         $exspectednotification = generator::generate_notification();
-        $id = $this->manager->add_or_update($exspectednotification);
+        $this->manager->add_or_update($exspectednotification);
 
-        $this->manager->delete($id);
+        $this->manager->delete($exspectednotification->uuid);
         $notifications = $this->manager->get_all();
 
         $this->assertCount(0, $notifications);
@@ -123,14 +119,14 @@ final class notification_manager_test extends advanced_testcase {
      */
     public function test_delete_notification_cron(): void {
         $exspectednotification = generator::generate_notification();
-        $id = $this->manager->add_or_update($exspectednotification);
+        $this->manager->add_or_update($exspectednotification);
         di::set(clock::class, new frozen_clock(1));
 
-        $this->manager->delete($id);
+        $this->manager->delete($exspectednotification->uuid);
         di::set(clock::class, new frozen_clock(31 * 24 * 3600));
         (new notification_cleanup())->execute();
 
-        $notification = $this->manager->get($id);
+        $notification = $this->manager->get($exspectednotification->uuid);
         $this->assertFalse($notification);
     }
 

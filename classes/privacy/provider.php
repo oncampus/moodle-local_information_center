@@ -50,7 +50,7 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
             'local_information_center',
             [
                 'userid' => 'privacy:metadata:local_information_center:userid',
-                'messageid' => 'privacy:metadata:local_information_center:messageid',
+                'messageuuid' => 'privacy:metadata:local_information_center:messageuuid',
             ],
             'privacy:metadata:local_information_center'
         );
@@ -139,11 +139,11 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
             }
 
             if (!empty($messages)) {
-                $messageids = array_column($messages, 'id');
-                [$messagesinsql, $messagesinparams] = $db->get_in_or_equal($messageids);
+                $messageuuids = array_column($messages, 'uuid');
+                [$messagesinsql, $messagesinparams] = $db->get_in_or_equal($messageuuids);
                 $ownmessagesread = $db->get_records_select(
                     'local_information_center',
-                    "messageid $messagesinsql",
+                    "messageuuid $messagesinsql",
                     $messagesinparams
                 );
 
@@ -191,7 +191,7 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
 
         $ownmessages = $db->get_fieldset_select(
             'local_information_center_messages',
-            'id',
+            'uuid',
             "useridfrom $userinsql",
             $userinparams
         );
@@ -199,7 +199,7 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
 
         $db->delete_records_select(
             'local_information_center',
-            "userid $userinsql OR messageid $messageinsql",
+            "userid $userinsql OR messageuuid $messageinsql",
             array_merge($userinparams, $messageinparams)
         );
         $db->delete_records_select(
@@ -225,12 +225,12 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
         $db = di::get(moodle_database::class);
         $userid = $contextlist->get_user()->id;
 
-        $ownmessages = $db->get_fieldset('local_information_center_messages', 'id', ['useridfrom' => $userid]);
+        $ownmessages = $db->get_fieldset('local_information_center_messages', 'uuid', ['useridfrom' => $userid]);
         [$messageinsql, $messageinparams] = $db->get_in_or_equal($ownmessages, onemptyitems: true);
 
         $db->delete_records_select(
             'local_information_center',
-            "userid = ? OR messageid $messageinsql",
+            "userid = ? OR messageuuid $messageinsql",
             array_merge([$userid], $messageinparams)
         );
 

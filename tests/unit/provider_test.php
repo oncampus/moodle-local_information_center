@@ -29,6 +29,9 @@ use local_information_center\privacy\provider;
 use moodle_database;
 use stdClass;
 
+defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/generator.php');
+
 /**
  * Tests if the privacy provider is working correctly
  *
@@ -76,12 +79,10 @@ final class provider_test extends provider_testcase {
         $user = $this->getDataGenerator()->create_user();
         $context = context_system::instance();
 
-        $message = $this->get_message($user->id);
-        $message->id = $db->insert_record('local_information_center_messages', $message);
-
+        $notification = generator::create_notification();
         $read = (object)[
             'userid' => $user->id,
-            'messageid' => $message->id,
+            'messageuuid' => $notification->uuid,
         ];
         $db->insert_record('local_information_center', $read);
 
@@ -132,12 +133,11 @@ final class provider_test extends provider_testcase {
         $context = context_system::instance();
 
         // Insert dummy data.
-        $message = $this->get_message($user->id);
-        $message->id = $DB->insert_record('local_information_center_messages', $message);
+        $notification = generator::create_notification();
 
         $read = (object)[
             'userid' => $user->id,
-            'messageid' => $message->id,
+            'messageuuid' => $notification->uuid,
         ];
         $DB->insert_record('local_information_center', $read);
 

@@ -20,7 +20,6 @@ use core\clock;
 use core\di;
 use core\uuid;
 use invalid_parameter_exception;
-use stdClass;
 
 /**
  * Data object for notifications
