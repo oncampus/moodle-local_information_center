@@ -144,13 +144,13 @@ class notification_controller {
      * @throws invalid_parameter_exception
      */
     #[route(
-        path: paths::ADMIN_DASHBOARD . '/edit[/{id}]',
+        path: paths::ADMIN_DASHBOARD . '/edit[/{uuid}]',
         method: ['GET', 'POST'],
         pathtypes: [new notification_id(false)],
         requirelogin: new router\require_login(),
     )]
     public function edit(
-        ?string $id,
+        ?string $uuid,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationsRead $notificationsread,
@@ -227,12 +227,12 @@ class notification_controller {
     #[route(
         title: 'Delete notification',
         description: 'Soft deletes a notification',
-        path: paths::ADMIN_DASHBOARD . '/delete/{id}',
+        path: paths::ADMIN_DASHBOARD . '/delete/{uuid}',
         pathtypes: [new notification_id(true)],
         requirelogin: new require_login(),
     )]
     public function delete(
-        string $id,
+        string $uuid,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationManager $manager,
@@ -246,7 +246,7 @@ class notification_controller {
             );
         }
 
-        $manager->delete($id);
+        $manager->delete($uuid);
         $response->withStatus(200);
         \core\notification::success(get_string('deletion_success', 'local_information_center'));
         return self::redirect(

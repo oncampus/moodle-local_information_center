@@ -61,15 +61,14 @@ class notification_api {
     #[route(
         title: 'Notification Renotify',
         description: 'Reset the read status of a notification',
-        security: [],
-        path: '/messages/{id}/renotify',
+        path: '/messages/{uuid}/renotify',
         method: ['PUT', 'POST'],
         pathtypes: [new notification_id(true)],
         responses: [new ok_response()],
         requirelogin: new require_login()
     )]
     public function renotify(
-        string $id,
+        string $uuid,
         ServerRequestInterface $request,
         NotificationsRead $readstatusmanager,
     ): payload_response {
@@ -79,7 +78,7 @@ class notification_api {
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
-        $readstatusmanager->reset_readcount($id);
+        $readstatusmanager->reset_readcount($uuid);
         return new payload_response(
             [],
             $request
@@ -115,8 +114,7 @@ class notification_api {
     #[route(
         title: 'Create or update a notification',
         description: 'Create or update a notification',
-        security: [],
-        path: '/notifications/{id}',
+        path: '/notifications/{uuid}',
         method: ['PUT', 'POST'],
         pathtypes: [new notification_id(true)],
         requestbody: new request_body(
@@ -130,7 +128,7 @@ class notification_api {
         requirelogin: new require_login()
     )]
     public function add_or_update_message(
-        string $id,
+        string $uuid,
         ResponseInterface $response,
         ServerRequestInterface $request,
         NotificationManager $notificationmanager,
@@ -142,7 +140,7 @@ class notification_api {
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
         $body = $request->getParsedBody();
-        $notification = $this->parse_to_notification($id, $body);
+        $notification = $this->parse_to_notification($uuid, $body);
         $notificationmanager->add_or_update($notification);
 
         return new payload_response(
@@ -167,8 +165,8 @@ class notification_api {
         $notification = notification::create(
             $notificationdata['subject'],
             $notificationdata['fullmessage'],
-            $notificationdata['fullmessageformat'],
-            $notificationdata['smallmessage'],
+            FORMAT_HTML,
+            '',
             $notificationdata['visibility'],
             $notificationdata['categoryid'],
             $notificationdata['timestart'] ?? null,
