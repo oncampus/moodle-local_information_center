@@ -170,7 +170,7 @@ class notification {
             $visibilityparsed,
             $component,
             $categoryid,
-            di::get(clock::class)->now(),
+            di::get(clock::class)->time(),
             $timestart,
             $timeend,
             null,
