@@ -41,9 +41,9 @@ $string['form:any'] = 'Any';
 $string['form:before'] = 'Before';
 $string['form:category'] = 'Category';
 $string['form:category_help'] = '<ul>
-<li><strong>Infos <i class="fa-regular fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>
-<li><strong>Events <i class="fa-regular fa-calendar-plus"></i>.</strong> Information about events, dates, or activities (Medium priority)</li>
-<li><strong>Administrative <i class="fa-regular fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>
+<li><strong>Infos <i class="fa-solid fa-newspaper"></i>.</strong> General news and announcements (Low priority)</li>
+<li><strong>Events <i class="fa-solid fa-calendar-plus"></i>.</strong> Information about events, dates, or activities (Medium priority)</li>
+<li><strong>Administrative <i class="fa-solid fa-graduation-cap"></i>.</strong> Official or organizationally important announcements (High priority)</li>
 </ul>';
 $string['form:categoryname'] = 'Category';
 $string['form:contains'] = 'Contains';

@@ -41,9 +41,9 @@ $string['form:any'] = 'Beliebig';
 $string['form:before'] = 'Vor';
 $string['form:category'] = 'Kategorie';
 $string['form:category_help'] = '<ul>
-    <li><strong>Informationen <i class="fa-regular fa-newspaper"></i>.</strong> Allgemeine Mitteilungen (Prio Niedrig)</li>
-    <li><strong>Veranstaltungen <i class="fa-regular fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)</li>
-    <li><strong>Verwaltung <i class="fa-regular fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>
+    <li><strong>Informationen <i class="fa-solid fa-newspaper"></i>.</strong> Allgemeine Mitteilungen (Prio Niedrig)</li>
+    <li><strong>Veranstaltungen <i class="fa-solid fa-calendar-plus"></i>.</strong> Informationen zu Veranstaltungen, Terminen oder Aktionen (Prio Mittel)</li>
+    <li><strong>Verwaltung <i class="fa-solid fa-graduation-cap"></i>.</strong> Offizielle oder organisatorisch wichtige Mitteilungen (Prio Hoch)</li>
 </ul>';
 $string['form:categoryname'] = 'Kategorie';
 $string['form:contains'] = 'Enthält';
