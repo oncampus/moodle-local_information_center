@@ -34,7 +34,7 @@
                COMMENT="List of messages to display in the information center message output ">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="uuid" TYPE="text" LENGTH="36" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="uuid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="useridfrom" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="subject" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
                 <FIELD NAME="fullmessage" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
