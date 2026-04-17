@@ -64,20 +64,15 @@ class notification_api {
         security: [],
         path: '/messages/{id}/renotify',
         method: ['PUT', 'POST'],
-        pathtypes: [
-            new path_parameter(
-                name: 'uuid',
-                type: param::ALPHANUMEXT,
-            ),
-        ],
+        pathtypes: [new notification_id(true)],
         responses: [new ok_response()]
     )]
     public function renotify(
-        string $uuid,
+        string $id,
         ServerRequestInterface $request,
         NotificationsRead $readstatusmanager,
     ): payload_response {
-        $readstatusmanager->reset_readcount($uuid);
+        $readstatusmanager->reset_readcount($id);
         return new payload_response(
             [],
             $request
@@ -127,19 +122,19 @@ class notification_api {
         responses: [new ok_response()]
     )]
     public function add_or_update_message(
-        string $uuid,
+        string $id,
         ResponseInterface $response,
         ServerRequestInterface $request,
         NotificationManager $notificationmanager,
     ): payload_response {
-        global $PAGE, $DB;
+        global $PAGE;
 
         $ctx = system::instance();
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
 
         $body = $request->getParsedBody();
-        $notification = $this->parse_to_notification($body);
+        $notification = $this->parse_to_notification($id, $body);
         $notificationmanager->add_or_update($notification);
 
         return new payload_response(
@@ -156,7 +151,7 @@ class notification_api {
      * @return notification Parsed notification
      * @throws invalid_parameter_exception
      */
-    private function parse_to_notification(array|null|object $notificationdata): notification {
+    private function parse_to_notification(string $id, array|null|object $notificationdata): notification {
         if (!is_array($notificationdata)) {
             throw new invalid_parameter_exception('Request body must be a JSON object.');
         }
@@ -171,7 +166,7 @@ class notification_api {
             $notificationdata['timestart'] ?? null,
             $notificationdata['timeend'] ?? null,
             'external',
-            $notificationdata['uuid']
+            $id
         );
         $notification->timedeleted = $notificationdata['timedeleted'] ?? null;
 

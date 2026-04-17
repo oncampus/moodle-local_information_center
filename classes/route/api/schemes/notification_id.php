@@ -18,6 +18,7 @@ namespace local_information_center\route\api\schemes;
 
 use core\param;
 use core\router\schema\parameters\path_parameter;
+use core\router\schema\referenced_object;
 
 /**
  * ID Path Parameter.
@@ -26,13 +27,13 @@ use core\router\schema\parameters\path_parameter;
  * @copyright  2026, onCampus GmbH <support@oncampus.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class notification_id extends path_parameter {
+class notification_id extends path_parameter implements referenced_object {
     /**
      * Constructor.
      *
      * @param bool $required
      */
-    public function __construct(bool $required) {
+    public function __construct(bool $required = false) {
         parent::__construct(
             name: 'uuid',
             type: param::ALPHANUMEXT,
