@@ -89,10 +89,10 @@ final class provider_test extends provider_testcase {
         $approvedcontextlist = new approved_contextlist($user, 'local_information_center', [$context->id]);
         provider::export_user_data($approvedcontextlist);
 
-        $exportread = writer::with_context($context)->get_data(['Infocenter/Read Messages']);
+        $exportread = (object) writer::with_context($context)->get_data(['Infocenter/Read Messages']);
         $this->assertNotEmpty($exportread->messages_read);
 
-        $exportwrote = writer::with_context($context)->get_data(['Infocenter/Own Messages']);
+        $exportwrote = (object) writer::with_context($context)->get_data(['Infocenter/Own Messages']);
         $this->assertNotEmpty($exportwrote->messages);
     }
 
