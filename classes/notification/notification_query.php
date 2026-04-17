@@ -48,6 +48,7 @@ class notification_query {
     /**
      * Returns the request sql
      *
+     * @param string $select Selected DB fields
      * @return array [sql, params, offset, limit]
      * @throws coding_exception Get in or equals failed
      * @throws dml_exception Database cannot be reached

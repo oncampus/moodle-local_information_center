@@ -40,6 +40,7 @@ interface NotificationCategory {
     /**
      * Get a single category
      *
+     * @param int $id ID of category to fetch
      * @return notification_category|false Single category
      * @throws dml_exception Database not reachable
      */
