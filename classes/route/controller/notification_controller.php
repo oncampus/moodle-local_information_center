@@ -232,7 +232,7 @@ class notification_controller {
         requirelogin: new require_login(),
     )]
     public function delete(
-        string $uuid,
+        string $id,
         ServerRequestInterface $request,
         ResponseInterface $response,
         NotificationManager $manager,
@@ -246,7 +246,7 @@ class notification_controller {
             );
         }
 
-        $manager->delete($uuid);
+        $manager->delete($id);
         $response->withStatus(200);
         \core\notification::success(get_string('deletion_success', 'local_information_center'));
         return self::redirect(
