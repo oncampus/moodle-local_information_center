@@ -18,8 +18,6 @@ namespace local_information_center\notification\contracts;
 
 use core\exception\coding_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Notification category (Data object)
  *
