@@ -33,7 +33,7 @@ use stdClass;
 class notification_category_manager implements NotificationCategory {
     /** @var moodle_database Moodle Database */
     private readonly moodle_database $db;
-
+    /** @var string[] Allowed categories to choose from */
     private readonly array $allowedcategories;
 
     /**
@@ -71,6 +71,13 @@ class notification_category_manager implements NotificationCategory {
         return $categoryselect;
     }
 
+    /**
+     * Fetches a category by id
+     *
+     * @param int $id DB id
+     * @return notification_category|false Category or false if id not exists
+     * @throws dml_exception
+     */
     public function get(int $id): notification_category|false {
         $rawcategory = $this->db->get_record(
             'local_information_center_categories',
@@ -80,7 +87,7 @@ class notification_category_manager implements NotificationCategory {
             return false;
         }
 
-        return $this->parse_to_category($rawcategory);
+        return $this->category_from_db_stdclass($rawcategory);
     }
 
     /**
@@ -96,10 +103,16 @@ class notification_category_manager implements NotificationCategory {
             'local_information_center_categories',
         );
 
-        return array_map(fn($c) => $this->parse_to_category($c), $rawcategories);
+        return array_map(fn($c) => $this->category_from_db_stdclass($c), $rawcategories);
     }
 
-    public function parse_to_category(stdClass $rawcategory): notification_category {
+    /**
+     * Converts a standard class to a notification category
+     *
+     * @param stdClass $rawcategory
+     * @return notification_category
+     */
+    public function category_from_db_stdclass(stdClass $rawcategory): notification_category {
         return new notification_category(
             $rawcategory->id,
             $rawcategory->name,

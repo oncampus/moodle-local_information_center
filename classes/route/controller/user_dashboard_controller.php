@@ -32,7 +32,7 @@ use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class user_dashboard_controller {
+readonly class user_dashboard_controller {
     use route_controller;
 
     public function __construct(

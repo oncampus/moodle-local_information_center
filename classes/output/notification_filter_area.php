@@ -47,7 +47,7 @@ class notification_filter_area implements renderable, templatable {
      * @param renderer_base $output Renderer to use
      * @return string[] Template parameters
      */
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template(renderer_base $output): array {
         return [
             'filtersform' => $this->form,
         ];

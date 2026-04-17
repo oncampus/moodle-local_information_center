@@ -18,6 +18,7 @@ namespace local_information_center\output;
 
 use coding_exception;
 use core\di;
+use core\exception\moodle_exception;
 use core\output\html_writer;
 use dml_exception;
 use flexible_table;
@@ -74,9 +75,9 @@ class notification_admin_table extends flexible_table implements FilterableTable
      * @return void
      */
     public function add_filter(
-        $field,
-        $value,
-        $comparator = "="
+        string $field,
+        mixed $value,
+        string $comparator = "="
     ): void {
         if ($value === null) {
             $this->filters[] = "$field $comparator";
@@ -137,7 +138,7 @@ class notification_admin_table extends flexible_table implements FilterableTable
      *
      * @param stdClass $notification
      * @return void
-     * @throws \core\exception\moodle_exception
+     * @throws moodle_exception
      * @throws coding_exception
      */
     public function add_notification_data(stdClass $notification): void {

@@ -85,5 +85,5 @@ interface NotificationManager {
      * @return void
      * @throws dml_exception Database cannot be reached
      */
-    public function delete(int $uuid): void;
+    public function delete(string $uuid): void;
 }

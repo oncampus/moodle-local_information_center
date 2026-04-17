@@ -16,6 +16,7 @@
 
 namespace local_information_center\notification;
 
+use coding_exception;
 use core\clock;
 use dml_exception;
 use local_information_center\notification\contracts\NotificationsRead;
@@ -89,7 +90,7 @@ class notifications_read implements NotificationsRead {
      * @param int $userid User to count for
      * @param bool|null $external If external set only counts external messages, else only internal
      * @return int Unread messages for given user
-     * @throws \coding_exception
+     * @throws coding_exception
      * @throws dml_exception
      */
     public function count_unread(int $userid, ?bool $external = null): int {

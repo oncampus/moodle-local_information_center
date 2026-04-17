@@ -16,6 +16,7 @@
 
 namespace local_information_center\notification\contracts;
 
+use coding_exception;
 use core\clock;
 use core\di;
 use core\uuid;
@@ -29,6 +30,23 @@ use invalid_parameter_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notification {
+    /**
+     * Constructor
+     *
+     * @param string $uuid
+     * @param int $useridfrom
+     * @param string $subject
+     * @param string $fullmessage
+     * @param int $fullmessageformat
+     * @param string $smallmessage
+     * @param visibility $visibility
+     * @param string $component
+     * @param int $categoryid
+     * @param int $timemodified
+     * @param int|null $timestart
+     * @param int|null $timeend
+     * @param int|null $timedeleted
+     */
     public function __construct(
         /** @var string Notification UUID */
         public string $uuid,
@@ -59,6 +77,11 @@ class notification {
     ) {
     }
 
+    /**
+     * Renders the body of the message
+     *
+     * @return string rendering of the message body
+     */
     public function get_message_body(): string {
         return message_format_message_text((object) [
             'fullmessageformat' => $this->fullmessageformat,
@@ -68,10 +91,32 @@ class notification {
         ]);
     }
 
+    /**
+     * Time since when the message is visible in the current form
+     *
+     * @return int timestamp
+     */
     public function get_time_visible(): int {
         return max($this->timestart, $this->timemodified);
     }
 
+    /**
+     * Build a message
+     *
+     * @param string $subject
+     * @param string $fullmessage
+     * @param int $fullmessageformat
+     * @param string $smallmessage
+     * @param string $visibility
+     * @param int $categoryid
+     * @param int|null $timestart
+     * @param int|null $timeend
+     * @param string $component
+     * @param string|null $uuid
+     * @return self
+     * @throws coding_exception
+     * @throws invalid_parameter_exception
+     */
     public static function create(
         string $subject,
         string $fullmessage,

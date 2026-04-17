@@ -18,7 +18,6 @@ namespace local_information_center\notification;
 
 use coding_exception;
 use core\clock;
-use core\di;
 use dml_exception;
 use Exception;
 use invalid_parameter_exception;
@@ -99,7 +98,7 @@ class notification_manager implements NotificationManager {
         $id = $this->db->get_field(self::TABLE, 'id', ['uuid' => $notification->uuid]);
 
         if (!$id) {
-            $data->timecreated = di::get(clock::class)->time();
+            $data->timecreated = $this->clock->time();
             $data->useridfrom = $notification->useridfrom;
             $data->uuid = $notification->uuid;
             $this->db->insert_record(self::TABLE, $data);
@@ -131,7 +130,7 @@ class notification_manager implements NotificationManager {
         if (!$data) {
             return false;
         }
-        return $this->parse_to_notification($data);
+        return $this->notification_from_db_stdclass($data);
     }
 
     /**
@@ -158,15 +157,15 @@ class notification_manager implements NotificationManager {
     /**
      * Deletes the message with the given ID
      *
-     * @param int $uuid Message UUID
+     * @param string $uuid Message UUID
      * @throws dml_exception
      */
-    public function delete(int $uuid): void {
+    public function delete(string $uuid): void {
         if (!$record = $this->db->get_record(self::TABLE, ["uuid" => $uuid])) {
             return;
         }
 
-        $record->timedeleted = di::get(clock::class)->time();
+        $record->timedeleted = $this->clock->time();
         $this->db->update_record(self::TABLE, $record);
     }
 
@@ -197,10 +196,16 @@ class notification_manager implements NotificationManager {
         $query = new notification_query($request);
         $sql = $query->get_sql('m.*');
         $rawdata = $this->db->get_records_sql($sql[0], $sql[1], $sql[2], $sql[3]);
-        return array_map(fn ($record) => $this->parse_to_notification($record), $rawdata);
+        return array_map(fn ($record) => $this->notification_from_db_stdclass($record), $rawdata);
     }
 
-    private function parse_to_notification(stdClass $data): notification {
+    /**
+     * Parse DB stdClass to notification
+     *
+     * @param stdClass $data DB stdClass
+     * @return notification Parsed notification
+     */
+    private function notification_from_db_stdclass(stdClass $data): notification {
         $visibility = visibility::from($data->visibility);
 
         return new notification(

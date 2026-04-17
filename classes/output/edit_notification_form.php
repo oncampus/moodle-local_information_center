@@ -132,7 +132,7 @@ class edit_notification_form extends moodleform {
      */
     public function set_notification_data(notification $notification): void {
         $this->set_data([
-            'id' => $notification->id,
+            'id' => $notification->uuid,
             'title' => $notification->subject,
             'message' => [
                 'text' => $notification->fullmessage,

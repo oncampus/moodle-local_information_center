@@ -20,6 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use context_system;
 use core\context\system;
+use core\exception\coding_exception;
 use core\param;
 use core\router\require_login;
 use core\router\route;
@@ -54,11 +55,10 @@ class notification_api {
     /**
      * Reset the read status of receivers of a notification
      *
-     * @param int $id
-     * @param NotificationsRead $readstatusmanager
-     * @return void
-     * @throws dml_exception
-     * @throws invalid_parameter_exception
+     * @param string $uuid Notification UUID
+     * @param ServerRequestInterface $request HTTP Request
+     * @param NotificationsRead $readstatusmanager Notification Readstatus Manager
+     * @return payload_response HTTP Response
      */
     #[route(
         title: 'Notification Renotify',
@@ -89,22 +89,25 @@ class notification_api {
     /**
      * Create or update a notification.
      *
-     * Expected JSON body:
-     * {
-     *     "timestart": 1710000000,
-     *     "timeend": 1710003600,
-     *     "timedeleted": 0,
-     *     "categoryid": 4,
-     *     "fullmessage": "<p>Hello</p>",
-     *     "fullmessageformat": 1,
-     *     "smallmessage": "Hello",
-     *     "visibility": "visible",
-     *     "subject": "Subject"
-     * }
+     *  Expected JSON body:
+     *  {
+     *      "timestart": 1710000000,
+     *      "timeend": 1710003600,
+     *      "timedeleted": 0,
+     *      "categoryid": 4,
+     *      "fullmessage": "<p>Hello</p>",
+     *      "fullmessageformat": 1,
+     *      "smallmessage": "Hello",
+     *      "visibility": "visible",
+     *      "subject": "Subject"
+     *  }
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
+     * @param string $uuid Notification UUID
+     * @param ResponseInterface $response Empty HTTP Response
+     * @param ServerRequestInterface $request HTTP Request
+     * @param NotificationManager $notificationmanager Notification Manager
+     * @return payload_response HTTP Response
+     * @throws coding_exception
      * @throws dml_exception
      * @throws invalid_parameter_exception
      * @throws required_capability_exception

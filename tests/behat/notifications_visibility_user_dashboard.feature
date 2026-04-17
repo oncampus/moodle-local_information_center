@@ -19,8 +19,8 @@ Feature: Notifications are restricted to specific user roles.
 
   Scenario Template: Notifications for equal or lower roles are visible
     Given the following information center messages exist:
-      | component | subject   | fullmessage  | fullmessageformat | categoryid | visibility   | useridfrom |
-      | external  | mymessage | external msg | 1                 | 1          | <visibility> | 2          |
+      | component | subject   | fullmessage  | categoryid | visibility   | useridfrom |
+      | external  | mymessage | external msg | 1          | <visibility> | 2          |
     And I log in as "<role>"
     And I am in the "external" Infocenter
     Then I should see "mymessage"
@@ -33,8 +33,8 @@ Feature: Notifications are restricted to specific user roles.
 
   Scenario Template: Notifications for higher roles are not visible
     Given the following information center messages exist:
-      | component | subject   | fullmessage  | fullmessageformat | categoryid | visibility   | useridfrom |
-      | external  | mymessage | external msg | 1                 | 1          | <visibility> | 2          |
+      | component | subject   | fullmessage  | categoryid | visibility   | useridfrom |
+      | external  | mymessage | external msg | 1          | <visibility> | 2          |
     And I log in as "<role>"
     And I am in the "external" Infocenter
     Then I should not see "mymessage"

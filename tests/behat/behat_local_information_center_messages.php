@@ -43,17 +43,17 @@ class behat_local_information_center_messages extends behat_base {
      */
     public function given_the_following_messages_exist(TableNode $table): void {
         foreach ($table as $row) {
-            $message = notification::from_stdClass((object) $row);
-            $result = di::get(NotificationManager::class)->add_or_update($message);
-
-            if ($result === false) {
-                throw new ExpectationException("Could not update message with id " . $row['id'], $this->getSession());
-            }
-
-            if (!is_int($result)) {
-                $validationerrors = var_export($result, true);
-                throw new ExpectationException("Could not create/update message: " . $validationerrors, $this->getSession());
-            }
+            $notification = notification::create(
+                $row->subject,
+                $row->fullmessage,
+                $row->fullmessageformat ?? FORMAT_HTML,
+                $row->smallmessage ?? '',
+                $row->visibility,
+                $row->categoryid,
+                $row->timestart,
+                $row->timeend
+            );
+            di::get(NotificationManager::class)->add_or_update($notification);
         }
     }
 

@@ -16,15 +16,37 @@
 
 namespace local_information_center\notification\contracts;
 
+use core\exception\coding_exception;
+use mod_booking\booking_rules\conditions\select_booking_manager;
+use stdClass;
+
 readonly class notification_category {
+    /**
+     * Constructor
+     *
+     * @param int $id
+     * @param string $name
+     * @param string $color
+     * @param string $icon
+     */
     public function __construct(
+        /** @var int Sequence-ID of the category */
         public int $id,
+        /** @var string Unique shortname of category */
         public string $name,
+        /** @var string Color, like #234212 */
         public string $color,
+        /** @var string Font awesome icon, like fa-gear */
         public string $icon,
     ) {
     }
 
+    /**
+     * Get the category label
+     *
+     * @return string category label
+     * @throws coding_exception
+     */
     public function get_label(): string {
         return get_string(
             'category:' . $this->name,
@@ -32,6 +54,11 @@ readonly class notification_category {
         );
     }
 
+    /**
+     * Get the icon
+     *
+     * @return string Font awesome icon
+     */
     public function get_icon(): string {
         return "fa-solid $this->icon";
     }

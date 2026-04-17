@@ -25,7 +25,15 @@ use core\uuid;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+/**
+ * Updates the plugin to newer versions
+ *
+ * @param int $oldversion Current plugin version
+ * @return bool True on success
+ * @throws downgrade_exception
+ * @throws moodle_exception
+ * @throws upgrade_exception
+ */
 function xmldb_local_information_center_upgrade($oldversion): bool {
     global $DB;
 
@@ -49,6 +57,16 @@ function xmldb_local_information_center_upgrade($oldversion): bool {
     return true;
 }
 
+/**
+ * Replaces the Notification-ID in the read table by the Notification-UUID
+ *
+ * @param database_manager $dbman
+ * @return void
+ * @throws ddl_exception
+ * @throws ddl_field_missing_exception
+ * @throws ddl_table_missing_exception
+ * @throws dml_exception
+ */
 function adapt_is_read_table_to_uuid(database_manager $dbman): void {
     $table = new xmldb_table('local_information_center');
 
@@ -101,6 +119,15 @@ function adapt_is_read_table_to_uuid(database_manager $dbman): void {
     }
 }
 
+/**
+ * Replaces external IDs by notification UUIDs
+ *
+ * @param database_manager $dbman
+ * @return void
+ * @throws ddl_exception
+ * @throws ddl_table_missing_exception
+ * @throws dml_exception
+ */
 function add_uuid_to_notifications(database_manager $dbman): void {
     $db = di::get(moodle_database::class);
 
@@ -145,6 +172,12 @@ function add_uuid_to_notifications(database_manager $dbman): void {
     }
 }
 
+/**
+ * Replaces the font awesome icons by new icons.
+ *
+ * @return void
+ * @throws dml_exception
+ */
 function upgrade_fa_icons(): void {
     $categories = [
         'infos' => 'fa-newspaper',

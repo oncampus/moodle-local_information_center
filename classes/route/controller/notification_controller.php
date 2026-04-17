@@ -39,7 +39,7 @@ use moodle_url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class notification_controller {
+readonly class notification_controller {
     use route_controller;
 
     public function __construct(
