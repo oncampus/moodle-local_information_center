@@ -53,7 +53,7 @@ class notification_cleanup extends scheduled_task {
 
         $mids = $db->get_fieldset_select(
             'local_information_center_messages',
-            'id',
+            'uuid',
             'timedeleted IS NOT NULL
             AND timedeleted <= :threshold',
             ['threshold' => $deletetime->getTimestamp()]
@@ -64,12 +64,12 @@ class notification_cleanup extends scheduled_task {
         [$messageinsql, $messageinparams] = $db->get_in_or_equal($mids, onemptyitems: true);
         $db->delete_records_select(
             'local_information_center',
-            "messageid $messageinsql",
+            "messageuuid $messageinsql",
             $messageinparams
         );
         $db->delete_records_select(
             'local_information_center_messages',
-            "id $messageinsql",
+            "uuid $messageinsql",
             $messageinparams
         );
     }
