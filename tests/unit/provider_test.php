@@ -75,24 +75,24 @@ final class provider_test extends provider_testcase {
      */
     public function test_export_user_data(): void {
         $db = di::get(moodle_database::class);
-
-        $user = $this->getDataGenerator()->create_user();
         $context = context_system::instance();
-
         $notification = generator::create_notification();
         $read = (object)[
-            'userid' => $user->id,
+            'userid' => 2,
             'messageuuid' => $notification->uuid,
         ];
         $db->insert_record('local_information_center', $read);
 
+        $user = $db->get_record('user', $read->userid);
         $approvedcontextlist = new approved_contextlist($user, 'local_information_center', [$context->id]);
         provider::export_user_data($approvedcontextlist);
 
-        $exportread = (object) writer::with_context($context)->get_data(['Infocenter/Read Messages']);
+        $exportread = writer::with_context($context)->get_data(['Infocenter/Read Messages']);
+        $this->assertNotEmpty($exportread);
         $this->assertNotEmpty($exportread->messages_read);
 
-        $exportwrote = (object) writer::with_context($context)->get_data(['Infocenter/Own Messages']);
+        $exportwrote = writer::with_context($context)->get_data(['Infocenter/Own Messages']);
+        $this->assertNotEmpty($exportread);
         $this->assertNotEmpty($exportwrote->messages);
     }
 
