@@ -19,6 +19,7 @@ use Behat\Mink\Exception\ExpectationException;
 use core\di;
 use local_information_center\notification\contracts\NotificationManager;
 use local_information_center\notification\contracts\notification;
+use local_information_center\route\controller\paths;
 
 /**
  * Creates, edits or deletes messages for behat tests
@@ -65,7 +66,7 @@ class behat_local_information_center_messages extends behat_base {
      * @param string $component Defines the component internal or external
      */
     public function when_i_am_on_the_infocenter_page(string $component): void {
-        $url = new moodle_url("/local/information_center/pages/user_notification_dashboard.php", ['component' => $component]);
+        $url = paths::user_dashboard($component);
         $this->getSession()->visit($this->locate_path($url->out()));
     }
 }
