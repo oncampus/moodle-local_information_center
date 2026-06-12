@@ -24,6 +24,7 @@ use dml_exception;
 use flexible_table;
 use local_information_center\notification\contracts\notification;
 use local_information_center\route\controller\paths;
+use Matrix\Exception;
 use moodle_database;
 use moodle_url;
 use stdClass;
@@ -40,6 +41,16 @@ class notification_admin_table extends flexible_table implements FilterableTable
     private array $filters = [];
     /** @var array Applied filter values */
     private array $filterparams = [];
+    /** @var string[] Fields that can be filtered by */
+    private const FIELD_MAP = [
+        'subject'     => 'm.subject',
+        'timestart'   => 'm.timestart',
+        'timeend'     => 'm.timeend',
+        'firstname'   => 'u.firstname',
+        'lastname'    => 'u.lastname',
+        'categoryid'  => 'm.categoryid',
+        'timedeleted' => 'm.timedeleted',
+    ];
 
     /**
      * Define the table structure
@@ -70,20 +81,44 @@ class notification_admin_table extends flexible_table implements FilterableTable
      * Applies an filter to the notifications in the table
      *
      * @param string $field Database field
-     * @param mixed $value Value to compare with
      * @param string $comparator Way to compare value with database value
+     * @param mixed $value Value to compare with
      * @return void
      */
     public function add_filter(
         string $field,
-        mixed $value,
-        string $comparator = "="
+        string $comparator = "eq",
+        mixed $value = null
     ): void {
-        if ($value === null) {
-            $this->filters[] = "$field $comparator";
-        } else {
-            $this->filters[] = "$field $comparator ?";
-            $this->filterparams[] = $value;
+        $column = self::FIELD_MAP[$field] ?? false;
+        if ($column === false) {
+            throw new Exception("The field '{$field}' is not a valid column.");
+        }
+
+        switch ($comparator) {
+            case '<':
+            case '>':
+                $this->filters[] = "$column $comparator ?";
+                $this->filterparams[] = $value;
+                break;
+            case 'contains':
+                global $DB;
+                $this->filters[] = $DB->sql_like($column, '?', false, false);
+                $this->filterparams[] = "%" . $DB->sql_like_escape($value) . "%";
+                break;
+            case 'eq':
+                $this->filters[] = "$column = ?";
+                $this->filterparams[] = $value;
+                break;
+            case 'isset':
+                if ($value) {
+                    $this->filters[] = "$column IS NOT NULL";
+                } else {
+                    $this->filters[] = "$field IS NULL";
+                }
+                break;
+            default:
+                throw new Exception("Unknown operation $comparator");
         }
     }
 
@@ -159,7 +194,7 @@ class notification_admin_table extends flexible_table implements FilterableTable
         if ($notification->component != 'local_information_center') {
             $name = get_string('table:createdby:extern', 'local_information_center') . " ($name)";
         }
-        $userlink = html_writer::link($userurl, $name);
+        $userlink = html_writer::link($userurl, s($name));
 
         $timestart = "";
         if ($notification->timestart) {

@@ -123,27 +123,11 @@ class notification_filter_form extends moodleform {
             }
 
             $comparator = $data["{$key}_ftype"];
-            switch ($comparator) {
-                case '':
-                    break;
-                case '<':
-                case '>':
-                    $table->add_filter($key, $value, $comparator);
-                    break;
-                case 'contains':
-                    $table->add_filter($key, "%$value%", "LIKE");
-                    break;
-                case 'eq':
-                    $table->add_filter($key, "$value");
-                    break;
-                case 'isset':
-                    if ($value) {
-                        $table->add_filter($key, null, 'IS NOT NULL');
-                    } else {
-                        $table->add_filter($key, null, 'IS NULL');
-                    }
-                    break;
+            if ($comparator == "") {
+                continue;
             }
+
+            $table->add_filter($key, $comparator, $value);
         }
     }
 }

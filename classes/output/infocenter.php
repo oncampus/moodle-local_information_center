@@ -162,7 +162,7 @@ class infocenter implements renderable, templatable {
         $category = $categorymng->get($notification->categoryid);
 
         $data = [
-            'title' => clean_param($notification->subject, PARAM_TEXT),
+            'title' => format_string($notification->subject, true, ['context' => context_system::instance()]),
             'message' => $notification->get_message_body(),
             'sended_time_ago' => get_string('ago', 'message', format_time($secondsago)),
             'unreadmarker' => !$isread,

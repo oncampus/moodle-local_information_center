@@ -161,8 +161,13 @@ class notification_manager implements NotificationManager {
      * @throws dml_exception
      */
     public function delete(string $uuid): void {
+        global $USER;
         if (!$record = $this->db->get_record(self::TABLE, ["uuid" => $uuid])) {
             return;
+        }
+
+        if ((int) $record->useridfrom !== (int) $USER->id) {
+            throw new Exception('You are not the owner of this message');
         }
 
         $record->timedeleted = $this->clock->time();

@@ -18,7 +18,8 @@ namespace local_information_center;
 
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/generator.php');
-require_once(__DIR__ . '/../../../../lib/testing/classes/frozen_clock.php');
+global $CFG;
+require_once($CFG->libdir . '/testing/classes/frozen_clock.php');
 
 use advanced_testcase;
 use core\clock;
@@ -50,9 +51,9 @@ final class notification_manager_test extends advanced_testcase {
      * @throws dml_exception Database connection error
      */
     public function test_create_and_get_notification(): void {
-        $exspectednotification = generator::generate_notification();
+        global $USER;
+        $exspectednotification = generator::create_notification($USER->id);
 
-        $this->manager->add_or_update($exspectednotification);
         $savednotification = $this->manager->get($exspectednotification->uuid);
 
         $this->assertEquals($exspectednotification, $savednotification);
@@ -66,7 +67,8 @@ final class notification_manager_test extends advanced_testcase {
      * @throws dml_exception Database connection error
      */
     public function test_create_and_get_all_notification(): void {
-        $exspectednotification = generator::generate_notification();
+        global $USER;
+        $exspectednotification = generator::create_notification($USER->id);
 
         $this->manager->add_or_update($exspectednotification);
         $notifications = $this->manager->get_all();
@@ -83,7 +85,8 @@ final class notification_manager_test extends advanced_testcase {
      * @throws dml_exception Database connection error
      */
     public function test_update_and_get_notification(): void {
-        $exspectednotification = generator::generate_notification();
+        global $USER;
+        $exspectednotification = generator::create_notification($USER->id);
         $this->manager->add_or_update($exspectednotification);
 
         $exspectednotification->subject = 'New Subject';
@@ -101,10 +104,10 @@ final class notification_manager_test extends advanced_testcase {
      * @throws dml_exception Database connection error
      */
     public function test_delete_notification(): void {
-        $exspectednotification = generator::generate_notification();
-        $this->manager->add_or_update($exspectednotification);
+        global $USER;
+        $notification = generator::create_notification($USER->id);
 
-        $this->manager->delete($exspectednotification->uuid);
+        $this->manager->delete($notification->uuid);
         $notifications = $this->manager->get_all();
 
         $this->assertCount(0, $notifications);
@@ -118,16 +121,16 @@ final class notification_manager_test extends advanced_testcase {
      * @throws dml_exception Database connection error
      */
     public function test_delete_notification_cron(): void {
-        $exspectednotification = generator::generate_notification();
-        $this->manager->add_or_update($exspectednotification);
+        global $USER;
+        $notification = generator::create_notification($USER->id);
 
-        $this->manager->delete($exspectednotification->uuid);
+        $this->manager->delete($notification->uuid);
         di::set(clock::class, new frozen_clock(31 * 24 * 3600));
         ob_start();
         (new notification_cleanup())->execute();
         ob_end_clean();
 
-        $notification = $this->manager->get($exspectednotification->uuid);
+        $notification = $this->manager->get($notification->uuid);
         $this->assertFalse($notification);
     }
 

@@ -17,6 +17,7 @@
 namespace local_information_center\route\controller;
 
 use core\exception\moodle_exception;
+use core\url;
 use moodle_url;
 
 /**
@@ -37,55 +38,52 @@ class paths {
     /**
      * Get admin dashboard for managing notifications
      *
-     * @return moodle_url URL
+     * @return url URL
      * @throws moodle_exception
      */
-    public static function admin_dashboard(): moodle_url {
-        return new moodle_url(self::BASE_URL . self::ADMIN_DASHBOARD);
+    public static function admin_dashboard(): url {
+        return moodle_url::routed_path(self::BASE_URL . self::ADMIN_DASHBOARD);
     }
 
     /**
      * Get notification inbox url
      *
      * @param string|null $component External or internal (by default external)
-     * @return moodle_url URL
-     * @throws moodle_exception
+     * @return url URL
      */
-    public static function user_dashboard(?string $component = null): moodle_url {
+    public static function user_dashboard(?string $component = null): url {
         $baseurl = self::BASE_URL . self::USER_DASHBOARD;
         if ($component) {
             $baseurl .= "/$component";
         }
-        return new moodle_url($baseurl);
+        return moodle_url::routed_path($baseurl);
     }
 
     /**
      * Get edit / create notification url
      *
      * @param string|null $uuid UUID of notification, null for creation
-     * @return moodle_url URL
-     * @throws moodle_exception
+     * @return url URL
      */
-    public static function edit_notification(?string $uuid = null): moodle_url {
+    public static function edit_notification(?string $uuid = null): url {
         $baseurl = self::BASE_URL . self::ADMIN_DASHBOARD . "/edit";
         if ($uuid) {
             $baseurl .= "/$uuid";
         }
-        return new moodle_url($baseurl);
+        return moodle_url::routed_path($baseurl);
     }
 
     /**
      * Get delete notification url
      *
      * @param string $uuid UUID of notification
-     * @return moodle_url URL
-     * @throws moodle_exception
+     * @return url URL
      */
-    public static function delete_notification(string $uuid): moodle_url {
+    public static function delete_notification(string $uuid): url {
         $baseurl = self::BASE_URL . self::ADMIN_DASHBOARD . "/delete";
         if ($uuid) {
             $baseurl .= "/$uuid";
         }
-        return new moodle_url($baseurl, ['sesskey' => sesskey()]);
+        return moodle_url::routed_path($baseurl, ['sesskey' => sesskey()]);
     }
 }

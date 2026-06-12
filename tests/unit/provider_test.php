@@ -76,14 +76,14 @@ final class provider_test extends provider_testcase {
     public function test_export_user_data(): void {
         $db = di::get(moodle_database::class);
         $context = context_system::instance();
-        $notification = generator::create_notification();
-        $read = (object)[
-            'userid' => 2,
+        $user = $this->getDataGenerator()->create_user();
+        $notification = generator::create_notification($user->id);
+        $db->insert_record('local_information_center', (object)[
+            'userid' => $user->id,
             'messageuuid' => $notification->uuid,
-        ];
-        $db->insert_record('local_information_center', $read);
+        ]);
 
-        $user = $db->get_record('user', ['id' => $read->userid]);
+        $user = $db->get_record('user', ['id' => $user->id]);
         $approvedcontextlist = new approved_contextlist($user, 'local_information_center', [$context->id]);
         provider::export_user_data($approvedcontextlist);
 
@@ -94,29 +94,6 @@ final class provider_test extends provider_testcase {
         $exportwrote = writer::with_context($context)->get_data(['Infocenter/Own Messages']);
         $this->assertNotEmpty($exportread);
         $this->assertNotEmpty($exportwrote->messages);
-    }
-
-    /**
-     * Creates message data for a user with specific id
-     *
-     * @param int $userid
-     * @return stdClass
-     */
-    public function get_message(int $userid): stdClass {
-        return (object)[
-            'useridfrom' => $userid,
-            'subject' => 'Test subject',
-            'fullmessage' => 'Full message',
-            'fullmessageformat' => FORMAT_PLAIN,
-            'smallmessage' => 'Small msg',
-            'timestart' => time(),
-            'timeend' => time() + 1000,
-            'visibility' => 1,
-            'categoryid' => 1,
-            'component' => 'infocenter',
-            'timecreated' => time(),
-            'timemodified' => time(),
-        ];
     }
 
     /**
@@ -133,8 +110,7 @@ final class provider_test extends provider_testcase {
         $context = context_system::instance();
 
         // Insert dummy data.
-        $notification = generator::create_notification();
-
+        $notification = generator::create_notification($user->id);
         $read = (object)[
             'userid' => $user->id,
             'messageuuid' => $notification->uuid,
@@ -163,13 +139,12 @@ final class provider_test extends provider_testcase {
         $user2 = $this->getDataGenerator()->create_user();
 
         // Add user1 as sender.
-        $message = $this->get_message($user1->id);
-        $DB->insert_record('local_information_center_messages', $message);
+        $notification = generator::create_notification($user1->id);
 
         // Add user2 as reader.
         $DB->insert_record('local_information_center', (object)[
             'userid' => $user2->id,
-            'messageid' => 1,
+            'messageid' => $notification->uuid,
         ]);
 
         $userlist = new userlist($context, 'local_information_center');
@@ -181,7 +156,7 @@ final class provider_test extends provider_testcase {
     }
 
     /**
-     * Tests if user data is deleted properly if all data is deleted
+     * Tests if user data is deleted properly.
      *
      * @covers ::delete_data_for_all_users_in_context
      * @return void
@@ -191,12 +166,12 @@ final class provider_test extends provider_testcase {
         global $DB;
 
         $context = context_system::instance();
+        $user = $this->getDataGenerator()->create_user();
 
-        $message = $this->get_message(1);
-        $DB->insert_record('local_information_center_messages', $message);
+        $message = generator::create_notification($user->id);
         $DB->insert_record('local_information_center', (object)[
-            'userid' => 1,
-            'messageid' => 1,
+            'userid' => $user->id,
+            'messageid' => $message->uuid,
         ]);
 
         provider::delete_data_for_all_users_in_context($context);

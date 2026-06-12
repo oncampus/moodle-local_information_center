@@ -186,25 +186,44 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
      * @throws dml_exception
      */
     public static function delete_data_for_users(approved_userlist $userlist): void {
-        $db = di::get(moodle_database::class);
-        [$userinsql, $userinparams] = $db->get_in_or_equal($userlist->get_userids());
+        // This plugin only stores data at system context level.
+        if ($userlist->get_context()->contextlevel !== CONTEXT_SYSTEM) {
+            return;
+        }
 
+        $userids = $userlist->get_userids();
+        if (empty($userids)) {
+            return;
+        }
+
+        $db = di::get(moodle_database::class);
+        [$userinsql, $userinparams] = $db->get_in_or_equal($userids);
+
+        // Delete own messages (and their read status).
         $ownmessages = $db->get_fieldset_select(
             'local_information_center_messages',
             'uuid',
             "useridfrom $userinsql",
             $userinparams
         );
-        [$messageinsql, $messageinparams] = $db->get_in_or_equal($ownmessages);
+        if (!empty($ownmessages)) {
+            [$messageinsql, $messageinparams] = $db->get_in_or_equal($ownmessages);
+            $db->delete_records_select(
+                'local_information_center',
+                "messageuuid $messageinsql",
+                $messageinparams
+            );
+            $db->delete_records_select(
+                'local_information_center_messages',
+                "useridfrom $userinsql",
+                $userinparams
+            );
+        }
 
+        // Delete own read status.
         $db->delete_records_select(
             'local_information_center',
-            "userid $userinsql OR messageuuid $messageinsql",
-            array_merge($userinparams, $messageinparams)
-        );
-        $db->delete_records_select(
-            'local_information_center_messages',
-            "useridfrom $userinsql",
+            "userid $userinsql",
             $userinparams
         );
     }

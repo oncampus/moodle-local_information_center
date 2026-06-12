@@ -28,12 +28,12 @@ interface FilterableTable {
      * Adds an additional filter
      *
      * @param string $field Query language field to filter by
+     * @param string $comparator One comparator of 'contains', <, >, 'eq' or 'isset'
      * @param mixed $value Value to compare with (null if not needed)
-     * @param string $comparator Compator like (=, <, >, <>, IS NULL …)
      */
     public function add_filter(
         string $field,
-        mixed $value,
-        string $comparator = "="
+        string $comparator = "eq",
+        mixed $value = null
     ): void;
 }

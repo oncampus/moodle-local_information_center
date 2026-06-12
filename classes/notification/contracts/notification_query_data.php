@@ -25,7 +25,11 @@ namespace local_information_center\notification\contracts;
  */
 class notification_query_data {
     /** @var string $order Fields to order the messages by */
-    public string $order = "ORDER BY c.priority DESC, GREATEST(m.timestart, m.timemodified) DESC";
+    public string $order =
+        "ORDER BY c.priority DESC,
+              CASE WHEN m.timestart > m.timemodified
+                   THEN m.timestart
+                   ELSE m.timemodified END DESC";
 
     /** @var null|int $userid Whether to filter for the access rights of a user */
     public ?int $userid = null;

@@ -33,12 +33,13 @@ class generator {
     /**
      * Creates a message in the database
      *
+     * @param int $userid Message creator
      * @return notification Message data object
      * @throws dml_exception Database connection failed
      */
-    public static function create_notification(): notification {
+    public static function create_notification(int $userid): notification {
         $manager = di::get(NotificationManager::class);
-        $notification = self::generate_notification();
+        $notification = self::generate_notification($userid);
         $manager->add_or_update($notification);
         return $notification;
     }
@@ -46,9 +47,10 @@ class generator {
     /**
      * Generates a message data object and returns it
      *
+     * @param int $userid Message creator
      * @return notification Message data object
      */
-    public static function generate_notification(): notification {
+    private static function generate_notification(int $userid): notification {
         $notification = notification::create(
             'test',
             '<p>test</p>',
@@ -59,7 +61,7 @@ class generator {
             1761126208,
             1761136208
         );
-        $notification->useridfrom = 2;
+        $notification->useridfrom = $userid;
         return $notification;
     }
 }

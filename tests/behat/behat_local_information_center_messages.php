@@ -54,6 +54,7 @@ class behat_local_information_center_messages extends behat_base {
                 $row->categoryid,
                 $row->timestart ?? null,
                 $row->timeend ?? null,
+                $row->component ?? 'local_information_center',
             );
             di::get(NotificationManager::class)->add_or_update($notification);
         }

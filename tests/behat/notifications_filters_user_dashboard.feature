@@ -4,10 +4,10 @@ Feature: Notifications can be seen in the message overview and filtered.
   Background:
     Given I log in as "admin"
     And the following information center messages exist:
-      | component | subject  | fullmessage  | categoryid | visibility | useridfrom |
-      | testing   | news     | internal msg | 1          | student    | 2          |
-      | testing   | events   | internal msg | 3          | student    | 2          |
-      | testing   | my_event | internal msg | 3          | student    | 2          |
+      | subject  | fullmessage  | categoryid | visibility | useridfrom |
+      | news     | internal msg | 1          | student    | 2          |
+      | events   | internal msg | 3          | student    | 2          |
+      | my_event | internal msg | 3          | student    | 2          |
     And I am in the "internal" Infocenter
 
   Scenario: A simple internal message is visible in the user notification dashboard

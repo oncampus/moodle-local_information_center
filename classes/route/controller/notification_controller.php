@@ -156,7 +156,7 @@ class notification_controller {
         NotificationsRead $notificationsread,
         NotificationManager $messagemanager
     ): ResponseInterface {
-        global $CFG, $OUTPUT;
+        global $CFG, $OUTPUT, $USER;
         require_once($CFG->libdir . '/tablelib.php');
 
         $context = context_system::instance();
@@ -198,6 +198,12 @@ class notification_controller {
 
         if ($uuid) {
             $message = $messagemanager->get($uuid);
+            if (!$message) {
+                throw new Exception("Message $uuid not found");
+            }
+            if ($message->useridfrom !== (int) $USER->id) {
+                throw new Exception('You are not the owner of this message');
+            }
             $mform->set_notification_data($message);
         }
 
@@ -239,12 +245,7 @@ class notification_controller {
     ): ResponseInterface {
         $context = context_system::instance();
         require_capability('local/information_center:delete_messages', $context);
-
-        if (!confirm_sesskey()) {
-            throw new invalid_parameter_exception(
-                "Sesskey is not valid! Deletion was aborted for security reasons."
-            );
-        }
+        require_sesskey();
 
         $manager->delete($uuid);
         $response->withStatus(200);
