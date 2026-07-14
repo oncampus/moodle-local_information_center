@@ -16,18 +16,14 @@
 
 namespace local_information_center\route\api;
 
-use context_system;
 use core\context\system;
 use core\exception\coding_exception;
-use core\param;
 use core\router\require_login;
 use core\router\route;
 use core\router\route_controller;
-use core\router\schema\parameters\path_parameter;
 use core\router\schema\request_body;
 use core\router\schema\response\content\payload_response_type;
 use core\router\schema\response\payload_response;
-use core\router\schema\response\response;
 use dml_exception;
 use invalid_parameter_exception;
 use local_information_center\notification\contracts\NotificationManager;
@@ -36,6 +32,7 @@ use local_information_center\notification\contracts\notification;
 use local_information_center\route\api\schemes\notification_id;
 use local_information_center\route\api\schemes\notification_schema;
 use local_information_center\route\api\schemes\ok_response;
+use local_information_center\route\api\schemes\sesskey_query_parameter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use required_capability_exception;
@@ -62,8 +59,9 @@ class notification_api {
         title: 'Notification Renotify',
         description: 'Reset the read status of a notification',
         path: '/messages/{uuid}/renotify',
-        method: ['PUT', 'POST'],
+        method: ['POST'],
         pathtypes: [new notification_id(true)],
+        queryparams: [new sesskey_query_parameter()],
         responses: [new ok_response()],
         requirelogin: new require_login()
     )]
@@ -116,7 +114,7 @@ class notification_api {
         title: 'Create or update a notification',
         description: 'Create or update a notification',
         path: '/notifications/{uuid}',
-        method: ['PUT', 'POST'],
+        method: ['POST'],
         pathtypes: [new notification_id(true)],
         requestbody: new request_body(
             description: 'Notification details to create or update',
