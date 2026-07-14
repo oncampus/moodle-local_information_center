@@ -111,11 +111,7 @@ class notification_admin_table extends flexible_table implements FilterableTable
                 $this->filterparams[] = $value;
                 break;
             case 'isset':
-                if ($value) {
-                    $this->filters[] = "$column IS NOT NULL";
-                } else {
-                    $this->filters[] = "$field IS NULL";
-                }
+                $this->filters[] = $value ? "$column IS NOT NULL" : "$column IS NULL";
                 break;
             default:
                 throw new Exception("Unknown operation $comparator");
