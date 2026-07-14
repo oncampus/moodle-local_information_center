@@ -77,6 +77,7 @@ class notification_api {
         $ctx = system::instance();
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
+        require_sesskey();
 
         $readstatusmanager->reset_readcount($uuid);
         return new payload_response(
