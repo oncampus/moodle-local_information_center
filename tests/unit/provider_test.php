@@ -144,7 +144,7 @@ final class provider_test extends provider_testcase {
         // Add user2 as reader.
         $DB->insert_record('local_information_center', (object)[
             'userid' => $user2->id,
-            'messageid' => $notification->uuid,
+            'messageuuid' => $notification->uuid,
         ]);
 
         $userlist = new userlist($context, 'local_information_center');
@@ -171,7 +171,7 @@ final class provider_test extends provider_testcase {
         $message = generator::create_notification($user->id);
         $DB->insert_record('local_information_center', (object)[
             'userid' => $user->id,
-            'messageid' => $message->uuid,
+            'messageuuid' => $message->uuid,
         ]);
 
         provider::delete_data_for_all_users_in_context($context);
