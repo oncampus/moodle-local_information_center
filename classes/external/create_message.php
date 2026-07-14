@@ -61,12 +61,17 @@ class create_message extends external_api {
      */
     public static function execute(string $uuid, array $messagedata, bool $renotify): stdClass {
         global $USER;
-
         [
             'messagedata' => $messagedata,
+            'uuid' => $uuid,
+            'renotify' => $renotify,
         ] = self::validate_parameters(
             self::execute_parameters(),
-            ['messagedata' => $messagedata]
+            [
+                'messagedata' => $messagedata,
+                'uuid' => $uuid,
+                'renotify' => $renotify,
+            ]
         );
 
         $ctx = context_system::instance();
@@ -80,18 +85,6 @@ class create_message extends external_api {
         $notification = self::parse_to_notification($uuid, $messagedata);
 
         $notificationmng = di::get(NotificationManager::class);
-        $errors = $notificationmng->validate($notification);
-        if (!empty($errors)) {
-            $parsederrors = [];
-            foreach ($errors as $field => $message) {
-                $parsederrors[] = [
-                    'field' => $field,
-                    'message' => $message,
-                ];
-            }
-            return (object) ['errors' => $parsederrors];
-        }
-
         $notificationmng->add_or_update($notification);
 
         if ($renotify) {
