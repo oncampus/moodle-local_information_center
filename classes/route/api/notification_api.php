@@ -116,6 +116,7 @@ class notification_api {
         path: '/notifications/{uuid}',
         method: ['POST'],
         pathtypes: [new notification_id(true)],
+        queryparams: [new sesskey_query_parameter()],
         requestbody: new request_body(
             description: 'Notification details to create or update',
             content: new payload_response_type(
@@ -137,6 +138,7 @@ class notification_api {
         $ctx = system::instance();
         $PAGE->set_context($ctx);
         require_capability('local/information_center:update_or_create_messages', $ctx);
+        require_sesskey();
 
         $body = $request->getParsedBody();
         $notification = $this->parse_to_notification($uuid, $body);
