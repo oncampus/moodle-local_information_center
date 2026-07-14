@@ -49,8 +49,9 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class create_message extends external_api {
     /**
-     * Adds a message and sends it to the specified users
+     * Adds / Updates a notification and sends it to a user group
      *
+     * @param string $uuid UUID of the notification
      * @param array $messagedata Data of the notification to create or update
      * @param bool $renotify True, if notification status should be resetted for all users
      * @return stdClass Validation errors of the notification
