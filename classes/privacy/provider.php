@@ -50,7 +50,7 @@ class provider implements core_userlist_provider, metadata_provider, request_pro
             'local_information_center',
             [
                 'userid' => 'privacy:metadata:local_information_center:userid',
-                'messageuuid' => 'privacy:metadata:local_information_center:messageuuid',
+                'messageuuid' => 'privacy:metadata:local_information_center:messageid',
             ],
             'privacy:metadata:local_information_center'
         );
